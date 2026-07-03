@@ -3,31 +3,31 @@
 > Personal website developed to centralize my career trajectory, technical skills, and software projects.
 
 <p align="center">
-<a href="README.pt-BR.md"><img src="https://img.shields.io/badge/🇧🇷-Português-009C3B?style=for-the-badge"></a>
+<a href="README.md"><img src="https://img.shields.io/badge/🇺🇸-English-1F6FEB?style=for-the-badge"></a>
 </p>
 
 ---
 
 ## 📖 About
 
-This repository contains the source code for my professional portfolio website. The primary purpose of this project is to present my technical background, core competencies, and software projects in a clear, modern and professional manner.
+This repository contains the source code for my professional portfolio website. The main purpose of this project is to present my technical background, core competencies, and software projects in a clear, modern, and professional way.
 
 ---
 
 ## 📑 Table of Contents
 
-- Features
-- Technologies Used
-- Project Structure
-- How to Access & Run
-- Developer
+- [✨ Features](#-features)
+- [🛠 Technologies Used](#-technologies-used)
+- [📂 Project Structure](#-project-structure)
+- [🚀 How to Run](#-how-to-run)
+- [👤 Developer](#-developer)
 
 ---
 
 ## ✨ Features
 
 - Professional presentation
-- Project showcase
+- Project portfolio showcase
 - Responsive design
 - Contact section
 
@@ -36,10 +36,10 @@ This repository contains the source code for my professional portfolio website. 
 ## 🛠 Technologies Used
 
 | Technology | Purpose |
-| --- | --- |
-| HTML5 | Semantic structure |
-| CSS3 | Styling and responsiveness |
-| JavaScript | Dynamic interactions |
+| :--- | :--- |
+| <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white" height="25" alt="HTML5"> | Structure |
+| <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white" height="25" alt="CSS3"> | Styling |
+| <img src="https://img.shields.io/badge/javascript-%23F7DF1E.svg?style=for-the-badge&logo=javascript&logoColor=black" height="25" alt="JavaScript"> | Interactivity |
 
 ---
 
@@ -59,14 +59,14 @@ portifolio/
 
 ---
 
-## 🚀 How to Access & Run Locally
+## 🚀 How to Run
 
 ```bash
 git clone https://github.com/davifigrd/portifolio.git
 cd portifolio
 ```
 
-Open `html/index.html` or use Live Server.
+Open html/index.html or use Live Server.
 
 ---
 
@@ -75,6 +75,6 @@ Open `html/index.html` or use Live Server.
 **Davi Figueiredo**
 
 - Website: https://davifigrd.com
-- Email: contact@davifigrd.com
+- E-mail: contact@davifigrd.com
 
-> Learning is building, testing and continuously evolving.
+> Learning is building, testing, and continuously evolving.
