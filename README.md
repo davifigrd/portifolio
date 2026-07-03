@@ -1,20 +1,16 @@
-<p align="center">
+# Davi Figueiredo | Portfólio
 
-# Davi Figueiredo | Portfolio
-
-Personal website developed to centralize my career trajectory, technical skills, and software projects.
+Site pessoal desenvolvido para centralizar minha trajetória profissional, habilidades técnicas e projetos de software.
 
 <br>
 
-🌐 https://davifigrd.com • 📧 contact@davifigrd.com
+🌐 https://davifigrd.com • 📧 contact@davifigrd.com  
 
-<br><br>
+<br>
 
-<a href="README.pt-BR.md">
+<a href="README.md">
   <img src="https://img.shields.io/badge/🇧🇷-Português-009C3B?style=for-the-badge">
 </a>
-
-</p>
 
 ---
 
@@ -26,13 +22,15 @@ This repository contains the source code for my professional portfolio website. 
 
 ## 📑 Table of Contents
 
-- [✨ Features](#-features)
-- [🛠 Technologies Used](#-technologies-used)
-- [📂 Project Structure](#-project-structure)
-- [🚀 How to Run](#-how-to-run)
-- [👤 Developer](#-developer)
+- [✨ Features](#features)
+- [🛠 Technologies Used](#technologies)
+- [📂 Project Structure](#structure)
+- [🚀 How to Run](#run)
+- [👤 Developer](#developer)
 
 ---
+
+<span id="features"></span>
 
 ## ✨ Features
 
@@ -43,6 +41,8 @@ This repository contains the source code for my professional portfolio website. 
 
 ---
 
+<span id="technologies"></span>
+
 ## 🛠 Technologies Used
 
 | Technology | Purpose |
@@ -52,6 +52,8 @@ This repository contains the source code for my professional portfolio website. 
 | <img src="https://img.shields.io/badge/javascript-%23F7DF1E.svg?style=for-the-badge&logo=javascript&logoColor=black" height="25" alt="JavaScript"> | Interactivity |
 
 ---
+
+<span id="structure"></span>
 
 ## 📂 Project Structure
 
@@ -69,6 +71,8 @@ portifolio/
 
 ---
 
+<span id="run"></span>
+
 ## 🚀 How to Run
 
 ```bash
@@ -76,9 +80,11 @@ git clone https://github.com/davifigrd/portifolio.git
 cd portifolio
 ```
 
-Open html/index.html or use Live Server.
+Open `html/index.html` or use `Live Server`.
 
 ---
+
+<span id="developer"></span>
 
 ## 👤 Developer
 
