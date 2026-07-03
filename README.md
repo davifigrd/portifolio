@@ -1,9 +1,19 @@
+<p align="center">
+
 # Davi Figueiredo | Portfolio
 
-> Personal website developed to centralize my career trajectory, technical skills, and software projects.
+Personal website developed to centralize my career trajectory, technical skills, and software projects.
 
-<p align="center">
-<a href="README.md"><img src="https://img.shields.io/badge/🇺🇸-English-1F6FEB?style=for-the-badge"></a>
+<br>
+
+🌐 https://davifigrd.com • 📧 contact@davifigrd.com
+
+<br><br>
+
+<a href="README.pt-BR.md">
+  <img src="https://img.shields.io/badge/🇧🇷-Português-009C3B?style=for-the-badge">
+</a>
+
 </p>
 
 ---
