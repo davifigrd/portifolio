@@ -1,11 +1,18 @@
+
+
 # Davi Figueiredo | Portfólio
 
-> Site pessoal desenvolvido para centralizar minha trajetória profissional, habilidades técnicas e projetos de software.
+Site pessoal desenvolvido para centralizar minha trajetória profissional, habilidades técnicas e projetos de software.
 
-<p align="center">
-<a href="README.md"><img src="https://img.shields.io/badge/🇺🇸-English-1F6FEB?style=for-the-badge"></a>
-</p>
+<br>
 
+🌐 https://davifigrd.com • 📧 contact@davifigrd.com  
+
+<br>
+
+<a href="README.md">
+  <img src="https://img.shields.io/badge/🇺🇸-English-1F6FEB?style=for-the-badge">
+</a>
 
 ---
 
@@ -17,13 +24,15 @@ Este repositório contém o código-fonte do meu site de portfólio profissional
 
 ## 📑 Índice
 
-- [✨ Funcionalidades](#-funcionalidades)
-- [🛠 Tecnologias Utilizadas](#-tecnologias-utilizadas)
-- [📂 Estrutura do Projeto](#-estrutura-do-projeto)
-- [🚀 Como Executar](#-como-executar)
-- [👤 Desenvolvedor](#-desenvolvedor)
+- [✨ Funcionalidades](#funcionalidades)
+- [🛠 Tecnologias Utilizadas](#tecnologias)
+- [📂 Estrutura do Projeto](#estrutura)
+- [🚀 Como Executar](#executar)
+- [👤 Desenvolvedor](#desenvolvedor)
 
 ---
+
+<span id="funcionalidades"></span>
 
 ## ✨ Funcionalidades
 
@@ -33,6 +42,8 @@ Este repositório contém o código-fonte do meu site de portfólio profissional
 - Contato
 
 ---
+
+<span id="tecnologias"></span>
 
 ## 🛠 Tecnologias Utilizadas
 
@@ -45,6 +56,8 @@ Este repositório contém o código-fonte do meu site de portfólio profissional
 
 
 ---
+
+<span id="estrutura"></span>
 
 ## 📂 Estrutura do Projeto
 
@@ -62,6 +75,8 @@ portifolio/
 
 ---
 
+<span id="executar"></span>
+
 ## 🚀 Como Executar
 
 ```bash
@@ -73,9 +88,15 @@ Abra `html/index.html` ou utilize o Live Server.
 
 ---
 
+<span id="desenvolvedor"></span>
+
 ## 👤 Desenvolvedor
 
 **Davi Figueiredo**
+
+[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:contact@davifigrd.com?subject=Github%20Contact&body=Hello)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/davifigrd)
+[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/davifigrd/)
 
 - Website: https://davifigrd.com
 - E-mail: contact@davifigrd.com
