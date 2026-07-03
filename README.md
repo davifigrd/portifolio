@@ -1,4 +1,4 @@
-# Davi Figueiredo | Portfólio
+# Davi Figueiredo | Portfolio
 
 Personal website developed to centralize my professional trajectory, technical skills, and software projects.
 
@@ -8,7 +8,9 @@ Personal website developed to centralize my professional trajectory, technical s
 
 <br>
 
-<a href="README.pt-BR.md">
+*Clique no badge abaixo para mudar o idioma para Português*
+
+<a href="README.md">
   <img src="https://img.shields.io/badge/🇧🇷-Português-009C3B?style=for-the-badge">
 </a>
 
