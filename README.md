@@ -10,7 +10,7 @@ Personal website developed to centralize my professional trajectory, technical s
 
 *Clique no badge abaixo para mudar o idioma para Português*
 
-<a href="README.md">
+<a href="README.pt-BR.md">
   <img src="https://img.shields.io/badge/🇧🇷-Português-009C3B?style=for-the-badge">
 </a>
 
