@@ -10,6 +10,8 @@ Site pessoal desenvolvido para centralizar minha trajetória profissional, habil
 
 <br>
 
+*Click the badge below to switch the language to English*
+
 <a href="README.md">
   <img src="https://img.shields.io/badge/🇺🇸-English-1F6FEB?style=for-the-badge">
 </a>
