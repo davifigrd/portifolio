@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Icon -->
-    <link rel="icon" type="image/png" href="../img/rounded-logo.png" />
+    <link rel="icon" type="image/png" href="../img/logo/shield-logo.png" />
 
     <!-- Title -->
-    <title>Home - davifigrd</title>
+    <title>Davi Figueiredo - davifigrd</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="../css/style.css" />
@@ -17,6 +17,44 @@
     <script src="../js/script.js" defer></script>
   </head>
   <body>
-    <h1 data-i18n="greeting">Hello, I'm Davi</h1>
+    <header>
+      <!-- Logo -->
+      <img src="../img/logo/logo-bg-removed.png" alt="Logo davifigrd" />
+
+      <div class="header-right">
+        <!-- Menu Toggle Button -->
+        <button id="menu-toggle" aria-label="Open menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <!-- Menu Overlay -->
+        <nav class="nav-links">
+          <ul>
+            <li><a data-i18n="about" href="#about">About</a></li>
+            <li><a data-i18n="skills" href="#skills">Skills</a></li>
+            <li><a data-i18n="projects" href="#projects">Projects</a></li>
+            <li><a data-i18n="contact" href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+
+        <!-- Header Actions -->
+        <div class="header-actions">
+          <!-- Language Button -->
+          <button id="lang-button">🇧🇷</button>
+
+          <!-- Dark Mode Button -->
+          <button id="theme-button">☀️</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section id="hero">
+      <img src="../img/perfil/perfil-4.png" alt="Foto de Davi Figueiredo" />
+      <h1 data-i18n="greeting">Hello, I'm Davi</h1>
+      <p class="subtitle" data-i18n="subtitle">ADS student & Developer</p>
+    </section>
   </body>
 </html>
