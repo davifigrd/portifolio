@@ -1,35 +1,32 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Icon -->
     <link rel="icon" type="image/png" href="../img/logo/shield-logo.png" />
 
-    <!-- Title -->
     <title>Davi Figueiredo - davifigrd</title>
 
-    <!-- CSS -->
     <link rel="stylesheet" href="../css/style.css" />
 
-    <!-- JavaScript -->
-    <script src="../js/script.js" defer></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
   </head>
   <body>
     <header>
-      <!-- Logo -->
-      <img src="../img/logo/logo-bg-removed.png" alt="Logo davifigrd" />
+      <a href="#hero" class="logo-link">
+        <img src="../img/logo/logo-bg-removed.png" alt="Logo davifigrd" />
+      </a>
 
       <div class="header-right">
-        <!-- Menu Toggle Button -->
         <button id="menu-toggle" aria-label="Open menu">
           <span></span>
           <span></span>
           <span></span>
         </button>
 
-        <!-- Menu Overlay -->
         <nav class="nav-links">
           <ul>
             <li><a data-i18n="about" href="#about">About</a></li>
@@ -39,22 +36,159 @@
           </ul>
         </nav>
 
-        <!-- Header Actions -->
         <div class="header-actions">
-          <!-- Language Button -->
           <button id="lang-button">🇧🇷</button>
 
-          <!-- Dark Mode Button -->
           <button id="theme-button">☀️</button>
         </div>
       </div>
     </header>
 
-    <!-- Hero -->
     <section id="hero">
       <img src="../img/perfil/perfil-4.png" alt="Foto de Davi Figueiredo" />
       <h1 data-i18n="greeting">Hello, I'm Davi</h1>
       <p class="subtitle" data-i18n="subtitle">ADS student & Developer</p>
     </section>
+
+    <section id="about">
+      <h2 data-i18n="about-title">About Me</h2>
+      <p data-i18n="about-text">
+        I am an Analysis and Systems Development student passionate about
+        creating clean, efficient, and modern digital solutions. Focused on
+        front-end development and constantly learning new technologies to build
+        premium web experiences.
+      </p>
+    </section>
+
+    <section id="skills">
+      <h2 data-i18n="skills-title">Skills & Technologies</h2>
+      <div class="skills-grid">
+        <div class="skill-card"><h3>HTML5</h3></div>
+        <div class="skill-card"><h3>CSS3</h3></div>
+        <div class="skill-card"><h3>JavaScript</h3></div>
+        <div class="skill-card"><h3>Git / GitHub</h3></div>
+        <div class="skill-card"><h3>Node.js</h3></div>
+        <div class="skill-card"><h3>C++</h3></div>
+        <div class="skill-card"><h3>Portugol</h3></div>
+        <div class="skill-card"><h3>Construct 3</h3></div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <h2 data-i18n="projects-title">Projects</h2>
+      <div class="projects-grid">
+        <div class="project-card">
+          <div class="project-img-placeholder">Code Studio</div>
+          <div class="project-info">
+            <h3 data-i18n="project-1-title">Premium Web Experience</h3>
+            <p data-i18n="project-1-desc">
+              A beautiful, minimalistic personal website built using modern CSS
+              layout techniques and interactive, lightweight JavaScript
+              features.
+            </p>
+            <div class="project-links">
+              <a href="https://github.com/davifigrd" target="_blank">GitHub</a>
+            </div>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-img-placeholder">Coming Soon</div>
+          <div class="project-info">
+            <h3 data-i18n="project-2-title">Next Big Project</h3>
+            <p data-i18n="project-2-desc">
+              Currently studying new architectures and software engineering
+              patterns to launch the next efficient fullstack application here.
+            </p>
+            <div class="project-links">
+              <a href="https://github.com/davifigrd" target="_blank">GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2 data-i18n="contact-title">Contact Me</h2>
+      <p class="contact-subtitle" data-i18n="contact-desc">
+        Feel free to reach out for projects, collaborations or just a friendly
+        chat!
+      </p>
+
+      <div class="contact-container">
+        <form
+          class="contact-form"
+          action="mailto:contact@davifigrd.com"
+          method="post"
+          enctype="text/plain"
+        >
+          <input
+            type="text"
+            placeholder="Name"
+            required
+            data-i18n-placeholder="form-name"
+            name="name"
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            required
+            data-i18n-placeholder="form-email"
+            name="email"
+          />
+          <textarea
+            placeholder="Message"
+            rows="5"
+            required
+            data-i18n-placeholder="form-msg"
+            name="message"
+          ></textarea>
+          <button type="submit" data-i18n="form-btn">Send Message</button>
+        </form>
+
+        <div class="social-links-minimal">
+          <a
+            href="mailto:contact@davifigrd.com?subject=Github%20Contact&body=Hello"
+            target="_blank"
+            aria-label="Email"
+          >
+            <i class="fa-solid fa-envelope"></i>
+          </a>
+          <a
+            href="https://www.linkedin.com/in/davifigrd"
+            target="_blank"
+            aria-label="LinkedIn"
+          >
+            <i class="fa-brands fa-linkedin-in"></i>
+          </a>
+          <a
+            href="https://github.com/davifigrd"
+            target="_blank"
+            aria-label="GitHub"
+          >
+            <i class="fa-brands fa-github"></i>
+          </a>
+          <a
+            href="https://discord.com/users/davifigrd"
+            target="_blank"
+            aria-label="Discord"
+          >
+            <i class="fa-brands fa-discord"></i>
+          </a>
+          <a
+            href="https://www.instagram.com/davifigrd/"
+            target="_blank"
+            aria-label="Instagram"
+          >
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2026 Davi Figueiredo (davifigrd). All rights reserved.</p>
+    </footer>
+
+    <script src="../js/script.js"></script>
   </body>
 </html>

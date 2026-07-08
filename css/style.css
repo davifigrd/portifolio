@@ -1,5 +1,5 @@
 /* ==========================================
-   RESET
+   RESET & BASE CONFIG
    ========================================== */
 * {
   margin: 0;
@@ -7,20 +7,31 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   --color-bg: #020203;
   --color-purple: #b24af1;
   --color-purple-dark: #400f70;
   --color-text: #dcdee1;
+  --color-card-bg: #0d0d11;
+  --color-input-bg: #121217;
+  --transition: all 0.3s ease;
 }
 
 /* ==========================================
-   OTHER ELEMENTS
+   OTHER ELEMENTS & GLOBAL STYLES
    ========================================== */
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: sans-serif;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+  overflow-x: hidden;
 }
 
 h1 {
@@ -33,24 +44,61 @@ h1 {
   -webkit-text-fill-color: transparent;
 }
 
+/* Títulos de seção genéricos para manter consistência */
+section h2 {
+  font-size: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--color-purple);
+  margin-bottom: 30px;
+  text-align: center;
+}
+
 /* ==========================================
-   DARK/ LIGHT MODE
+   DARK / LIGHT MODE VARIATIONS
    ========================================== */
 body.light-mode {
   --color-bg: #f4f4f6;
   --color-text: #1a1a1c;
   --color-purple: #8b26df;
   --color-purple-dark: #29064d;
+  --color-card-bg: #ffffff;
+  --color-input-bg: #e8e8ec;
 }
 
 /* ==========================================
-   HEADER
+   HEADER & NAVIGATION
    ========================================== */
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px 4%;
+  position: sticky;
+  top: 0;
+  background-color: rgba(2, 2, 3, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  transition: var(--transition);
+}
+
+body.light-mode header {
+  background-color: rgba(244, 244, 246, 0.8);
+}
+
+.logo-link {
+  display: inline-flex;
+  transition: var(--transition);
+}
+
+.logo-link:hover {
+  opacity: 0.8;
+  transform: scale(1.02);
+}
+
+header img {
+  height: 40px;
+  width: auto;
 }
 
 .header-right {
@@ -65,11 +113,6 @@ header {
   gap: 15px;
 }
 
-header img {
-  height: 40px;
-  width: auto;
-}
-
 .nav-links ul {
   display: flex;
   list-style: none;
@@ -81,11 +124,27 @@ header img {
   color: var(--color-text);
   font-weight: 500;
   font-size: 0.95rem;
-  transition: opacity 0.2s;
+  transition: var(--transition);
+  position: relative;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -4px;
+  left: 0;
+  background-color: var(--color-purple);
+  transition: var(--transition);
 }
 
 .nav-links a:hover {
-  opacity: 0.7;
+  color: var(--color-purple);
+}
+
+.nav-links a:hover::after {
+  width: 100%;
 }
 
 #lang-button,
@@ -101,7 +160,7 @@ header img {
 
 #lang-button:hover,
 #theme-button:hover {
-  transform: scale(1.1);
+  transform: scale(1.15);
   opacity: 0.8;
 }
 
@@ -121,19 +180,20 @@ header img {
   height: 2px;
   background-color: var(--color-text);
   border-radius: 2px;
-  transition: all 0.3s ease;
+  transition: var(--transition);
 }
 
 /* ==========================================
-   HERO
+   HERO SECTION
    ========================================== */
 #hero {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  min-height: 100vh;
+  min-height: calc(100vh - 80px);
   justify-content: center;
+  padding: 40px 20px;
 }
 
 #hero img {
@@ -141,6 +201,13 @@ header img {
   height: 210px;
   border-radius: 50%;
   object-fit: cover;
+  border: 3px solid var(--color-purple);
+  box-shadow: 0 10px 30px rgba(178, 74, 241, 0.2);
+  transition: var(--transition);
+}
+
+#hero img:hover {
+  transform: scale(1.05) rotate(2deg);
 }
 
 .subtitle {
@@ -149,7 +216,281 @@ header img {
 }
 
 /* ==========================================
-   MOBILE
+   ABOUT SECTION
+   ========================================== */
+#about {
+  padding: 80px 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+}
+
+#about p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  max-width: 700px;
+  color: var(--color-text);
+}
+
+/* ==========================================
+   SKILLS SECTION
+   ========================================== */
+#skills {
+  padding: 80px 10%;
+  background-color: rgba(255, 255, 255, 0.01);
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.skill-card {
+  background-color: var(--color-card-bg);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 25px 15px;
+  text-align: center;
+  transition: var(--transition);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .skill-card {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.skill-card h3 {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.skill-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--color-purple);
+  box-shadow: 0 8px 20px rgba(178, 74, 241, 0.15);
+}
+
+/* ==========================================
+   PROJECTS SECTION
+   ========================================== */
+#projects {
+  padding: 80px 10%;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.project-card {
+  background-color: var(--color-card-bg);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+body.light-mode .project-card {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.project-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+  border-color: rgba(178, 74, 241, 0.3);
+}
+
+.project-img-placeholder {
+  width: 100%;
+  height: 180px;
+  background: linear-gradient(
+    135deg,
+    var(--color-purple-dark),
+    var(--color-bg)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #ffffff;
+  opacity: 0.8;
+}
+
+.project-info {
+  padding: 25px;
+}
+
+.project-info h3 {
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+  color: var(--color-text);
+}
+
+.project-info p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #a1a1aa;
+  margin-bottom: 20px;
+}
+
+.project-links a {
+  text-decoration: none;
+  color: var(--color-purple);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: var(--transition);
+}
+
+.project-links a:hover {
+  color: var(--color-text);
+  text-decoration: underline;
+}
+
+/* ==========================================
+   CONTACT SECTION
+   ========================================== */
+#contact {
+  padding: 80px 10%;
+  text-align: center;
+}
+
+.contact-subtitle {
+  color: #a1a1aa;
+  margin-bottom: 40px;
+  font-size: 1.05rem;
+}
+
+.contact-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 15px;
+  background-color: var(--color-input-bg);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  color: var(--color-text);
+  font-size: 1rem;
+  outline: none;
+  transition: var(--transition);
+}
+
+body.light-mode .contact-form input,
+body.light-mode .contact-form textarea {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: var(--color-purple);
+  box-shadow: 0 0 10px rgba(178, 74, 241, 0.1);
+}
+
+.contact-form button {
+  background: linear-gradient(
+    to right,
+    var(--color-purple),
+    var(--color-purple-dark)
+  );
+  color: #ffffff;
+  border: none;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.contact-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(178, 74, 241, 0.4);
+  filter: brightness(1.1);
+}
+
+/* ==========================================
+   MINIMAL SOCIAL ICONS
+   ========================================== */
+.social-links-minimal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.social-links-minimal a {
+  text-decoration: none;
+  color: var(--color-text);
+  font-size: 1.2rem; /* Tamanho do ícone */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%; /* Deixa o botão redondo */
+  transition: var(--transition);
+}
+
+body.light-mode .social-links-minimal a {
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Efeito Hover com o Roxo do tema */
+.social-links-minimal a:hover {
+  color: #ffffff;
+  background-color: var(--color-purple);
+  border-color: var(--color-purple);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(178, 74, 241, 0.3);
+}
+
+body.light-mode .social-links-minimal a:hover {
+  color: #ffffff;
+}
+
+/* ==========================================
+   FOOTER
+   ========================================== */
+footer {
+  padding: 30px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #71717a;
+  border-top: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+body.light-mode footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+/* ==========================================
+   MOBILE MEDIA QUERY
    ========================================== */
 @media (max-width: 768px) {
   #menu-toggle {
@@ -169,6 +510,7 @@ header img {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    transition: background-color 0.3s ease;
   }
 
   .nav-links ul {
@@ -179,9 +521,10 @@ header img {
 
   .nav-links a {
     font-size: 1.5rem;
+  }
 
-    .nav-links.active {
-      display: flex;
-    }
+  /* Correção: Fora da regra do '.nav-links a' */
+  .nav-links.active {
+    display: flex;
   }
 }
