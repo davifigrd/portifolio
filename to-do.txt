@@ -1,0 +1,26 @@
+DESIGN GERAL
+- Barra de rolagem personalizada
+- Deixar fontes <p> mais escuras para modo claro
+- Titulos mais bonitos (degradê)
+- Animações e efeitos de transição
+
+<FORM>
+- Mensagem em ingles no formulario = traduzir pra portugues mantendo a versão original
+- Banco de dados funcional (futuro)
+
+<HEADER>
+- Bandeira idioma
+- Ícone tema claro/ escuro
+- Aumentar logo
+- Aparecer depois de rolar
+
+<HERO>
+- Tirar efeito de girar foto
+- Efeito círculo girando na foto
+
+<SKILLS>
+- Melhorar design skills e tecnologies
+
+<PROJECTS>
+- Melhorar cards de projetos e botão de link para projeto
+

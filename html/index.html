@@ -13,6 +13,10 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
   </head>
   <body>
     <header>
@@ -117,9 +121,11 @@
       <div class="contact-container">
         <form
           class="contact-form"
-          action="mailto:contact@davifigrd.com"
-          method="post"
-          enctype="text/plain"
+          onsubmit="
+            event.preventDefault();
+            alert('Mensagem enviada! (Simulação do Front-end)');
+            this.reset();
+          "
         >
           <input
             type="text"
@@ -154,18 +160,18 @@
             <i class="fa-solid fa-envelope"></i>
           </a>
           <a
-            href="https://www.linkedin.com/in/davifigrd"
-            target="_blank"
-            aria-label="LinkedIn"
-          >
-            <i class="fa-brands fa-linkedin-in"></i>
-          </a>
-          <a
             href="https://github.com/davifigrd"
             target="_blank"
             aria-label="GitHub"
           >
             <i class="fa-brands fa-github"></i>
+          </a>
+          <a
+            href="https://www.linkedin.com/in/davifigrd"
+            target="_blank"
+            aria-label="LinkedIn"
+          >
+            <i class="fa-brands fa-linkedin-in"></i>
           </a>
           <a
             href="https://discord.com/users/davifigrd"

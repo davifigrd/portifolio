@@ -397,6 +397,8 @@ body.light-mode .project-card {
   font-size: 1rem;
   outline: none;
   transition: var(--transition);
+  resize: none;
+  font-family: inherit;
 }
 
 body.light-mode .contact-form input,
@@ -446,14 +448,14 @@ body.light-mode .contact-form textarea {
 .social-links-minimal a {
   text-decoration: none;
   color: var(--color-text);
-  font-size: 1.2rem; /* Tamanho do ícone */
+  font-size: 1.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 45px;
   height: 45px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 50%; /* Deixa o botão redondo */
+  border-radius: 50%;
   transition: var(--transition);
 }
 
@@ -461,7 +463,6 @@ body.light-mode .social-links-minimal a {
   border-color: rgba(0, 0, 0, 0.1);
 }
 
-/* Efeito Hover com o Roxo do tema */
 .social-links-minimal a:hover {
   color: #ffffff;
   background-color: var(--color-purple);
