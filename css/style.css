@@ -99,6 +99,7 @@ body.light-mode header {
 header img {
   height: 40px;
   width: auto;
+  transition: var(--transition);
 }
 
 .header-right {
@@ -110,7 +111,7 @@ header img {
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 20px;
 }
 
 .nav-links ul {
@@ -164,6 +165,58 @@ header img {
   opacity: 0.8;
 }
 
+#theme-button {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-text);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%; /* Botão redondo */
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+body.light-mode #theme-button {
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Efeito Hover Premium: Sem fundo roxo, apenas o ícone acende e gira */
+#theme-button:hover {
+  color: var(--color-purple); /* O ícone fica roxo */
+  border-color: var(--color-purple); /* A borda fina fica roxa */
+  background-color: transparent; /* Mantém o fundo transparente */
+  transform: scale(1.05);
+  box-shadow: 0 0 12px rgba(178, 74, 241, 0.15); /* Um brilho bem discreto */
+}
+
+#theme-button:hover i {
+  transform: rotate(180deg); /* O ícone gira meia volta */
+}
+
+#theme-button i {
+  transition: transform 0.4s ease;
+}
+
+#theme-button i {
+  color: var(--color-text);
+  transition: var(--transition);
+}
+
+#theme-button:hover i {
+  color: var(--color-purple); /* O ícone acende no roxo ao passar o mouse */
+}
+
+#lang-button .fi {
+  font-size: 1rem; /* Controla o tamanho da bandeira */
+  border-radius: 3px; /* Deixa os cantos da bandeira levemente arredondados (premium) */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Uma sombra bem sutil atrás da bandeira */
+  display: inline-block;
+  vertical-align: middle;
+}
+
 #menu-toggle {
   display: none;
   flex-direction: column;
@@ -189,30 +242,70 @@ header img {
 #hero {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; /* Garante que tudo dentro do Hero fique centralizado horizontalmente */
+  justify-content: center; /* Centraliza verticalmente na tela */
   gap: 20px;
   min-height: calc(100vh - 80px);
-  justify-content: center;
   padding: 40px 20px;
+  text-align: center; /* Garante que os textos também fiquem centralizados */
 }
 
-#hero img {
+/* CONTAINER PRINCIPAL DO EFEITO */
+.profile-card {
+  background-color: transparent;
   width: 210px;
   height: 210px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid var(--color-purple);
-  box-shadow: 0 10px 30px rgba(178, 74, 241, 0.2);
-  transition: var(--transition);
+  perspective: 1000px;
+  display: block; /* Garante que ele se comporte como um bloco controlável */
+  margin: 0 auto; /* Força a centralização horizontal do container */
 }
 
-#hero img:hover {
-  transform: scale(1.05) rotate(2deg);
+/* O elemento interno que faz a rotação */
+.profile-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+/* Ao passar o mouse, o bloco gira 180 graus e cresce um pouquinho */
+.profile-card:hover .profile-card-inner {
+  transform: rotateY(180deg) scale(1.05);
+}
+
+/* Configuração da frente e do verso */
+.profile-front,
+.profile-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* Estilo das imagens (Sua foto e seu Logo) */
+.profile-front img,
+.profile-back img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--color-purple);
+  box-shadow: 0 10px 30px rgba(178, 74, 241, 0.2);
+}
+
+/* Deixa o logo de costas por padrão */
+.profile-back {
+  transform: rotateY(180deg);
 }
 
 .subtitle {
   color: #a1a1aa;
   font-size: 1.1rem;
+  margin-top: 10px; /* Dá um espacinho extra abaixo da imagem se precisar */
 }
 
 /* ==========================================

@@ -9,9 +9,7 @@ DESIGN GERAL
 - Banco de dados funcional (futuro)
 
 <HEADER>
-- Bandeira idioma
-- Ícone tema claro/ escuro
-- Aumentar logo
+- Logo SHIELD + DAVI FIGUEIREDO
 - Aparecer depois de rolar
 
 <HERO>

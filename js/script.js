@@ -101,33 +101,46 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================================
   const langButton = document.getElementById('lang-button');
 
-  if (langButton) {
-    langButton.addEventListener('click', () => {
-      if (lang === "en") {
-        lang = "pt";
-        langButton.textContent = "🇺🇸";
-      } else {
-        lang = "en";
-        langButton.textContent = "🇧🇷";
-      }
-      applyTranslations();
-    });
+  function updateLangButtonIcon() {
+    if (lang === "en") {
+      // Se o site está em inglês, mostra a bandeira do Brasil pra mudar pra PT
+      langButton.innerHTML = '<span class="fi fi-br"></span>';
+    } else {
+      // Se o site está em português, mostra a bandeira dos EUA pra mudar pra EN
+      langButton.innerHTML = '<span class="fi fi-us"></span>';
+    }
   }
 
+  // Inicializa o ícone correto assim que a página carrega
+  updateLangButtonIcon();
+
+  langButton.addEventListener('click', () => {
+    if (lang === "en") {
+      lang = "pt";
+    } else {
+      lang = "en";
+    }
+
+    updateLangButtonIcon();
+    applyTranslations();
+  });
+
   // =========================================
-  // THEME TOGGLE (DARK/LIGHT MODE)
+  // THEME TOGGLE (DARK/ LIGHT MODE)
   // =========================================
   const themeButton = document.getElementById('theme-button');
 
+  function updateThemeButtonIcon() {
+    // Usamos o mesmo ícone minimalista de contraste para os dois modos
+    themeButton.innerHTML = '<i class="fa-solid fa-circle-half-stroke"></i>';
+  }
+
   if (themeButton) {
+    updateThemeButtonIcon();
+
     themeButton.addEventListener('click', () => {
       document.body.classList.toggle('light-mode');
-
-      if (document.body.classList.contains('light-mode')) {
-        themeButton.textContent = "🌙";
-      } else {
-        themeButton.textContent = "☀️";
-      }
+      updateThemeButtonIcon();
     });
   }
 

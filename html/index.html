@@ -15,6 +15,10 @@
     />
     <link
       rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.2/css/flag-icons.min.css"
+    />
+    <link
+      rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
     />
   </head>
@@ -41,17 +45,31 @@
         </nav>
 
         <div class="header-actions">
-          <button id="lang-button">🇧🇷</button>
+          <button id="lang-button"></button>
 
-          <button id="theme-button">☀️</button>
+          <button id="theme-button"></button>
         </div>
       </div>
     </header>
-
+    
     <section id="hero">
-      <img src="../img/perfil/perfil-4.png" alt="Foto de Davi Figueiredo" />
-      <h1 data-i18n="greeting">Hello, I'm Davi</h1>
-      <p class="subtitle" data-i18n="subtitle">ADS student & Developer</p>
+      <div class="profile-card">
+        <div class="profile-card-inner">
+          <div class="profile-front">
+            <img
+              src="../img/perfil/perfil-4.png"
+              alt="Foto de perfil de Davi Figueiredo"
+            />
+          </div>
+          <div class="profile-back">
+            <img src="../img/logo/rounded-logo.png" alt="Logo davifigrd" />
+          </div>
+        </div>
+      </div>
+
+      <p class="subtitle" data-i18n="hero-subtitle">
+        Estudante de Análise e Desenvolvimento de Sistemas
+      </p>
     </section>
 
     <section id="about">
