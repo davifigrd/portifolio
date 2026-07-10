@@ -1,10 +1,17 @@
 DESIGN GERAL
+- queria quea fonte dos textos das descrições fosse mais fonte de terminal, mais a ver com o tema de programação
+- separar mais as seções, uma página pra cada
+- quero que o header tenha o comportamento:
+1. além de aparecer só depois que o hero sumir (esse ja esta)
+2. quero que suma toda vez que o usuario rolar pra baixo e apareça quando rolar pra cima
+3. sempre que aparecer, aparece com a borda normal, depois de 0.5 segundos, fica com a borda roxa dando um destaque (igual estava)
 - Barra de rolagem personalizada
-- Deixar fontes <p> mais escuras para modo claro
 - Titulos mais bonitos (degradê)
 - Animações e efeitos de transição
 - botão fixed depois de rolar um pouco
 - transição de introdução, logo chegando na tela?? primeira vez no site (local storage)
+- animação escrevendo codigo terminal
+- barra de rolagem horizontal ou vertical ou sem
 
 MOBILE
 - Responsividade
@@ -12,10 +19,6 @@ MOBILE
 <FORM>
 - Mensagem em ingles no formulario = traduzir pra portugues mantendo a versão original
 - Banco de dados funcional (futuro)
-
-<HEADER>
-- Logo SHIELD + DAVI FIGUEIREDO
-- Aparecer depois de rolar
 
 <SKILLS>
 - Melhorar design skills e tecnologies talvez para blocos 3D das linguagens
@@ -25,6 +28,3 @@ MOBILE
 
 CODE
 - Comentar
-
-o header só aparecer depois que o hero sumir da tela
-mudar esse header, nao sei, parece muito simples, queria algo diferente e mais bonito

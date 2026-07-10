@@ -28,9 +28,11 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: sans-serif;
+
+  /* CORREÇÃO F5: Totalmente invisível e sem barra de rolagem no início */
   opacity: 0;
-  transition: opacity 0.2s ease;
-  overflow-x: hidden;
+  overflow: hidden;
+
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
@@ -38,61 +40,239 @@ body {
 
 body.loaded {
   opacity: 1;
+  overflow-x: hidden; /* Libera o site, mas trava o scroll horizontal indesejado */
+  overflow-y: auto; /* Libera a rolagem vertical perfeitamente */
 }
 
-body.loaded .profile-card.active-360 .profile-card-inner {
-  animation: quickSpin 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
+/* ==========================================
+   H1 MINIMALISTA: SCAN HIGH-CONTRAST + GLOW
+   ========================================== */
+#hero h1 {
+  font-size: 3.6rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+  line-height: 1.1;
+  position: relative;
+  transition:
+    background-position 0.5s ease,
+    filter 0.4s ease,
+    color 0.4s ease;
 
-h1 {
+  /* Centralização */
+  text-align: center;
+  display: block;
+  width: 100%;
+  max-width: max-content;
+  margin-left: auto;
+  margin-right: auto;
+  margin: 0 auto 20px auto;
+  padding-bottom: 12px;
+
+  /* O SCAN NA FONTE CORRIGIDO: 
+     Início e fim travados na mesma cor (#4b1093) elimina a "segunda mão de cor" */
   background: linear-gradient(
     to right,
-    var(--color-purple),
-    var(--color-purple-dark)
+    #4b1093 0%,
+    #4b1093 47%,
+    #ba7eff 50%,
+    /* Faixa de luz sutil da logo */ #4b1093 53%,
+    #4b1093 100%
   );
+  background-size: 300% 100%;
+  background-position: 250% 0;
+
   -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  /* Sincronização em 5 segundos */
+  animation: cyberScan 5s linear infinite;
+
+  /* DESTAQUE EXTRA: Sombra de texto estática que dá nitidez e presença premium */
+  filter: drop-shadow(0 2px 10px rgba(186, 126, 255, 0.25));
+}
+
+/* O span herda o comportamento para o scan passar direto por ele */
+#hero h1 span {
+  color: inherit;
   -webkit-text-fill-color: transparent;
 }
 
+/* ==========================================
+   A LINHA DA COBRINHA (BEM PEQUENA)
+   ========================================== */
+#hero h1::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  transition:
+    background-position 0.5s ease,
+    opacity 0.4s ease;
+
+  /* Cobrinha limpa e curta */
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    transparent 47%,
+    #ba7eff 50%,
+    transparent 53%,
+    transparent 100%
+  );
+
+  background-size: 300% 100%;
+  background-position: 250% 0;
+
+  animation: cyberScan 5s linear infinite;
+}
+
+/* ==========================================
+   TIMELINE DA ANIMAÇÃO (CYBER SCAN)
+   ========================================== */
+@keyframes cyberScan {
+  0% {
+    background-position: 250% 0;
+  }
+  100% {
+    background-position: -50% 0;
+  }
+}
+
+/* ==========================================
+   MODO CLARO (LIGHT MODE) - SCAN ATIVADO
+   ========================================== */
+body.light-mode #hero h1 {
+  /* Fundo roxo muito escuro com o feixe em roxo elétrico nítido */
+  background: linear-gradient(
+    to right,
+    #2a0854 0%,
+    #2a0854 47%,
+    #8b2df7 50%,
+    /* Cor do feixe adaptada para o modo claro */ #2a0854 53%,
+    #2a0854 100%
+  );
+  background-size: 300% 100%;
+  background-position: 250% 0;
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  /* Mantém a animação rodando no modo claro */
+  animation: cyberScan 5s linear infinite;
+
+  /* Sombra suave cinza/roxa para dar relevo no fundo claro */
+  filter: drop-shadow(0 2px 8px rgba(42, 8, 84, 0.15));
+}
+
+/* Garante que o span siga o gradiente do pai no modo claro */
+body.light-mode #hero h1 span {
+  color: inherit;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Ativa a cobrinha sob o texto no modo claro */
+body.light-mode #hero h1::after {
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    transparent 47%,
+    #8b2df7 50%,
+    /* Mesma cor do feixe do texto */ transparent 53%,
+    transparent 100%
+  );
+  background-size: 300% 100%;
+  background-position: 250% 0;
+  opacity: 1;
+
+  /* Mantém a animação da cobrinha rodando no modo claro */
+  animation: cyberScan 5s linear infinite;
+}
+
 section h2 {
-  font-size: 2rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #a1a1aa; /* Cinza Titânio moderno */
   text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--color-purple);
-  margin-bottom: 30px;
+  letter-spacing: 4px; /* Letras espaçadas estilo Tech/Cyberpunk */
   text-align: center;
+  margin: 0 auto 50px auto;
+  width: max-content; /* Faz a linha abaixo se ajustar ao tamanho do texto */
+  padding-bottom: 8px;
+
+  /* Linha inferior roxa minimalista e elegante */
+  border-bottom: 2px solid var(--color-purple);
+
+  /* Um leve brilho neon apenas sob a linha divisória */
+  filter: drop-shadow(0 2px 8px rgba(178, 74, 241, 0.4));
+}
+
+body.light-mode section h2 {
+  color: #27272a; /* Grafite escuro */
+  border-bottom-color: var(--color-purple-dark);
+  filter: none;
 }
 
 /* ==========================================
    DARK / LIGHT MODE VARIATIONS
    ========================================== */
 body.light-mode {
-  --color-bg: #f4f4f6;
-  --color-text: #1a1a1c;
+  --color-bg: #ececed; /* Um cinza/off-white fosco muito mais confortável */
+  --color-text: #1f1f23; /* Texto levemente suavizado (não é preto puro) */
   --color-purple: #8b26df;
   --color-purple-dark: #29064d;
-  --color-card-bg: #ffffff;
-  --color-input-bg: #e8e8ec;
+  --color-card-bg: #f5f5f7; /* Cartões ligeiramente mais claros que o fundo */
+  --color-input-bg: #dfdfe3;
 }
 
 /* ==========================================
-   HEADER & NAVIGATION
+   HEADER & NAVIGATION (PREMIUM FLOATING) - ANTIFLICK
    ========================================== */
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 4%;
-  position: sticky;
-  top: 0;
-  background-color: rgba(2, 2, 3, 0.8);
-  backdrop-filter: blur(10px);
+  padding: 15px 3%;
+  position: fixed;
+  top: 20px;
+  left: 50%;
+
+  /* Inicia invisível e travado para cliques até o JS permitir - CORRIGE O FLICK */
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(-150%);
+
+  width: 90%;
+  max-width: 1200px;
+  border-radius: 50px;
+
+  background-color: rgba(2, 2, 3, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+
   z-index: 1000;
-  transition: var(--transition);
+  transition:
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
-body.light-mode header {
-  background-color: rgba(244, 244, 246, 0.8);
+/* CLASSE DE ATIVAÇÃO: Injetada via JS pós-Hero */
+body.loaded header.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+header.scrolled {
+  border-color: rgba(178, 74, 241, 0.3);
+  box-shadow: 0 10px 30px rgba(178, 74, 241, 0.1);
 }
 
 .logo-link {
@@ -106,7 +286,7 @@ body.light-mode header {
 }
 
 header img {
-  height: 40px;
+  height: 38px;
   width: auto;
   transition: var(--transition);
 }
@@ -131,7 +311,7 @@ header img {
 
 .nav-links a {
   text-decoration: none;
-  color: var(--color-text);
+  color: #dcdee1;
   font-weight: 500;
   font-size: 0.95rem;
   transition: var(--transition);
@@ -158,13 +338,13 @@ header img {
 }
 
 /* ==========================================
-   HEADER ACTIONS & BUTTONS (AJUSTADO)
+   HEADER ACTIONS & BUTTONS
    ========================================== */
 #lang-button,
 #theme-button {
   background: none;
   border: none;
-  font-size: 1.1rem; /* Mantém os dois ícones com tamanhos visuais equivalentes */
+  font-size: 1.1rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -177,22 +357,18 @@ header img {
     transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     opacity 0.2s ease,
     color 0.3s ease;
-
-  /* Mantém a rotação nítida sem serrilhar os pixels do ícone */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transform-style: preserve-3d;
   backface-visibility: hidden;
 }
 
-/* Efeito de Hover idêntico e minimalista para ambos */
 #lang-button:hover,
 #theme-button:hover {
   transform: scale(1.15);
   color: var(--color-purple);
 }
 
-/* Faz apenas o desenho interno da lua/sol girar suavemente, sem círculos externos */
 #theme-button:hover {
   transform: rotate(180deg) scale(1.15);
 }
@@ -202,7 +378,6 @@ header img {
   transition: none;
 }
 
-/* Alinhamento da bandeira para casar perfeitamente com o botão ao lado */
 #lang-button .fi {
   font-size: 1.1rem;
   border-radius: 3px;
@@ -233,69 +408,134 @@ header img {
 }
 
 /* ==========================================
-   HERO SECTION (FOTO MAIOR, MAIS ALTA E COM SUPER BRILHO)
+   HERO SECTION: DISTANCIAMENTO DOS ELEMENTOS
    ========================================== */
 #hero {
+  min-height: 100vh; /* Permite que a seção cresça se o conteúdo precisar de espaço */
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  gap: 20px;
-  min-height: calc(100vh - 80px);
-  padding: 10px 20px 40px 20px; /* Reduzido o padding do topo para subir a foto */
+  align-items: center;
   text-align: center;
+  padding: 40px 20px; /* Um respiro interno superior e inferior */
+  position: relative;
+  box-sizing: border-box;
 }
 
+/* O H1 (Fica acima da foto) */
+#hero h1 {
+  font-size: 3.6rem;
+  font-weight: 900;
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+  position: relative;
+  text-align: center;
+  display: block;
+  width: 100%;
+  max-width: max-content;
+
+  /* LINHA DO ESPAÇO SUPERIOR: 
+     Define a distância perfeita entre o Texto Principal (H1) e a foto */
+  margin: 0 auto 35px auto;
+  padding-bottom: 12px;
+
+  background: linear-gradient(
+    to right,
+    #4b1093 0%,
+    #4b1093 47%,
+    #ba7eff 50%,
+    #4b1093 53%,
+    #4b1093 100%
+  );
+  background-size: 300% 100%;
+  background-position: 250% 0;
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  animation: cyberScan 5s linear infinite;
+  filter: drop-shadow(0 2px 10px rgba(186, 126, 255, 0.25));
+  transition:
+    background-position 0.5s ease,
+    filter 0.4s ease,
+    color 0.4s ease;
+}
+
+/* A FOTO DA MOEDA (Mantida idêntica, apenas unificando as duplicadas do código) */
 .profile-card {
   background-color: transparent;
-  width: 250px; /* Aumentado para 250px */
-  height: 250px; /* Aumentado para 250px */
+  width: 250px;
+  height: 250px;
   perspective: 1000px;
   display: block;
-  margin: -40px auto 10px auto; /* Margin negativa joga a foto mais para cima */
+  margin: 0 auto;
   cursor: pointer;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
 }
 
+/* O SUBTITLE (Abaixo da foto) */
+.subtitle {
+  font-family: monospace;
+  font-size: 1.3rem;
+  letter-spacing: 1px;
+  border-right: 3px solid var(--color-purple);
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block; /* Altera para inline-block para o width funcionar bem */
+  
+  /* Afasta 45px da foto e mantém centralizado horizontalmente */
+  margin: 45px auto 0 auto; 
+  
+  width: 0;
+  color: #a1a1aa;
+  transition: color var(--transition);
+  --text-length: 25;
+}
+
+/* CONTAINER DE FORA: Controla o tamanho e o ZOOM no Hover */
+.profile-card {
+  background-color: transparent;
+  width: 250px;
+  height: 250px;
+  perspective: 1000px;
+  display: block;
+margin: 25px auto 0 auto;
+  cursor: pointer;
+  transition: transform 0.3s ease; /* Transição suave apenas para o ZOOM */
+}
+
+/* HOVER: Dá o zoom na moeda inteira (Frente e Verso aumentam juntos) */
+.profile-card:hover {
+  transform: scale(1.05);
+}
+
+/* CARD INTERNO: Cuida estritamente do Giro (A transição de rotação fica fixa aqui) */
 .profile-card-inner {
   position: relative;
   width: 100%;
   height: 100%;
-  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); /* O giro sempre será suave */
 }
 
-/* Clique Manual: Vira 180 graus (mostra o verso) */
-.profile-card.active .profile-card-inner {
-  transform: rotateY(180deg);
-}
-
-/* Efeito de Hover Manual */
-.profile-card:hover .profile-card-inner {
-  transform: scale(1.05);
-}
-
-.profile-card.active:hover .profile-card-inner {
-  transform: rotateY(180deg) scale(1.05);
-}
-
-/* ==========================================
-   ANIMAÇÃO DE INTRODUÇÃO DA MOEDA (CORRIGIDA SEM BUG)
-   ========================================== */
-@keyframes quickSpin {
-  0% {
-    transform: rotateY(0deg);
-  }
-  100% {
-    transform: rotateY(360deg);
-  }
-}
-
-/* Classe temporária disparada pelo JS no F5 */
+/* NOVA CLASSE PARA O GIRO INICIAL (Substitui o quickSpin que bugava o clique) */
 .profile-card.active-360 .profile-card-inner {
+  transform: rotateY(360deg);
+}
+
+/* 3. O Hover Premium: Aplica o zoom na foto sem mexer na rotação Y */
+.profile-card:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+body.loaded .profile-card.active-360 .profile-card-inner {
   animation: quickSpin 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-/* Configuração Geral das Duas Faces com Super Brilho Neon */
+/* Faces Config - LIMPA E UNIFICADA (DUPLICAÇÃO REMOVIDA) */
 .profile-front,
 .profile-back {
   position: absolute;
@@ -303,44 +543,14 @@ header img {
   left: 0;
   width: 100%;
   height: 100%;
-
-  /* Esconde a face oposta perfeitamente, impedindo que uma foto sobreponha a outra */
   -webkit-backface-visibility: hidden !important;
   backface-visibility: hidden !important;
-
   border: 3px solid var(--color-purple);
   border-radius: 50%;
-
-  /* SUPER BRILHO NEON ATUALIZADO */
   box-shadow:
     0 0 15px rgba(178, 74, 241, 0.9),
-    /* Brilho interno forte na borda */ 0 0 40px rgba(178, 74, 241, 0.6),
-    /* Brilho médio para encorpar a cor */ 0 0 70px rgba(178, 74, 241, 0.4); /* Aura gigante espalhada ao redor */
-  overflow: hidden;
-  box-sizing: border-box;
-}
-
-/* REMOVIDO: O bloco antigo "profile-card.active-360 .profile-front..." que causava o bug foi deletado */
-/* ==========================================
-   ANIMAÇÃO DE INTRODUÇÃO DA MOEDA (360 CONTÍNUO E SUAVE)
-   ========================================== */
-
-.profile-card.active:hover .profile-card-inner {
-  transform: rotateY(180deg) scale(1.05);
-}
-
-.profile-front,
-.profile-back {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  border: 3px solid var(--color-purple);
-  border-radius: 50%;
-  box-shadow: 0 10px 30px rgba(178, 74, 241, 0.2);
+    0 0 40px rgba(178, 74, 241, 0.6),
+    0 0 70px rgba(178, 74, 241, 0.4);
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -361,11 +571,45 @@ body.light-mode .profile-back {
   background-color: #020203;
 }
 
-.subtitle,
-.contact-info p,
-footer p {
+/* ==========================================
+   EFEITO MAQUINA DE ESCREVER TERMINAL (SUBTITLE)
+   ========================================== */
+.subtitle {
+  font-family: monospace;
+  font-size: 1.3rem;
+  letter-spacing: 1px;
+  border-right: 3px solid var(--color-purple);
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0;
   color: #a1a1aa;
   transition: color var(--transition);
+  --text-length: 25;
+}
+
+body.loaded .subtitle {
+  animation:
+    typing 4s steps(var(--text-length)) 1.5s forwards, /* Passos dinâmicos aqui! */
+    blink 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    /* Conta perfeita: largura das letras + folga de 1 letra + os pixels do letter-spacing */
+    width: calc((var(--text-length) * 1ch) + 1ch + (var(--text-length) * 1px));
+  }
+}
+
+@keyframes blink {
+  from, to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: var(--color-purple);
+  }
 }
 
 body.light-mode .subtitle,
@@ -375,7 +619,7 @@ body.light-mode footer p {
 }
 
 /* ==========================================
-   CORTINA DE TRANSIÇÃO ULTRA-PREMIUM (SUAVIZADA)
+   CORTINA DE TRANSIÇÃO (CORRIGIDA DEFINITIVO)
    ========================================== */
 .lang-overlay {
   position: fixed;
@@ -394,32 +638,63 @@ body.light-mode footer p {
   backdrop-filter: blur(10px);
   z-index: 9999;
   pointer-events: none;
-  /* CORREÇÃO: Começa mais recuado (-150%) para esconder completamente o efeito do skew no canto esquerdo */
+
+  /* Ela nasce totalmente escondida à esquerda */
   transform: translateX(-150%) skewX(-10deg);
-  border: none !important;
-  box-shadow: none !important;
-  outline: none !important;
+  opacity: 0;
 }
 
-/* Animação com ciclo contínuo e suave de ponta a ponta */
-@keyframes curtainSlide {
+/* ANIMAÇÃO DE ENTRADA E SAÍDA FLUIDA: 
+   Ela entra, tampa tudo no meio (50%) e sai pela direita (100%) */
+@keyframes curtainFlash {
   0% {
     transform: translateX(-150%) skewX(-10deg);
+    opacity: 1;
   }
-  40% {
-    transform: translateX(-15%) skewX(-10deg);
-  }
-  60% {
-    transform: translateX(-15%) skewX(-10deg);
+  45%,
+  55% {
+    transform: translateX(-15%) skewX(-10deg); /* Tampa a tela perfeitamente */
+    opacity: 1;
   }
   100% {
-    /* CORREÇÃO: Sai totalmente da tela sem deixar rastros */
-    transform: translateX(120%) skewX(-10deg);
+    transform: translateX(120%) skewX(-10deg); /* Sai pela direita */
+    opacity: 1;
   }
 }
 
-.lang-overlay.active {
-  animation: curtainSlide 1.4s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+/* Classe dinâmica que o JS vai injetar e DEPOIS REMOVER */
+.lang-overlay.run-transition {
+  animation: curtainFlash 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+}
+
+/* ==========================================
+   CONFIGURAÇÃO DE RESPIRO PREMIUM & SCROLL REVEAL DAS SEÇÕES
+   ========================================== */
+section {
+  padding-top: 160px !important;
+  padding-bottom: 160px !important;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 90%;
+
+  /* Estado oculto padrão para a animação geral */
+  opacity: 0;
+  transform: translateY(50px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Injetado via JS ao rolar */
+section.active-section {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Desativa a animação de scroll no Hero para ele aparecer com a cortina */
+#hero.section {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
 }
 
 /* ==========================================
@@ -431,7 +706,6 @@ body.light-mode footer p {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 60px 20px;
 }
 
 #about p {
@@ -450,7 +724,6 @@ body.light-mode .contact-card p {
    SKILLS SECTION
    ========================================== */
 #skills {
-  padding: 80px 10%;
   background-color: rgba(255, 255, 255, 0.01);
 }
 
@@ -489,12 +762,8 @@ body.light-mode .skill-card {
 }
 
 /* ==========================================
-   PROJECTS SECTION (UPDATED)
+   PROJECTS SECTION
    ========================================== */
-#projects {
-  padding: 80px 10%;
-}
-
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -542,7 +811,6 @@ body.light-mode .project-card:hover {
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  letter-spacing: 1px;
   color: #ffffff;
   opacity: 0.9;
   border-bottom: 1px solid rgba(255, 255, 255, 0.03);
@@ -598,7 +866,6 @@ body.light-mode .project-card:hover {
    CONTACT SECTION
    ========================================== */
 #contact {
-  padding: 80px 10%;
   text-align: center;
 }
 

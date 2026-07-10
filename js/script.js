@@ -1,9 +1,16 @@
-const immediateOverlay = document.querySelector('.lang-overlay');
-if (immediateOverlay) {
-  immediateOverlay.classList.add('active');
+// 1. FORÇAR A PÁGINA A IR PARA O TOPO IMEDIATAMENTE NO REFRESH (F5)
+if (history.scrollRestoration) {
+  history.scrollRestoration = 'manual';
+} else {
+  window.onbeforeunload = function () {
+    window.scrollTo(0, 0);
+  };
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Garante o topo assim que o DOM estiver pronto
+  window.scrollTo(0, 0);
+
   // =========================================
   // TRANSLATIONS DICTIONARY
   // =========================================
@@ -46,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
       "project-2-title": "Próximo Grande Projeto",
       "project-2-desc": "Atualmente estudando novas arquiteturas e padrões de engenharia de software para lançar a próxima aplicação fullstack eficiente aqui.",
       "contact-title": "Contato",
-      "contact-desc": "Sinta-se à vontade para entrar em contato para projetos, colaborações ou apenas um bate-papo amigável!",
+      "contact-desc": "Sainte-se à vontade para entrar em contato para projetos, colaborações ou apenas um bate-papo amigável!",
       "form-name": "Nome",
       "form-email": "E-mail",
       "form-msg": "Mensagem",
@@ -54,7 +61,13 @@ document.addEventListener('DOMContentLoaded', () => {
     },
   };
 
-  let lang = localStorage.getItem('user-language') || "en";
+  // DETECÇÃO AUTOMÁTICA DE IDIOMA
+  let lang = localStorage.getItem('user-language');
+
+  if (!lang) {
+    const browserLang = navigator.language || navigator.userLanguage;
+    lang = browserLang.startsWith('pt') ? 'pt' : 'en';
+  }
 
   if (localStorage.getItem('user-theme') === 'light') {
     document.body.classList.add('light-mode');
@@ -65,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     i18nElements.forEach((element) => {
       const key = element.dataset.i18n;
       if (translations[lang] && translations[lang][key]) {
-        element.textContent = translations[lang][key];
+        element.innerHTML = translations[lang][key];
       }
     });
 
@@ -76,7 +89,18 @@ document.addEventListener('DOMContentLoaded', () => {
         element.setAttribute('placeholder', translations[lang][key]);
       }
     });
-  }
+
+    // CONTROLADOR DINÂMICO DA MÁQUINA DE ESCREVER (SUBTITLE)
+    const subtitleEl = document.querySelector('.subtitle');
+    if (subtitleEl) {
+      subtitleEl.style.animation = 'none';
+      void subtitleEl.offsetWidth; // Truque de reflow
+      subtitleEl.style.animation = '';
+
+      const textLength = subtitleEl.textContent.length;
+      subtitleEl.style.setProperty('--text-length', textLength);
+    }
+  } // <--- CHAVE CORRIGIDA AQUI
 
   applyTranslations();
 
@@ -91,9 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const navLinks = document.querySelector('.nav-links');
   const menuItems = document.querySelectorAll('.nav-links a');
 
-  // =========================================
-  // CONTROLADORES DE ÍCONES
-  // =========================================
   function updateLangButtonIcon() {
     if (langButton) {
       if (lang === "en") {
@@ -113,46 +134,50 @@ document.addEventListener('DOMContentLoaded', () => {
   updateLangButtonIcon();
   updateThemeButtonIcon();
 
-  // =========================================
-  // TRANSIÇÃO NO REFRESH (F5) & TEASER RÁPIDO 360°
-  // =========================================
+  // Modifique este bloco por volta da linha 116:
   if (overlay) {
-    // Remove a classe suavemente após os 1.4s da animação terminar por completo
-    setTimeout(() => {
-      overlay.classList.remove('active');
-    }, 1400);
+    overlay.classList.add('run-transition');
+    setTimeout(() => { overlay.classList.remove('run-transition'); }, 1250);
   }
 
-  // 3. Torna o site visível bem no meio da transição (com a tela 100% coberta)
   setTimeout(() => {
     document.body.classList.add('loaded');
   }, 500);
 
-  // 4. Roda o efeito 360° da foto de perfil estritamente DEPOIS que a cortina sai de cena
   if (profileCard) {
+    // Faz o giro de 360 graus lindo na entrada da página
     setTimeout(() => {
       profileCard.classList.add('active-360');
     }, 1450);
 
-    // Limpa a animação da moeda
-    setTimeout(() => {
-      profileCard.classList.remove('active-360');
-    }, 2250);
-
-    // Mantém o clique manual
+    // CONTROLE DO CLIQUE (FRENTE / VERSO)
+    let isFlipped = false;
     profileCard.addEventListener('click', () => {
-      profileCard.classList.toggle('active');
+      // Remove a classe de entrada para ela não brigar com o clique
+      profileCard.classList.remove('active-360');
+
+      isFlipped = !isFlipped; // Inverte o estado
+
+      const innerCard = profileCard.querySelector('.profile-card-inner');
+      if (innerCard) {
+        // Gira na hora que clica, sem esperar o mouse sair!
+        innerCard.style.transform = isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+      }
     });
   }
 
   // =========================================
   // EVENTOS DE CLIQUES (IDIOMA E TEMA CORRIGIDOS)
   // =========================================
+  // =========================================
+  // EVENTOS DE CLIQUES (RESET DE ANIMAÇÃO REAL)
+  // =========================================
   if (langButton && overlay) {
     langButton.addEventListener('click', () => {
-      overlay.classList.add('active');
+      // Injeta a animação flash
+      overlay.classList.add('run-transition');
 
-      // Muda o idioma exatamente quando a tela estiver 100% coberta (no meio do ciclo)
+      // Muda o idioma bem no meio da cortina (quando ela cobrir a tela inteira aos 500ms)
       setTimeout(() => {
         lang = (lang === "en") ? "pt" : "en";
         localStorage.setItem('user-language', lang);
@@ -160,23 +185,60 @@ document.addEventListener('DOMContentLoaded', () => {
         applyTranslations();
       }, 500);
 
-      // CORREÇÃO: Aguarda os 1.4s completos da animação terminar para limpar a classe sem cortes secos
+      // Remove a classe logo após a animação acabar (1.2s), deixando ela pronta para o próximo clique
+      setTimeout(() => {
+        overlay.classList.remove('run-transition');
+      }, 1250);
+    });
+  }
+
+  if (themeButton && overlay) {
+    themeButton.addEventListener('click', () => {
+      // Injeta a animação flash
+      overlay.classList.add('run-transition');
+
+      // Muda o tema no escuro total (500ms)
+      setTimeout(() => {
+        document.body.classList.toggle('light-mode');
+        const isLight = document.body.classList.contains('light-mode');
+        localStorage.setItem('user-theme', isLight ? 'light' : 'dark');
+        updateThemeButtonIcon();
+      }, 500);
+
+      // Reseta o gatilho da cortina
+      setTimeout(() => {
+        overlay.classList.remove('run-transition');
+      }, 1250);
+    });
+  }
+
+  if (themeButton && overlay) {
+    themeButton.addEventListener('click', () => {
+      // 1. Dispara a cortina
+      overlay.classList.add('active');
+
+      // 2. Altera o tema exatamente no meio da transição escura (600ms)
+      setTimeout(() => {
+        document.body.classList.toggle('light-mode');
+        const isLight = document.body.classList.contains('light-mode');
+        localStorage.setItem('user-theme', isLight ? 'light' : 'dark');
+        updateThemeButtonIcon();
+      }, 600); // Sincronizado com o ponto cego
+
+      // 3. Finaliza a animação retirando a cortina
       setTimeout(() => {
         overlay.classList.remove('active');
       }, 1400);
     });
   }
 
-if (themeButton && overlay) {
+  if (themeButton && overlay) {
     themeButton.addEventListener('click', () => {
       overlay.classList.add('active');
       setTimeout(() => {
         document.body.classList.toggle('light-mode');
-        
-        // ADICIONE ESTAS LINHAS AQUI: Verifica se a classe existe e salva o status correto
         const isLight = document.body.classList.contains('light-mode');
         localStorage.setItem('user-theme', isLight ? 'light' : 'dark');
-        
         updateThemeButtonIcon();
       }, 500);
       setTimeout(() => {
@@ -199,4 +261,47 @@ if (themeButton && overlay) {
       });
     });
   }
+
+  // =========================================
+  // ANIMAÇÃO DE REVELAÇÃO DAS SEÇÕES AO ROLAR
+  // =========================================
+  const sections = document.querySelectorAll('section');
+
+  function revealSections() {
+    const triggerBottom = window.innerHeight * 0.85;
+    sections.forEach(section => {
+      const sectionTop = section.getBoundingClientRect().top;
+      if (sectionTop < triggerBottom) {
+        section.classList.add('active-section');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', revealSections);
+  setTimeout(revealSections, 600);
 });
+
+// =========================================
+// APARIÇÃO DINÂMICA DO HEADER (PÓS-HERO)
+// =========================================
+const header = document.querySelector('header');
+const heroSection = document.getElementById('hero');
+
+if (header && heroSection) {
+  window.addEventListener('scroll', () => {
+    const heroHeight = heroSection.offsetHeight;
+    const scrollPosition = window.scrollY;
+
+    if (scrollPosition > heroHeight * 0.8) {
+      header.classList.add('visible');
+    } else {
+      header.classList.remove('visible');
+    }
+
+    if (scrollPosition > heroHeight * 1.2) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+}
