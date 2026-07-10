@@ -3,6 +3,11 @@ DESIGN GERAL
 - Deixar fontes <p> mais escuras para modo claro
 - Titulos mais bonitos (degradê)
 - Animações e efeitos de transição
+- botão fixed depois de rolar um pouco
+- transição de introdução, logo chegando na tela?? primeira vez no site (local storage)
+
+MOBILE
+- Responsividade
 
 <FORM>
 - Mensagem em ingles no formulario = traduzir pra portugues mantendo a versão original
@@ -12,13 +17,14 @@ DESIGN GERAL
 - Logo SHIELD + DAVI FIGUEIREDO
 - Aparecer depois de rolar
 
-<HERO>
-- Tirar efeito de girar foto
-- Efeito círculo girando na foto
-
 <SKILLS>
-- Melhorar design skills e tecnologies
+- Melhorar design skills e tecnologies talvez para blocos 3D das linguagens
 
 <PROJECTS>
 - Melhorar cards de projetos e botão de link para projeto
 
+CODE
+- Comentar
+
+o header só aparecer depois que o hero sumir da tela
+mudar esse header, nao sei, parece muito simples, queria algo diferente e mais bonito
