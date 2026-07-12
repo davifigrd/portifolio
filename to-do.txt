@@ -9,18 +9,10 @@
 - Melhorar cards de projetos e botão de link para projeto
 
 MOBILE / CODE
-- Comentar e Responsividade
+- Comentar e organizar
+- Responsividade
 - Espanhol
 - Audio?
+- Tirar theme e idioma toggle
+- Tirar transição antiga?
 
-efeito cobrinha não está compativel com o brilho na fonte, esta dessincronizado
-
-3. barra de rolagem só aparecer depois da introdição inicial
-
-4. quando clico na moeda ela vira pro lado esquerdo, na primeira vez depois da introm depois vira pro lado direito, quero um padrão, de preferencia que ela vire completamente, dando uma volta completa, por exemplo: ta de frente, clicei uma vez, ela vai da esquerda pra direita, agora que esta de costas, quero que quando eu clique va da esquerda pra direita tambem, dando uma volta completa, nao indo e voltando entendeu
-
-5. linha do footer pro botão da seta
-
-tirar theme button de vez e tirar tudo relacionado (local storage densecessario e light mode)
-tirar tudo relcionado ao botão do idioma de troca de idioma (agora ja faz automatico)
-apague aquela antiga transição roxa, agora minha transição é essa cortina vertical

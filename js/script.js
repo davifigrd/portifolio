@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
       skills: "Skills",
       projects: "Projects",
       contact: "Contact",
-      greeting: "Hello, I'm Davi",
+      greeting: "Davi",
       subtitle: "ADS student & Developer",
       "about-title": "About Me",
       "about-text": "I am an Analysis and Systems Development student passionate about creating clean, efficient, and modern digital solutions. Focused on front-end development and constantly learning new technologies to build premium web experiences.",
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
       skills: "Habilidades",
       projects: "Projetos",
       contact: "Contato",
-      greeting: "Olá, Eu sou o Davi",
+      greeting: "Davi Figueiredo",
       subtitle: "Estudante de ADS & Desenvolvedor",
       "about-title": "Sobre Mim",
       "about-text": "Sou estudante de Análise e Desenvolvimento de Sistemas, apaixonado por criar soluções digitais limpas, eficientes e modernas. Focado no desenvolvimento front-end e constantemente aprendendo novas tecnologias para construir experiências web premium.",
@@ -525,7 +525,6 @@ window.addEventListener('load', () => {
     const langBtn = document.getElementById('btn-lang') || document.querySelector('.lang-btn');
     if (langBtn) {
       langBtn.addEventListener('click', () => {
-        // Pequeno delay para esperar o seu script original atualizar o localStorage primeiro
         setTimeout(atualizarTextoIdioma, 50);
       });
     }
@@ -549,4 +548,25 @@ window.addEventListener('load', () => {
 
     window.addEventListener('scroll', removerAviso);
   }
-}); // <--- CHAVE DE FECHAMENTO GERAL DO DOMContentLoaded MANTIDA TOTALMENTE SEGURA
+
+  // =================================================================
+  // CONTROLE DE ROTAÇÃO DA MOEDA (SEMPRE DA ESQUERDA PARA A DIREITA)
+  // =================================================================
+  const profileCard = document.querySelector('.profile-card');
+  const cardInner = document.querySelector('.profile-card-inner');
+
+  if (profileCard && cardInner) {
+    // Agora totalmente corrigido sem aspas e iniciando em 360 por causa da intro
+    let rotacaoAcumulada = 360;
+
+    const girarMoeda = () => {
+      rotacaoAcumulada += 180;
+      cardInner.style.transform = `rotateY(${rotacaoAcumulada}deg)`;
+    };
+
+    // Aplica o giro infinito ao clicar na moeda
+    profileCard.addEventListener('click', girarMoeda);
+
+  }
+
+}); // <--- CHAVE DE FECHAMENTO GLOBAL DO DOMCONTENTLOADED GARANTIDA E CORRETA
