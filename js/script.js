@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
       "project-2-title": "Próximo Grande Projeto",
       "project-2-desc": "Atualmente estudando novas arquiteturas e padrões de engenharia de software para lançar a próxima aplicação fullstack eficiente aqui.",
       "contact-title": "Contato",
-      "contact-desc": "Sainte-se à vontade para entrar em contato para projetos, colaborações ou apenas um bate-papo amigável!",
+      "contact-desc": "Sinta-se à vontade para entrar em contato para projetos, colaborações ou apenas um bate-papo amigável!",
       "form-name": "Nome",
       "form-email": "E-mail",
       "form-msg": "Mensagem",
@@ -279,29 +279,274 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.addEventListener('scroll', revealSections);
   setTimeout(revealSections, 600);
+
+  // =========================================
+  // EFEITO DE ENVIO PREMIUM (VALIDAÇÃO AVANÇADA E FILTRO AUTOMÁTICO)
+  // =========================================
+  const contactForm = document.querySelector('.contact-form');
+  const submitBtn = contactForm ? contactForm.querySelector('button') : null;
+
+  if (contactForm && submitBtn) {
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // 1. Identifica o idioma usando a variável global do seu código
+      const isEn = (lang === 'en');
+
+      // LISTA AUTOMÁTICA DE MODERAÇÃO
+      const blackList = [
+        "viado", "puta", "caralho", "porra", "merda", "chupa", "buceta", "pica", "caral", "fdp", "vtnm",
+        "arrombado", "cu", "cuzao", "pnc", "cacete", "bosta", "vadia", "vagabundo", "bicha", "macaco",
+        "filho da puta", "imbecil", "idiota", "otario", "pinto", "xereca", "penis", "vagina", "orgia", "sexo",
+        "fuck", "shit", "bitch", "asshole", "cunt", "dick", "pussy", "faggot", "nigger", "bastard",
+        "slut", "whore", "cock", "prick", "wanker", "motherfucker", "sex", "porn", "naked"
+      ];
+
+      // Dicionário de traduções internas para os estados do botão
+      const text = {
+        sending: isEn ? `<i class="fa-solid fa-circle-notch fa-spin"></i> Sending...` : `<i class="fa-solid fa-circle-notch fa-spin"></i> Enviando...`,
+        success: isEn ? `<i class="fa-solid fa-circle-check"></i> Message Sent!` : `<i class="fa-solid fa-circle-check"></i> Mensagem Enviada!`,
+        errEmpty: isEn ? `<i class="fa-solid fa-circle-xmark"></i> Fill all fields!` : `<i class="fa-solid fa-circle-xmark"></i> Preencha os campos!`,
+        errEmail: isEn ? `<i class="fa-solid fa-circle-xmark"></i> Invalid Email!` : `<i class="fa-solid fa-circle-xmark"></i> E-mail Inválido!`,
+        errBanned: isEn ? `<i class="fa-solid fa-hand"></i> Forbidden Content!` : `<i class="fa-solid fa-hand"></i> Conteúdo Proibido!`
+      };
+
+      // Seleção dos campos do formulário
+      const nameInput = contactForm.querySelector('input[type="text"]');
+      const emailInput = contactForm.querySelector('input[type="email"]');
+      const messageInput = contactForm.querySelector('textarea');
+
+      let mensagemErro = "";
+
+      // --- FUNÇÕES AUXILIARES INTERNAS ---
+      const contemTermoProibido = (texto) => {
+        if (!texto) return false;
+        const textoMinusculo = texto.toLowerCase();
+        return blackList.some(termo => textoMinusculo.includes(termo));
+      };
+
+      const emailValido = (email) => {
+        // O .trim() remove espaços antes/depois e o regex proíbe espaços no meio
+        const regex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+        return regex.test(email.toLowerCase().trim());
+      };
+
+      // --- ETAPAS DE VALIDAÇÃO REAL ---
+      if (!nameInput?.value.trim() || !emailInput?.value.trim() || !messageInput?.value.trim()) {
+        mensagemErro = text.errEmpty;
+      }
+      else if (emailInput && !emailValido(emailInput.value)) {
+        mensagemErro = text.errEmail;
+      }
+      else if (contemTermoProibido(nameInput?.value) || contemTermoProibido(messageInput?.value)) {
+        mensagemErro = text.errBanned;
+      }
+
+      const originalText = submitBtn.innerHTML;
+
+      if (mensagemErro !== "") {
+        submitBtn.classList.remove('success', 'loading');
+        submitBtn.classList.add('error', 'shake');
+        submitBtn.innerHTML = mensagemErro;
+
+        setTimeout(() => {
+          submitBtn.classList.remove('shake');
+        }, 500);
+
+        setTimeout(() => {
+          submitBtn.classList.remove('error');
+          submitBtn.innerHTML = originalText;
+        }, 1500);
+
+      } else {
+        submitBtn.classList.remove('success', 'error', 'shake');
+        submitBtn.classList.add('loading');
+        submitBtn.innerHTML = text.sending;
+
+        setTimeout(() => {
+          submitBtn.classList.remove('loading');
+          submitBtn.classList.add('success');
+          submitBtn.innerHTML = text.success;
+
+          setTimeout(() => {
+            submitBtn.classList.remove('success');
+            submitBtn.innerHTML = originalText;
+            contactForm.reset();
+          }, 1500);
+
+        }, 2000);
+      }
+    }); // <-- Fecha o addEventListener corretamente
+  } // <-- Fecha o IF inicial de segurança corretamente e isola o código abaixo!
+  // =========================================
+  // EXIBIÇÃO INTELIGENTE DO BOTÃO VOLTAR AO TOPO (FIXED)
+  // =========================================
+  const backToTopButton = document.getElementById('back-to-top');
+  const contactSection = document.getElementById('contact');
+
+  if (backToTopButton && contactSection) {
+    const contactObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        // Quando a seção de contato entrar 10% no ecrã, mostra a seta fixed
+        if (entry.isIntersecting) {
+          backToTopButton.classList.add('visible');
+        } else {
+          backToTopButton.classList.remove('visible');
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+
+    contactObserver.observe(contactSection);
+  }
 });
 
 // =========================================
-// APARIÇÃO DINÂMICA DO HEADER (PÓS-HERO)
+// CONTROLE INTELIGENTE DO HEADER (UP/DOWN + DELAY ROXO)
 // =========================================
 const header = document.querySelector('header');
 const heroSection = document.getElementById('hero');
 
+let lastScrollY = window.scrollY;
+let borderTimeout = null;
+
 if (header && heroSection) {
   window.addEventListener('scroll', () => {
     const heroHeight = heroSection.offsetHeight;
-    const scrollPosition = window.scrollY;
+    const currentScrollY = window.scrollY;
 
-    if (scrollPosition > heroHeight * 0.8) {
-      header.classList.add('visible');
+    // Verifica se o usuário já passou da seção Hero
+    const pastHero = currentScrollY > heroHeight * 0.8;
+    // Detecta a direção do scroll: true se rolou para cima, false se rolar para baixo
+    const scrollingUp = currentScrollY < lastScrollY;
+
+    if (pastHero && (scrollingUp || currentScrollY <= 0)) {
+      // Se passou do hero E está rolando para cima (ou no topo extremo): MOSTRA
+      if (!header.classList.contains('visible')) {
+        header.classList.add('visible');
+
+        // Limpa timers anteriores para evitar bugs de rolagem rápida
+        clearTimeout(borderTimeout);
+
+        // Dispara o destaque da borda roxa exatamente após 0.5 segundos (500ms)
+        borderTimeout = setTimeout(() => {
+          header.classList.add('scrolled');
+        }, 500);
+      }
     } else {
+      // Se rolar para baixo OU ainda estiver dentro do Hero: ESCONDE
       header.classList.remove('visible');
+
+      // Quando ele some, remove instantaneamente a borda roxa para resetar o efeito
+      header.classList.remove('scrolled');
+      clearTimeout(borderTimeout);
     }
 
-    if (scrollPosition > heroHeight * 1.2) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
-    }
+    // Atualiza a última posição do scroll para a próxima verificação
+    lastScrollY = currentScrollY;
   });
 }
+// =========================================
+// GERENCIADOR DE INTRODUÇÃO (EFEITO PORTA PREMIUM)
+// =========================================
+window.addEventListener('load', () => {
+  const introScreen = document.getElementById('intro-screen');
+  const hasVisited = localStorage.getItem('davi_portfolio_visited');
+
+  // Função auxiliar para procurar e disparar a tua digitação original
+  const dispararTyping = () => {
+    if (typeof typeEffect === 'function') {
+      typeEffect();
+    }
+  };
+
+  // ==================================================
+  // GERENCIADOR DE INTRODUÇÃO & AVISO DE SCROLL AUTOMÁTICO
+  // ==================================================
+  if (introScreen) {
+    document.body.classList.add('loaded');
+
+    // 1. Mantém a tela totalmente fechada por 6 segundos para a pulsação lenta agir
+    setTimeout(() => {
+      // Inicia a abertura física e o fade-out contínuo da cortina
+      introScreen.classList.add('fade-out');
+
+      // 2. Aos 85% de abertura (700ms), o Hero surge suavemente no fundo
+      setTimeout(() => {
+        document.body.classList.add('start-animations');
+        dispararTyping();
+      }, 700);
+
+      // 3. Cortina some totalmente. Ativa o scroll invisível e inicia o timer do aviso
+      setTimeout(() => {
+        document.body.classList.add('scrollbar-visible');
+        introScreen.remove();
+
+        // Ativa a lógica do aviso inteligente de Scroll
+        ativarAvisoScroll();
+      }, 1300);
+
+    }, 6000);
+  } else {
+    document.body.classList.add('loaded');
+    document.body.classList.add('start-animations');
+    document.body.classList.add('scrollbar-visible');
+    dispararTyping();
+    ativarAvisoScroll();
+  }
+
+  // FUNÇÃO PARA CRIAR E GERENCIAR O AVISO DE SCROLL DINÂMICO
+  function ativarAvisoScroll() {
+    // Busca o idioma ativo direto do localStorage ou assume 'pt' como padrão
+    const obterTexto = () => {
+      const idiomaSalvo = localStorage.getItem('davi_portfolio_lang') || 'pt';
+      return idiomaSalvo === 'en' ? 'Scroll' : 'Role para baixo';
+    };
+
+    // Cria o elemento da setinha no HTML dinamicamente
+    const hint = document.createElement('div');
+    hint.className = 'scroll-hint';
+    hint.innerHTML = `
+      <span id="scroll-hint-text">${obterTexto()}</span>
+      <svg viewBox="0 0 24 24">
+        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+      </svg>
+    `;
+    document.body.appendChild(hint);
+
+    // Se o usuário clicar no botão de trocar idioma enquanto o aviso estiver ativo, atualiza o texto na hora!
+    const atualizarTextoIdioma = () => {
+      const txtEl = document.getElementById('scroll-hint-text');
+      if (txtEl) txtEl.textContent = obterTexto();
+    };
+
+    const langBtn = document.getElementById('btn-lang') || document.querySelector('.lang-btn');
+    if (langBtn) {
+      langBtn.addEventListener('click', () => {
+        // Pequeno delay para esperar o seu script original atualizar o localStorage primeiro
+        setTimeout(atualizarTextoIdioma, 50);
+      });
+    }
+
+    // Se o usuário ficar 5 segundos sem rolar a página, mostra a mensagem
+    let timerHint = setTimeout(() => {
+      hint.classList.add('show');
+    }, 5000);
+
+    // Função para sumir com o aviso para sempre assim que o usuário rolar a tela
+    const removerAviso = () => {
+      clearTimeout(timerHint);
+      hint.classList.remove('show');
+
+      setTimeout(() => {
+        hint.remove();
+      }, 800);
+
+      window.removeEventListener('scroll', removerAviso);
+    };
+
+    window.addEventListener('scroll', removerAviso);
+  }
+}); // <--- CHAVE DE FECHAMENTO GERAL DO DOMContentLoaded MANTIDA TOTALMENTE SEGURA

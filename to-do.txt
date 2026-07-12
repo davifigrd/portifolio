@@ -1,16 +1,3 @@
-DESIGN GERAL
-- quero que o header tenha o comportamento:
-1. além de aparecer só depois que o hero sumir (esse ja esta)
-2. quero que suma toda vez que o usuario rolar pra baixo e apareça quando rolar pra cima
-3. sempre que aparecer, aparece com a borda normal, depois de 0.5 segundos, fica com a borda roxa dando um destaque (igual estava)
-
-- queria quea fonte dos textos das descrições fosse mais fonte de terminal, mais a ver com o tema de programação
-- separar mais as seções, uma página pra cada
-- botão fixed depois de rolar um pouco
-- transição de introdução, logo chegando na tela?? primeira vez no site (local storage)
-- barra de rolagem horizontal ou vertical ou sem
-- tirar header?
-
 <FORM>
 - Mensagem em ingles no formulario = traduzir pra portugues mantendo a versão original
 - Banco de dados funcional (futuro)
@@ -23,3 +10,17 @@ DESIGN GERAL
 
 MOBILE / CODE
 - Comentar e Responsividade
+- Espanhol
+- Audio?
+
+efeito cobrinha não está compativel com o brilho na fonte, esta dessincronizado
+
+3. barra de rolagem só aparecer depois da introdição inicial
+
+4. quando clico na moeda ela vira pro lado esquerdo, na primeira vez depois da introm depois vira pro lado direito, quero um padrão, de preferencia que ela vire completamente, dando uma volta completa, por exemplo: ta de frente, clicei uma vez, ela vai da esquerda pra direita, agora que esta de costas, quero que quando eu clique va da esquerda pra direita tambem, dando uma volta completa, nao indo e voltando entendeu
+
+5. linha do footer pro botão da seta
+
+tirar theme button de vez e tirar tudo relacionado (local storage densecessario e light mode)
+tirar tudo relcionado ao botão do idioma de troca de idioma (agora ja faz automatico)
+apague aquela antiga transição roxa, agora minha transição é essa cortina vertical

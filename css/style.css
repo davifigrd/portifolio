@@ -41,7 +41,45 @@ body {
 body.loaded {
   opacity: 1;
   overflow-x: hidden; /* Libera o site, mas trava o scroll horizontal indesejado */
-  overflow-y: auto; /* Libera a rolagem vertical perfeitamente */
+  overflow-y: hidden; /* Libera a rolagem vertical perfeitamente */
+}
+
+/* ==========================================
+   SCROLLBAR PREMIUM & MINIMALISTA
+   ========================================== */
+/* Suporte para navegadores baseados em Webkit (Chrome, Safari, Edge, Opera) */
+::-webkit-scrollbar {
+  width: 8px; /* Deixa a barra bem fina e elegante */
+  height: 8px; /* Para scroll horizontal, se houver */
+}
+
+/* O fundo da barra (onde o indicador desliza) */
+::-webkit-scrollbar-track {
+  background: var(--color-bg); /* Mantém o fundo escuro integrado ao site */
+}
+
+/* O indicador que mexe (o "bloquinho") */
+::-webkit-scrollbar-thumb {
+  background-color: rgba(
+    178,
+    74,
+    241,
+    0.3
+  ); /* Roxo sutil com transparência inicial */
+  border-radius: 20px; /* Cantos totalmente arredondados */
+  border: 2px solid var(--color-bg); /* Cria um respiro elegante nas laterais */
+  transition: background-color 0.3s ease;
+}
+
+/* Quando o utilizador passa o rato ou arrasta a barra */
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-purple); /* Acende o roxo elétrico completo */
+}
+
+/* Suporte para Firefox (Moderno e padronizado) */
+html {
+  scrollbar-width: thin; /* Deixa a barra fina no Firefox */
+  scrollbar-color: rgba(178, 74, 241, 0.3) var(--color-bg); /* Cor do indicador e do fundo */
 }
 
 /* ==========================================
@@ -417,7 +455,7 @@ header img {
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 40px 20px; /* Um respiro interno superior e inferior */
+  padding: 40px 20px; !important /* Um respiro interno superior e inferior */
   position: relative;
   box-sizing: border-box;
 }
@@ -484,58 +522,63 @@ header img {
   white-space: nowrap;
   overflow: hidden;
   display: inline-block; /* Altera para inline-block para o width funcionar bem */
-  
+
   /* Afasta 45px da foto e mantém centralizado horizontalmente */
-  margin: 45px auto 0 auto; 
-  
+  margin: 45px auto 0 auto;
+
   width: 0;
   color: #a1a1aa;
   transition: color var(--transition);
   --text-length: 25;
 }
 
-/* CONTAINER DE FORA: Controla o tamanho e o ZOOM no Hover */
+.subtitle span {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 3px solid var(--color-purple);
+  width: 0;
+  /* Aumentado de 2s para 4s para ficar mais lento e elegante */
+  /* Mantido o delay de 0.5s para começar logo após o Hero surgir a 70% */
+  animation:
+    typing 4s steps(30, end) 0.5s forwards,
+    blink 0.75s step-end infinite;
+}
+
+/* CONTAINER DE FORA: Controla o tamanho e o EFEITO HOVER SUAVE */
 .profile-card {
   background-color: transparent;
   width: 250px;
   height: 250px;
   perspective: 1000px;
   display: block;
-margin: 25px auto 0 auto;
+  margin: 25px auto 0 auto;
   cursor: pointer;
-  transition: transform 0.3s ease; /* Transição suave apenas para o ZOOM */
+  flex-shrink: 0;
+  
+  /* ESTA LINHA CONSERTA TUDO: Garante que qualquer efeito no card ou nos filhos seja ultra suave */
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* HOVER: Dá o zoom na moeda inteira (Frente e Verso aumentam juntos) */
-.profile-card:hover {
-  transform: scale(1.05);
-}
-
-/* CARD INTERNO: Cuida estritamente do Giro (A transição de rotação fica fixa aqui) */
+/* CARD INTERNO: Cuida estritamente da rotação 3D */
 .profile-card-inner {
   position: relative;
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
-  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); /* O giro sempre será suave */
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* NOVA CLASSE PARA O GIRO INICIAL (Substitui o quickSpin que bugava o clique) */
+/* CLASSE PARA O GIRO INICIAL VIA JS */
 .profile-card.active-360 .profile-card-inner {
   transform: rotateY(360deg);
-}
-
-/* 3. O Hover Premium: Aplica o zoom na foto sem mexer na rotação Y */
-.profile-card:hover {
-  transform: scale(1.05);
-  transition: transform 0.3s ease;
 }
 
 body.loaded .profile-card.active-360 .profile-card-inner {
   animation: quickSpin 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-/* Faces Config - LIMPA E UNIFICADA (DUPLICAÇÃO REMOVIDA) */
+/* FACES DA MOEDA: Configuração das bordas e do Brilho Neon Original */
 .profile-front,
 .profile-back {
   position: absolute;
@@ -547,12 +590,31 @@ body.loaded .profile-card.active-360 .profile-card-inner {
   backface-visibility: hidden !important;
   border: 3px solid var(--color-purple);
   border-radius: 50%;
+  
+  /* Sombra neon inicial discreta */
   box-shadow:
-    0 0 15px rgba(178, 74, 241, 0.9),
-    0 0 40px rgba(178, 74, 241, 0.6),
-    0 0 70px rgba(178, 74, 241, 0.4);
+    0 0 10px rgba(178, 74, 241, 0.5),
+    0 0 25px rgba(178, 74, 241, 0.3);
+    
   overflow: hidden;
   box-sizing: border-box;
+  
+  /* Transição suave para quando as sombras expandirem no hover */
+  transition: box-shadow 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* O EFEITO HOVER PREMIUM: O círculo todo ganha um leve zoom (5%) E a aura neon expande macia */
+.profile-card:hover {
+  transform: scale(1.05);
+}
+
+.profile-card:hover .profile-front,
+.profile-card:hover .profile-back {
+  /* As sombras expandem criando aquele destaque pop-up volumoso e flutuante */
+  box-shadow:
+    0 0 25px rgba(178, 74, 241, 0.9),
+    0 0 50px rgba(178, 74, 241, 0.6),
+    0 0 80px rgba(178, 74, 241, 0.4);
 }
 
 .profile-front img,
@@ -587,9 +649,10 @@ body.light-mode .profile-back {
   --text-length: 25;
 }
 
-body.loaded .subtitle {
-  animation:
-    typing 4s steps(var(--text-length)) 1.5s forwards, /* Passos dinâmicos aqui! */
+/* Modifique para que a animação só seja ativada sob o start-animations */
+body.start-animations .subtitle {
+  animation: 
+    typing 2s steps(var(--text-length)) forwards,
     blink 0.75s step-end infinite;
 }
 
@@ -604,7 +667,8 @@ body.loaded .subtitle {
 }
 
 @keyframes blink {
-  from, to {
+  from,
+  to {
     border-color: transparent;
   }
   50% {
@@ -671,13 +735,20 @@ body.light-mode footer p {
    CONFIGURAÇÃO DE RESPIRO PREMIUM & SCROLL REVEAL DAS SEÇÕES
    ========================================== */
 section {
-  padding-top: 160px !important;
-  padding-bottom: 160px !important;
+  min-height: 100vh; /* Força cada seção a ter, no mínimo, o tamanho da tela inteira */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centraliza o conteúdo verticalmente */
+  align-items: center;     /* Centraliza o conteúdo horizontalmente */
+  
+  /* Ajuste do preenchimento interno para o conteúdo nunca encostar nas bordas */
+padding: 140px 20px !important; 
   max-width: 1200px;
   margin: 0 auto;
   width: 90%;
+  box-sizing: border-box;
 
-  /* Estado oculto padrão para a animação geral */
+  /* Mantém o teu efeito de Scroll Reveal intacto */
   opacity: 0;
   transform: translateY(50px);
   transition:
@@ -711,6 +782,10 @@ section.active-section {
 #about p {
   max-width: 700px;
   margin: 0 auto;
+  font-family: 'Courier New', Courier, monospace; /* Fonte estilo terminal */
+  font-size: 1rem;
+  line-height: 1.6;
+  letter-spacing: 0.5px; /* Deixa os caracteres ligeiramente espaçados como em código */
 }
 
 body.light-mode #about p,
@@ -750,8 +825,9 @@ body.light-mode .skill-card {
 }
 
 .skill-card h3 {
+  font-family: 'Courier New', Courier, monospace;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--color-text);
 }
 
@@ -768,7 +844,7 @@ body.light-mode .skill-card {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 30px;
-  max-width: 900px;
+  max-width: 1100px; /* Aumentado para os cards respirarem para os lados */
   margin: 0 auto;
 }
 
@@ -831,11 +907,13 @@ body.light-mode .project-card:hover {
 }
 
 .project-info p {
-  font-size: 0.95rem;
+  font-family: 'Courier New', Courier, monospace; /* Fonte estilo terminal */
+  font-size: 0.9rem;
   line-height: 1.6;
   color: #a1a1aa;
   margin: 0;
   margin-bottom: 10px;
+  letter-spacing: 0.5px;
 }
 
 .project-links a {
@@ -870,9 +948,11 @@ body.light-mode .project-card:hover {
 }
 
 .contact-subtitle {
+  font-family: 'Courier New', Courier, monospace; /* Fonte estilo terminal */
   color: #a1a1aa;
   margin-bottom: 40px;
-  font-size: 1.05rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
 }
 
 .contact-container {
@@ -880,7 +960,8 @@ body.light-mode .project-card:hover {
   flex-direction: column;
   align-items: center;
   gap: 40px;
-  max-width: 600px;
+  width: 100%;
+  max-width: 850px; /* Expandido de 600px para 850px para dar conforto visual */
   margin: 0 auto;
 }
 
@@ -891,7 +972,19 @@ body.light-mode .project-card:hover {
   width: 100%;
 }
 
-.contact-form input,
+.contact-form input {
+  width: 100%;
+  padding: 15px;
+  background-color: var(--color-input-bg);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  color: var(--color-text);
+  font-size: 1rem;
+  outline: none;
+  transition: var(--transition);
+}
+
+/* Atualização do campo de texto - Travado e sem opção de esticar */
 .contact-form textarea {
   width: 100%;
   padding: 15px;
@@ -902,8 +995,79 @@ body.light-mode .project-card:hover {
   font-size: 1rem;
   outline: none;
   transition: var(--transition);
-  resize: none;
+  
+  resize: none; /* TRAVA DEFINITIVAMENTE: some com a opção de aumentar o espaço */
+  min-height: 160px;
   font-family: inherit;
+}
+
+/* BASE DO BOTÃO DE ENVIAR (Para suportar a transição do efeito) */
+.contact-form button {
+  background: linear-gradient(
+    to right,
+    var(--color-purple),
+    var(--color-purple-dark)
+  );
+  color: #ffffff;
+  border: none;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(178, 74, 241, 0.4);
+  filter: brightness(1.1);
+}
+
+/* ESTADO DE CARREGAMENTO (Clicou, o botão pulsa e suaviza) */
+.contact-form button.loading {
+  pointer-events: none;
+  filter: brightness(0.8);
+  opacity: 0.8;
+}
+
+/* ESTADO DE SUCESSO (Visual Verde Neon Cyberpunk ao terminar de enviar) */
+.contact-form button.success {
+  background: #00ff87 !important; /* Verde neon de sucesso */
+  color: #020203 !important;      /* Texto escuro para contraste alto */
+  pointer-events: none;
+  transform: scale(0.98);
+  box-shadow: 0 0 20px rgba(0, 255, 135, 0.4);
+}
+
+/* ==========================================
+   ESTADOS EXTRAS DO BOTÃO DE CONTATO
+   ========================================== */
+
+/* ESTADO DE ERRO (Vermelho Neon Cyberpunk) */
+.contact-form button.error {
+  background: #ff0055 !important; /* Vermelho vibrante */
+  color: #ffffff !important;
+  pointer-events: none;
+  box-shadow: 0 0 20px rgba(255, 0, 85, 0.5);
+}
+
+/* CLASSE QUE DISPARA A ANIMAÇÃO DE BALANÇO (SHAKE) */
+.contact-form button.shake {
+  animation: buttonShake 0.5s ease-in-out;
+}
+
+/* KEYFRAMES DA ANIMAÇÃO DE VIBRAÇÃO HACKER/FLUIDA */
+@keyframes buttonShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
 }
 
 body.light-mode .contact-form input,
@@ -989,10 +1153,108 @@ footer {
   font-size: 0.9rem;
   color: #71717a;
   border-top: 1px solid rgba(255, 255, 255, 0.02);
+  padding-top: 38px;
+  display: flex;
+  align-items: center;      /* ISSO centraliza verticalmente tudo lá dentro */
+  justify-content: center;
+  padding: 20px 0;
+  height: 60px; /* Opcional: se quiser travar uma altura fixa para o rodapé */
+  box-sizing: border-box;
+}
+
+footer p {
+  margin: 0;
+  padding: 0;
 }
 
 body.light-mode footer {
   border-top: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+/* ==========================================
+   BOTÃO VOLTAR AO TOPO (FIXED MINIMALISTA)
+   ========================================== */
+#back-to-top {
+  position: fixed !important;
+  bottom: 30px;
+  right: 30px;
+  width: 45px;
+  height: 45px;
+  background-color: rgba(2, 2, 3, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--color-text);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 0.9rem; /* Tamanho calibrado para o chevron */
+  z-index: 9999;
+  cursor: pointer;
+
+  /* Estado oculto inicial */
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.8) translateY(10px);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+/* Container do Ícone */
+#back-to-top i {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* A LINHA VERTICAL (|) - Ajustada para emendar perfeitamente */
+#back-to-top::after {
+  content: "";
+  position: absolute;
+
+  /* Subimos a base da linha para dentro do arco do chevron */
+  bottom: 15px;
+  width: 2px;
+  height: 0; /* Invisível inicialmente */
+  background-color: var(--color-purple);
+  border-radius: 1px;
+  opacity: 0;
+  transition:
+    height 0.3s ease,
+    opacity 0.2s ease;
+}
+
+/* Ativado via JS no Contato */
+#back-to-top.visible {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: scale(1) translateY(0) !important;
+}
+
+/* HOVER PREMIUM: Luz Suave + Junção Perfeita */
+#back-to-top:hover {
+  border-color: rgba(178, 74, 241, 0.3) !important; /* Borda roxa bem suave */
+  box-shadow: 0 0 12px rgba(178, 74, 241, 0.2) !important; /* Brilho neon atenuado e discreto */
+  transform: scale(1.05) translateY(-2px) !important;
+}
+
+/* Sobe o chevron ligeiramente para dar elegância */
+#back-to-top:hover i {
+  color: var(--color-purple);
+  transform: translateY(-2px);
+}
+
+/* Faz a linha crescer até tocar exatamente no vértice do chevron */
+#back-to-top:hover::after {
+  height: 12px; /* Altura ideal para completar o desenho da seta */
+  opacity: 1;
 }
 
 /* ==========================================
@@ -1033,3 +1295,306 @@ body.light-mode footer {
     display: flex;
   }
 }
+
+/* ==========================================
+   TELA DE INTRODUÇÃO CINEMATOGRÁFICA (PRELOADER)
+   ========================================== */
+#intro-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999;
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+/* Painéis Verticais Estilo Cortina Premium */
+.intro-panel {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background-color: #020203;
+  transition: transform 1.4s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* Painel Superior: Ganha o gradiente roxo sutil na borda inferior */
+.panel-top {
+  top: 0;
+  background: linear-gradient(to bottom, #020203 70%, rgba(178, 74, 241, 0.15) 100%);
+  border-bottom: 2px solid var(--color-purple);
+  box-shadow: 0 5px 25px rgba(178, 74, 241, 0.2);
+}
+
+/* Painel Inferior: Ganha o gradiente espelhado vindo de baixo */
+.panel-bottom {
+  bottom: 0;
+  background: linear-gradient(to top, #020203 70%, rgba(178, 74, 241, 0.15) 100%);
+  border-top: 2px solid var(--color-purple);
+  box-shadow: 0 -5px 25px rgba(178, 74, 241, 0.2);
+}
+
+/* Container do Escudo (Logo ancorado ao centro absoluto da tela inteira) */
+.intro-content {
+  position: absolute;
+  bottom: -60px; /* Alinha perfeitamente no centro da divisão dos painéis (metade do tamanho da imagem) */
+  left: 50%;
+  transform: translate(-50%, 0) scale(0.85);
+  z-index: 2;
+  text-align: center;
+  opacity: 0;
+  animation: fadeInLogoShield 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards 0.2s;
+}
+
+/* Estilização da Imagem do Escudo com Brilho Neon */
+.intro-logo-img {
+  width: 120px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 0 20px rgba(178, 74, 241, 0.6));
+}
+
+/* Animação Inicial de Surgimento do Escudo */
+@keyframes fadeInLogoShield {
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+/* CLASSES DE ATIVAÇÃO SUAVE (Disparadas via JS) */
+#intro-screen.fade-out .panel-top {
+  transform: translateY(-100%); /* Sobe levando a linha roxa e a logo junto! */
+}
+
+#intro-screen.fade-out .panel-bottom {
+  transform: translateY(100%);  /* Desce levando a linha inferior */
+}
+
+/* Suaviza o sumiço da logo enquanto ela sobe presa no painel */
+#intro-screen.fade-out .intro-content {
+  opacity: 0;
+  filter: blur(2px);
+  transition: all 0.7s ease-in-out;
+}
+
+/* ====================================================
+   TRAVA TOTAL DO SITE ENQUANTO A PORTA ESTÁ FECHADA
+   ==================================================== */
+
+/* Esconde e congela absolutamente todas as animações do Hero antes do sinal verde */
+body:not(.start-animations) .hero-image img,
+body:not(.start-animations) .coin-container,
+body:not(.start-animations) .coin-glitch,
+body:not(.start-animations) .hero-img,
+body:not(.start-animations) .profile-pic,
+body:not(.start-animations) section {
+  animation: none !important;
+  opacity: 0 !important;
+  transform: translateY(20px) scale(0.95) !important;
+  transition: none !important;
+}
+
+/* Transição de entrada suave para quando a porta se abre por completo */
+body.start-animations .hero-image img,
+body.start-animations .coin-container,
+body.start-animations .coin-glitch,
+body.start-animations .hero-img,
+body.start-animations .profile-pic {
+  opacity: 1 !important;
+  transform: translateY(0) scale(1) !important;
+  /* Aplica o surgimento elegante sincronizado com o fim da intro */
+  transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1), transform 1s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+
+/* ====================================================
+   TRAVA TOTAL DO SITE ENQUANTO A PORTA ESTÁ FECHADA
+   ==================================================== */
+
+/* Esconde o hero, seções e desativa a animação quickSpin da moeda */
+body:not(.start-animations) #hero h1,
+body:not(.start-animations) .profile-card,
+body:not(.start-animations) .profile-card-inner,
+body:not(.start-animations) .subtitle,
+body:not(.start-animations) section {
+  animation: none !important;
+  opacity: 0 !important;
+}
+
+/* Transição de entrada suave para os elementos principais ao abrir a cortina */
+body.start-animations #hero h1,
+body.start-animations .profile-card {
+  opacity: 1;
+  transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ====================================================
+   LINHA PULSANTE DA INTRODUÇÃO (MAIS LENTA E SUAVE)
+   ==================================================== */
+@keyframes pulseIntroLineTop {
+  0% {
+    box-shadow: 0 4px 12px rgba(178, 74, 241, 0.15);
+    border-bottom-color: var(--color-purple);
+  }
+  50% {
+    box-shadow: 0 8px 35px rgba(178, 74, 241, 0.8);
+    border-bottom-color: #e2b6ff;
+  }
+  100% {
+    box-shadow: 0 4px 12px rgba(178, 74, 241, 0.15);
+    border-bottom-color: var(--color-purple);
+  }
+}
+
+@keyframes pulseIntroLineBottom {
+  0% {
+    box-shadow: 0 -4px 12px rgba(178, 74, 241, 0.15);
+    border-top-color: var(--color-purple);
+  }
+  50% {
+    box-shadow: 0 -8px 35px rgba(178, 74, 241, 0.8);
+    border-top-color: #e2b6ff;
+  }
+  100% {
+    box-shadow: 0 -4px 12px rgba(178, 74, 241, 0.15);
+    border-top-color: var(--color-purple);
+  }
+}
+
+/* Aplica a pulsação bem lenta (4 segundos por ciclo) enquanto a intro estiver fechada */
+#intro-screen:not(.fade-out) .panel-top {
+  animation: pulseIntroLineTop 4s infinite ease-in-out !important;
+}
+
+#intro-screen:not(.fade-out) .panel-bottom {
+  animation: pulseIntroLineBottom 4s infinite ease-in-out !important;
+}
+
+/* ====================================================
+   TRAVA DO HERO (85%) E BARRA DE SCROLL 100% INVISÍVEL
+   ==================================================== */
+
+/* Quando a intro acaba, o scroll fica funcional, mas a barra continua totalmente oculta */
+body.scrollbar-visible {
+  overflow-y: auto !important;
+}
+
+/* Esconde a barra visual no Chrome, Edge e Safari */
+body::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+}
+
+/* Esconde a barra no Firefox e Internet Explorer */
+html {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+/* O Container do Indicador de Scroll Minimalista */
+.scroll-hint {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+  pointer-events: none;
+}
+
+/* Quando ativo, ele aparece suavemente */
+.scroll-hint.show {
+  opacity: 0.6;
+  visibility: visible;
+}
+
+/* Texto descritivo */
+.scroll-hint span {
+  font-family: monospace;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+/* Seta minimalista animada pulsando */
+.scroll-hint svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--color-purple);
+  animation: bounceHint 2s infinite;
+}
+
+@keyframes bounceHint {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(6px); }
+  60% { transform: translateY(3px); }
+}
+
+/* ====================================================
+   ESTILO DO INDICADOR DE SCROLL MINIMALISTA & TRAVA TOTAL
+   ==================================================== */
+
+/* Mantém o site sem nenhuma barra de rolagem lateral de forma definitiva */
+body {
+  overflow-y: hidden !important;
+}
+body.scrollbar-visible {
+  overflow-y: auto !important; /* Libera o scroll funcional, mas mantém a barra oculta */
+}
+body::-webkit-scrollbar {
+  display: none !important; /* Esconde a barra no Chrome, Edge e Safari */
+}
+
+/* O Container do Indicador (canto inferior direito) */
+.scroll-hint {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+  pointer-events: none; /* Não atrapalha cliques na tela */
+}
+
+/* Quando ativo, ele aparece suavemente */
+.scroll-hint.show {
+  opacity: 0.6; /* Discreto e elegante */
+  visibility: visible;
+}
+
+/* Texto descritivo */
+.scroll-hint span {
+  font-family: monospace;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+/* Seta minimalista animada (pulsando de leve para baixo) */
+.scroll-hint svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--color-purple);
+  animation: bounceHint 2s infinite;
+}
+
+@keyframes bounceHint {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(6px); }
+  60% { transform: translateY(3px); }
+}
+

@@ -23,11 +23,20 @@
     />
   </head>
   <body>
+<div id="intro-screen">
+  <div class="intro-panel panel-top">
+    <div class="intro-content">
+      <img src="../img/logo/shield-logo.png" alt="Logo Shield" class="intro-logo-img">
+    </div>
+  </div>
+  <div class="intro-panel panel-bottom"></div>
+</div>
+
     <header>
       <a href="#hero" class="logo-link">
         <img src="../img/logo/logo-name-bg-removed.png" alt="Logo davifigrd" />
       </a>
-
+      
       <div class="header-right">
         <button id="menu-toggle" aria-label="Open menu">
           <span></span>
@@ -45,9 +54,9 @@
         </nav>
 
         <div class="header-actions">
-          <button id="lang-button"></button>
-
-          <button id="theme-button"></button>
+          <button id="lang-button" aria-label="Change language">
+            <span class="fi fi-br"></span>
+          </button>
         </div>
       </div>
     </header>
@@ -55,22 +64,21 @@
     <div class="lang-overlay"></div>
 
     <section id="hero" class="section">
+      <h1 data-i18n="greeting">Hello, I'm Davi</h1>
 
-<h1 data-i18n="greeting">Hello, I'm Davi</h1>
-
-<div class="profile-card">
-  <div class="profile-card-inner">
-    <div class="profile-front">
-      <img
-        src="../img/perfil/perfil-4.png"
-        alt="Foto de perfil de Davi Figueiredo"
-      />
-    </div>
-    <div class="profile-back">
-      <img src="../img/logo/rounded-logo.png" alt="Logo davifigrd" />
-    </div>
-  </div>
-</div>
+      <div class="profile-card">
+        <div class="profile-card-inner">
+          <div class="profile-front">
+            <img
+              src="../img/perfil/perfil-4.png"
+              alt="Foto de perfil de Davi Figueiredo"
+            />
+          </div>
+          <div class="profile-back">
+            <img src="../img/logo/rounded-logo.png" alt="Logo davifigrd" />
+          </div>
+        </div>
+      </div>
 
       <p class="subtitle" data-i18n="subtitle">ADS Student & Developer</p>
     </section>
@@ -140,14 +148,7 @@
       </p>
 
       <div class="contact-container">
-        <form
-          class="contact-form"
-          onsubmit="
-            event.preventDefault();
-            alert('Mensagem enviada!');
-            this.reset();
-          "
-        >
+        <form class="contact-form" novalidate>
           <input
             type="text"
             placeholder="Name"
@@ -217,5 +218,9 @@
     </footer>
 
     <script src="../js/script.js"></script>
+
+    <a href="#hero" id="back-to-top" aria-label="Voltar ao topo">
+      <i class="fa-solid fa-chevron-up"></i>
+    </a>
   </body>
 </html>
