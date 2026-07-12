@@ -1,4 +1,8 @@
-// 1. FORÇAR A PÁGINA A IR PARA O TOPO IMEDIATAMENTE NO REFRESH (F5)
+// =================================================================
+// SCROLL-TO-TOP FIX ON REFRESH (F5)
+// Forces the page to stay at the top instead of restoring old scroll
+// position, so the intro curtain always plays from a clean state.
+// =================================================================
 if (history.scrollRestoration) {
   history.scrollRestoration = 'manual';
 } else {
@@ -8,11 +12,10 @@ if (history.scrollRestoration) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Garante o topo assim que o DOM estiver pronto
   window.scrollTo(0, 0);
 
   // =========================================
-  // TRANSLATIONS DICTIONARY
+  // TRANSLATIONS DICTIONARY (i18n)
   // =========================================
   const translations = {
     en: {
@@ -61,194 +64,71 @@ document.addEventListener('DOMContentLoaded', () => {
     },
   };
 
-  // DETECÇÃO AUTOMÁTICA DE IDIOMA
+  // Auto-detects language from a saved preference or the browser locale
   let lang = localStorage.getItem('user-language');
-
   if (!lang) {
     const browserLang = navigator.language || navigator.userLanguage;
     lang = browserLang.startsWith('pt') ? 'pt' : 'en';
   }
 
-  if (localStorage.getItem('user-theme') === 'light') {
-    document.body.classList.add('light-mode');
+  // =========================================
+  // APPLY TRANSLATIONS TO THE PAGE
+  // =========================================
+  const i18nTextElements = document.querySelectorAll("[data-i18n]");
+  i18nTextElements.forEach((element) => {
+    const key = element.dataset.i18n;
+    if (translations[lang] && translations[lang][key]) {
+      element.textContent = translations[lang][key];
+    }
+  });
+
+  const i18nPlaceholders = document.querySelectorAll("[data-i18n-placeholder]");
+  i18nPlaceholders.forEach((element) => {
+    const key = element.dataset.i18nPlaceholder;
+    if (translations[lang] && translations[lang][key]) {
+      element.setAttribute('placeholder', translations[lang][key]);
+    }
+  });
+
+  // =========================================
+  // SUBTITLE TYPEWRITER SETUP
+  // Restarts the CSS "typing" animation and recalculates the
+  // character count so it matches whichever language is active.
+  // =========================================
+  const subtitleEl = document.querySelector('.subtitle');
+  if (subtitleEl) {
+    subtitleEl.style.animation = 'none';
+    void subtitleEl.offsetWidth; // Forces a reflow so the animation can restart
+    subtitleEl.style.animation = '';
+
+    const textLength = subtitleEl.textContent.length;
+    subtitleEl.style.setProperty('--text-length', textLength);
   }
 
-  function applyTranslations() {
-    const i18nElements = document.querySelectorAll("[data-i18n]");
-    i18nElements.forEach((element) => {
-      const key = element.dataset.i18n;
-      if (translations[lang] && translations[lang][key]) {
-        element.innerHTML = translations[lang][key];
-      }
-    });
-
-    const i18nPlaceholders = document.querySelectorAll("[data-i18n-placeholder]");
-    i18nPlaceholders.forEach((element) => {
-      const key = element.dataset.i18nPlaceholder;
-      if (translations[lang] && translations[lang][key]) {
-        element.setAttribute('placeholder', translations[lang][key]);
-      }
-    });
-
-    // CONTROLADOR DINÂMICO DA MÁQUINA DE ESCREVER (SUBTITLE)
-    const subtitleEl = document.querySelector('.subtitle');
-    if (subtitleEl) {
-      subtitleEl.style.animation = 'none';
-      void subtitleEl.offsetWidth; // Truque de reflow
-      subtitleEl.style.animation = '';
-
-      const textLength = subtitleEl.textContent.length;
-      subtitleEl.style.setProperty('--text-length', textLength);
-    }
-  } // <--- CHAVE CORRIGIDA AQUI
-
-  applyTranslations();
-
   // =========================================
-  // REFERÊNCIAS GLOBAIS (Elementos DOM)
+  // GLOBAL DOM REFERENCES
   // =========================================
-  const langButton = document.getElementById('lang-button');
-  const themeButton = document.getElementById('theme-button');
-  const overlay = document.querySelector('.lang-overlay');
   const profileCard = document.querySelector('.profile-card');
   const menuToggle = document.getElementById('menu-toggle');
   const navLinks = document.querySelector('.nav-links');
   const menuItems = document.querySelectorAll('.nav-links a');
 
-  function updateLangButtonIcon() {
-    if (langButton) {
-      if (lang === "en") {
-        langButton.innerHTML = '<span class="fi fi-br"></span>';
-      } else {
-        langButton.innerHTML = '<span class="fi fi-us"></span>';
-      }
-    }
-  }
-
-  function updateThemeButtonIcon() {
-    if (themeButton) {
-      themeButton.innerHTML = '<i class="fa-solid fa-circle-half-stroke"></i>';
-    }
-  }
-
-  updateLangButtonIcon();
-  updateThemeButtonIcon();
-
-  // Modifique este bloco por volta da linha 116:
-  if (overlay) {
-    overlay.classList.add('run-transition');
-    setTimeout(() => { overlay.classList.remove('run-transition'); }, 1250);
-  }
-
+  // Reveals the page body shortly after DOM content is ready
   setTimeout(() => {
     document.body.classList.add('loaded');
   }, 500);
 
+  // =========================================
+  // PROFILE CARD ENTRY ANIMATION (360° spin-in)
+  // =========================================
   if (profileCard) {
-    // Faz o giro de 360 graus lindo na entrada da página
     setTimeout(() => {
       profileCard.classList.add('active-360');
     }, 1450);
-
-    // CONTROLE DO CLIQUE (FRENTE / VERSO)
-    let isFlipped = false;
-    profileCard.addEventListener('click', () => {
-      // Remove a classe de entrada para ela não brigar com o clique
-      profileCard.classList.remove('active-360');
-
-      isFlipped = !isFlipped; // Inverte o estado
-
-      const innerCard = profileCard.querySelector('.profile-card-inner');
-      if (innerCard) {
-        // Gira na hora que clica, sem esperar o mouse sair!
-        innerCard.style.transform = isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
-      }
-    });
   }
 
   // =========================================
-  // EVENTOS DE CLIQUES (IDIOMA E TEMA CORRIGIDOS)
-  // =========================================
-  // =========================================
-  // EVENTOS DE CLIQUES (RESET DE ANIMAÇÃO REAL)
-  // =========================================
-  if (langButton && overlay) {
-    langButton.addEventListener('click', () => {
-      // Injeta a animação flash
-      overlay.classList.add('run-transition');
-
-      // Muda o idioma bem no meio da cortina (quando ela cobrir a tela inteira aos 500ms)
-      setTimeout(() => {
-        lang = (lang === "en") ? "pt" : "en";
-        localStorage.setItem('user-language', lang);
-        updateLangButtonIcon();
-        applyTranslations();
-      }, 500);
-
-      // Remove a classe logo após a animação acabar (1.2s), deixando ela pronta para o próximo clique
-      setTimeout(() => {
-        overlay.classList.remove('run-transition');
-      }, 1250);
-    });
-  }
-
-  if (themeButton && overlay) {
-    themeButton.addEventListener('click', () => {
-      // Injeta a animação flash
-      overlay.classList.add('run-transition');
-
-      // Muda o tema no escuro total (500ms)
-      setTimeout(() => {
-        document.body.classList.toggle('light-mode');
-        const isLight = document.body.classList.contains('light-mode');
-        localStorage.setItem('user-theme', isLight ? 'light' : 'dark');
-        updateThemeButtonIcon();
-      }, 500);
-
-      // Reseta o gatilho da cortina
-      setTimeout(() => {
-        overlay.classList.remove('run-transition');
-      }, 1250);
-    });
-  }
-
-  if (themeButton && overlay) {
-    themeButton.addEventListener('click', () => {
-      // 1. Dispara a cortina
-      overlay.classList.add('active');
-
-      // 2. Altera o tema exatamente no meio da transição escura (600ms)
-      setTimeout(() => {
-        document.body.classList.toggle('light-mode');
-        const isLight = document.body.classList.contains('light-mode');
-        localStorage.setItem('user-theme', isLight ? 'light' : 'dark');
-        updateThemeButtonIcon();
-      }, 600); // Sincronizado com o ponto cego
-
-      // 3. Finaliza a animação retirando a cortina
-      setTimeout(() => {
-        overlay.classList.remove('active');
-      }, 1400);
-    });
-  }
-
-  if (themeButton && overlay) {
-    themeButton.addEventListener('click', () => {
-      overlay.classList.add('active');
-      setTimeout(() => {
-        document.body.classList.toggle('light-mode');
-        const isLight = document.body.classList.contains('light-mode');
-        localStorage.setItem('user-theme', isLight ? 'light' : 'dark');
-        updateThemeButtonIcon();
-      }, 500);
-      setTimeout(() => {
-        overlay.classList.remove('active');
-      }, 1400);
-    });
-  }
-
-  // =========================================
-  // HAMBURGUER MENU (MOBILE)
+  // HAMBURGER MENU (MOBILE)
   // =========================================
   if (menuToggle && navLinks) {
     menuToggle.addEventListener('click', () => {
@@ -263,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =========================================
-  // ANIMAÇÃO DE REVELAÇÃO DAS SEÇÕES AO ROLAR
+  // SECTION SCROLL-REVEAL ANIMATION
   // =========================================
   const sections = document.querySelectorAll('section');
 
@@ -281,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimeout(revealSections, 600);
 
   // =========================================
-  // EFEITO DE ENVIO PREMIUM (VALIDAÇÃO AVANÇADA E FILTRO AUTOMÁTICO)
+  // CONTACT FORM: VALIDATION + SIMULATED SUBMIT
   // =========================================
   const contactForm = document.querySelector('.contact-form');
   const submitBtn = contactForm ? contactForm.querySelector('button') : null;
@@ -291,10 +171,9 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       e.stopPropagation();
 
-      // 1. Identifica o idioma usando a variável global do seu código
       const isEn = (lang === 'en');
 
-      // LISTA AUTOMÁTICA DE MODERAÇÃO
+      // Basic profanity / inappropriate-content filter
       const blackList = [
         "viado", "puta", "caralho", "porra", "merda", "chupa", "buceta", "pica", "caral", "fdp", "vtnm",
         "arrombado", "cu", "cuzao", "pnc", "cacete", "bosta", "vadia", "vagabundo", "bicha", "macaco",
@@ -303,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "slut", "whore", "cock", "prick", "wanker", "motherfucker", "sex", "porn", "naked"
       ];
 
-      // Dicionário de traduções internas para os estados do botão
+      // Button label text for each state, in both languages
       const text = {
         sending: isEn ? `<i class="fa-solid fa-circle-notch fa-spin"></i> Sending...` : `<i class="fa-solid fa-circle-notch fa-spin"></i> Enviando...`,
         success: isEn ? `<i class="fa-solid fa-circle-check"></i> Message Sent!` : `<i class="fa-solid fa-circle-check"></i> Mensagem Enviada!`,
@@ -312,14 +191,12 @@ document.addEventListener('DOMContentLoaded', () => {
         errBanned: isEn ? `<i class="fa-solid fa-hand"></i> Forbidden Content!` : `<i class="fa-solid fa-hand"></i> Conteúdo Proibido!`
       };
 
-      // Seleção dos campos do formulário
       const nameInput = contactForm.querySelector('input[type="text"]');
       const emailInput = contactForm.querySelector('input[type="email"]');
       const messageInput = contactForm.querySelector('textarea');
 
       let mensagemErro = "";
 
-      // --- FUNÇÕES AUXILIARES INTERNAS ---
       const contemTermoProibido = (texto) => {
         if (!texto) return false;
         const textoMinusculo = texto.toLowerCase();
@@ -327,19 +204,16 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       const emailValido = (email) => {
-        // O .trim() remove espaços antes/depois e o regex proíbe espaços no meio
         const regex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
         return regex.test(email.toLowerCase().trim());
       };
 
-      // --- ETAPAS DE VALIDAÇÃO REAL ---
+      // Validation pipeline: empty fields -> invalid email -> banned content
       if (!nameInput?.value.trim() || !emailInput?.value.trim() || !messageInput?.value.trim()) {
         mensagemErro = text.errEmpty;
-      }
-      else if (emailInput && !emailValido(emailInput.value)) {
+      } else if (emailInput && !emailValido(emailInput.value)) {
         mensagemErro = text.errEmail;
-      }
-      else if (contemTermoProibido(nameInput?.value) || contemTermoProibido(messageInput?.value)) {
+      } else if (contemTermoProibido(nameInput?.value) || contemTermoProibido(messageInput?.value)) {
         mensagemErro = text.errBanned;
       }
 
@@ -377,10 +251,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         }, 2000);
       }
-    }); // <-- Fecha o addEventListener corretamente
-  } // <-- Fecha o IF inicial de segurança corretamente e isola o código abaixo!
+    });
+  }
+
   // =========================================
-  // EXIBIÇÃO INTELIGENTE DO BOTÃO VOLTAR AO TOPO (FIXED)
+  // BACK-TO-TOP BUTTON VISIBILITY
+  // Shows the button once the Contact section enters the viewport.
   // =========================================
   const backToTopButton = document.getElementById('back-to-top');
   const contactSection = document.getElementById('contact');
@@ -388,7 +264,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (backToTopButton && contactSection) {
     const contactObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        // Quando a seção de contato entrar 10% no ecrã, mostra a seta fixed
         if (entry.isIntersecting) {
           backToTopButton.classList.add('visible');
         } else {
@@ -404,87 +279,85 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // =========================================
-// CONTROLE INTELIGENTE DO HEADER (UP/DOWN + DELAY ROXO)
+// HEADER SHOW/HIDE ON SCROLL (up = show, down = hide)
 // =========================================
 const header = document.querySelector('header');
 const heroSection = document.getElementById('hero');
+const backToTopBtn = document.getElementById('back-to-top');
 
 let lastScrollY = window.scrollY;
 let borderTimeout = null;
+let suppressHeaderOnTop = false; // True while the back-to-top scroll animation is running
+
+// Clicking "back to top" scrolls upward, which would normally reveal the
+// header (see scroll logic below). This suppresses that side-effect.
+if (backToTopBtn && header) {
+  backToTopBtn.addEventListener('click', () => {
+    suppressHeaderOnTop = true;
+    header.classList.remove('visible');
+    header.classList.remove('scrolled');
+    clearTimeout(borderTimeout);
+  });
+}
 
 if (header && heroSection) {
   window.addEventListener('scroll', () => {
     const heroHeight = heroSection.offsetHeight;
     const currentScrollY = window.scrollY;
 
-    // Verifica se o usuário já passou da seção Hero
+    // Releases the lock only once the page has actually reached the top,
+    // no matter how long the smooth-scroll animation takes.
+    if (suppressHeaderOnTop && currentScrollY <= 5) {
+      suppressHeaderOnTop = false;
+    }
+
     const pastHero = currentScrollY > heroHeight * 0.8;
-    // Detecta a direção do scroll: true se rolou para cima, false se rolar para baixo
     const scrollingUp = currentScrollY < lastScrollY;
 
-    if (pastHero && (scrollingUp || currentScrollY <= 0)) {
-      // Se passou do hero E está rolando para cima (ou no topo extremo): MOSTRA
+    if (!suppressHeaderOnTop && pastHero && (scrollingUp || currentScrollY <= 0)) {
       if (!header.classList.contains('visible')) {
         header.classList.add('visible');
 
-        // Limpa timers anteriores para evitar bugs de rolagem rápida
         clearTimeout(borderTimeout);
-
-        // Dispara o destaque da borda roxa exatamente após 0.5 segundos (500ms)
         borderTimeout = setTimeout(() => {
           header.classList.add('scrolled');
         }, 500);
       }
     } else {
-      // Se rolar para baixo OU ainda estiver dentro do Hero: ESCONDE
       header.classList.remove('visible');
-
-      // Quando ele some, remove instantaneamente a borda roxa para resetar o efeito
       header.classList.remove('scrolled');
       clearTimeout(borderTimeout);
     }
 
-    // Atualiza a última posição do scroll para a próxima verificação
     lastScrollY = currentScrollY;
   });
 }
-// =========================================
-// GERENCIADOR DE INTRODUÇÃO (EFEITO PORTA PREMIUM)
-// =========================================
+
+// =================================================================
+// PAGE LOAD SEQUENCE (intro curtain, scroll hint, coin spin)
+// =================================================================
 window.addEventListener('load', () => {
   const introScreen = document.getElementById('intro-screen');
-  const hasVisited = localStorage.getItem('davi_portfolio_visited');
 
-  // Função auxiliar para procurar e disparar a tua digitação original
-  const dispararTyping = () => {
-    if (typeof typeEffect === 'function') {
-      typeEffect();
-    }
-  };
-
-  // ==================================================
-  // GERENCIADOR DE INTRODUÇÃO & AVISO DE SCROLL AUTOMÁTICO
-  // ==================================================
+  // =========================================
+  // INTRO CURTAIN TIMELINE
+  // =========================================
   if (introScreen) {
     document.body.classList.add('loaded');
 
-    // 1. Mantém a tela totalmente fechada por 6 segundos para a pulsação lenta agir
+    // Keeps the curtain fully closed for 6s while it pulses gently
     setTimeout(() => {
-      // Inicia a abertura física e o fade-out contínuo da cortina
       introScreen.classList.add('fade-out');
 
-      // 2. Aos 85% de abertura (700ms), o Hero surge suavemente no fundo
+      // At ~85% open (700ms in), the Hero fades in behind the curtain
       setTimeout(() => {
         document.body.classList.add('start-animations');
-        dispararTyping();
       }, 700);
 
-      // 3. Cortina some totalmente. Ativa o scroll invisível e inicia o timer do aviso
+      // Curtain fully gone: enable real scrolling and arm the scroll hint
       setTimeout(() => {
         document.body.classList.add('scrollbar-visible');
         introScreen.remove();
-
-        // Ativa a lógica do aviso inteligente de Scroll
         ativarAvisoScroll();
       }, 1300);
 
@@ -493,19 +366,19 @@ window.addEventListener('load', () => {
     document.body.classList.add('loaded');
     document.body.classList.add('start-animations');
     document.body.classList.add('scrollbar-visible');
-    dispararTyping();
     ativarAvisoScroll();
   }
 
-  // FUNÇÃO PARA CRIAR E GERENCIAR O AVISO DE SCROLL DINÂMICO
+  // =========================================
+  // IDLE SCROLL HINT
+  // Appears after 5s of inactivity, disappears for good on first scroll.
+  // =========================================
   function ativarAvisoScroll() {
-    // Busca o idioma ativo direto do localStorage ou assume 'pt' como padrão
     const obterTexto = () => {
-      const idiomaSalvo = localStorage.getItem('davi_portfolio_lang') || 'pt';
+      const idiomaSalvo = localStorage.getItem('user-language') || 'pt';
       return idiomaSalvo === 'en' ? 'Scroll' : 'Role para baixo';
     };
 
-    // Cria o elemento da setinha no HTML dinamicamente
     const hint = document.createElement('div');
     hint.className = 'scroll-hint';
     hint.innerHTML = `
@@ -516,25 +389,10 @@ window.addEventListener('load', () => {
     `;
     document.body.appendChild(hint);
 
-    // Se o usuário clicar no botão de trocar idioma enquanto o aviso estiver ativo, atualiza o texto na hora!
-    const atualizarTextoIdioma = () => {
-      const txtEl = document.getElementById('scroll-hint-text');
-      if (txtEl) txtEl.textContent = obterTexto();
-    };
-
-    const langBtn = document.getElementById('btn-lang') || document.querySelector('.lang-btn');
-    if (langBtn) {
-      langBtn.addEventListener('click', () => {
-        setTimeout(atualizarTextoIdioma, 50);
-      });
-    }
-
-    // Se o usuário ficar 5 segundos sem rolar a página, mostra a mensagem
     let timerHint = setTimeout(() => {
       hint.classList.add('show');
     }, 5000);
 
-    // Função para sumir com o aviso para sempre assim que o usuário rolar a tela
     const removerAviso = () => {
       clearTimeout(timerHint);
       hint.classList.remove('show');
@@ -549,24 +407,82 @@ window.addEventListener('load', () => {
     window.addEventListener('scroll', removerAviso);
   }
 
-  // =================================================================
-  // CONTROLE DE ROTAÇÃO DA MOEDA (SEMPRE DA ESQUERDA PARA A DIREITA)
-  // =================================================================
+  // =========================================
+  // PROFILE CARD SPIN-ON-CLICK (coin flip accumulator)
+  // Keeps spinning further with every click instead of resetting.
+  // =========================================
   const profileCard = document.querySelector('.profile-card');
   const cardInner = document.querySelector('.profile-card-inner');
 
   if (profileCard && cardInner) {
-    // Agora totalmente corrigido sem aspas e iniciando em 360 por causa da intro
-    let rotacaoAcumulada = 360;
+    let rotacaoAcumulada = 360; // Starts at 360 to match the entry-spin animation
 
     const girarMoeda = () => {
       rotacaoAcumulada += 180;
       cardInner.style.transform = `rotateY(${rotacaoAcumulada}deg)`;
     };
 
-    // Aplica o giro infinito ao clicar na moeda
     profileCard.addEventListener('click', girarMoeda);
+  }
+});
 
+// =================================================================
+// 3D SKILL CUBES: click jump + continuous hover rotation
+// =================================================================
+const cubes = document.querySelectorAll('.cube');
+
+// Click: brief "jump" pulse
+cubes.forEach(cube => {
+  cube.addEventListener('click', () => {
+    if (cube.classList.contains('jump-active')) return;
+
+    cube.classList.add('jump-active');
+    setTimeout(() => {
+      cube.classList.remove('jump-active');
+    }, 600);
+  });
+});
+
+// Hover: constant-speed rotation that always eases back to the resting angle
+cubes.forEach(cube => {
+  let animationFrameId = null;
+  let currentY = 25;       // Starting Y angle
+  const baseX = -20;       // Fixed X angle
+  const velocidade = 2.0;  // Constant rotation speed for every cube
+  let isHovered = false;
+
+  function updateRotation() {
+    currentY += velocidade;
+
+    if (isHovered) {
+      // Mouse over: spin indefinitely
+      cube.style.transform = `rotateX(${baseX}deg) rotateY(${currentY}deg)`;
+      animationFrameId = requestAnimationFrame(updateRotation);
+    } else {
+      // Mouse left: keep the same pace until it lands back on the resting angle
+      const anguloRelativo = (currentY - 25) % 360;
+
+      if (anguloRelativo >= 0 && anguloRelativo < velocidade) {
+        const voltas = Math.round((currentY - 25) / 360);
+        currentY = 25 + (voltas * 360); // Snaps precisely to the resting angle
+        cube.style.transform = `rotateX(${baseX}deg) rotateY(${currentY}deg)`;
+        animationFrameId = null; // Stops the loop gracefully
+      } else {
+        cube.style.transform = `rotateX(${baseX}deg) rotateY(${currentY}deg)`;
+        animationFrameId = requestAnimationFrame(updateRotation);
+      }
+    }
   }
 
-}); // <--- CHAVE DE FECHAMENTO GLOBAL DO DOMCONTENTLOADED GARANTIDA E CORRETA
+  cube.addEventListener('mouseenter', () => {
+    isHovered = true;
+    if (!animationFrameId) {
+      updateRotation();
+    }
+  });
+
+  cube.addEventListener('mouseleave', () => {
+    isHovered = false;
+    // Loop keeps running until it naturally reaches the resting angle
+  });
+});

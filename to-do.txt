@@ -2,17 +2,20 @@
 - Mensagem em ingles no formulario = traduzir pra portugues mantendo a versão original
 - Banco de dados funcional (futuro)
 
-<SKILLS>
-- Melhorar design skills e tecnologies talvez para blocos 3D das linguagens
-
 <PROJECTS>
-- Melhorar cards de projetos e botão de link para projeto
+- Melhorar botão de link
+- 4 x 4 + outros projetos...
+- card vai ter um video dando scroll/ mostrando o projeto
+- espaço entre h2 e cards
 
-MOBILE / CODE
+FINAL
 - Comentar e organizar
 - Responsividade
 - Espanhol
 - Audio?
-- Tirar theme e idioma toggle
-- Tirar transição antiga?
 
+outros
+- cursor personalizado?
+- cobrinha scan dessincronizando
+- h2 efeito sublinhado
+- melhorar fontes descrição h2 (tirar fonte terminal)

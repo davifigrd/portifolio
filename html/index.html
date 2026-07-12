@@ -13,14 +13,6 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
     />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.2/css/flag-icons.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-    />
   </head>
   <body>
     <div id="intro-screen">
@@ -56,16 +48,8 @@
             <li><a data-i18n="contact" href="#contact">Contact</a></li>
           </ul>
         </nav>
-
-        <div class="header-actions">
-          <button id="lang-button" aria-label="Change language">
-            <span class="fi fi-br"></span>
-          </button>
-        </div>
       </div>
     </header>
-
-    <div class="lang-overlay"></div>
 
     <section id="hero" class="section">
       <h1 data-i18n="greeting">Hello, I'm Davi</h1>
@@ -97,17 +81,172 @@
       </p>
     </section>
 
-    <section id="skills">
+    <section id="skills" class="skills-fullpage">
       <h2 data-i18n="skills-title">Skills & Technologies</h2>
-      <div class="skills-grid">
-        <div class="skill-card"><h3>HTML5</h3></div>
-        <div class="skill-card"><h3>CSS3</h3></div>
-        <div class="skill-card"><h3>JavaScript</h3></div>
-        <div class="skill-card"><h3>Git / GitHub</h3></div>
-        <div class="skill-card"><h3>Node.js</h3></div>
-        <div class="skill-card"><h3>C++</h3></div>
-        <div class="skill-card"><h3>Portugol</h3></div>
-        <div class="skill-card"><h3>Construct 3</h3></div>
+      <div class="skills-3d-container">
+        <div class="cube-wrapper" data-lang="html">
+          <div class="cube">
+            <div class="cube-face front">
+              <i class="fa-brands fa-html5"></i>
+            </div>
+            <div class="cube-face back"><i class="fa-brands fa-html5"></i></div>
+            <div class="cube-face right">
+              <i class="fa-brands fa-html5"></i>
+            </div>
+            <div class="cube-face left"><i class="fa-brands fa-html5"></i></div>
+            <div class="cube-face top"></div>
+            <div class="cube-face bottom"></div>
+          </div>
+          <span class="cube-label">HTML5</span>
+        </div>
+
+        <div class="cube-wrapper" data-lang="css">
+          <div class="cube">
+            <div class="cube-face front">
+              <i class="fa-brands fa-css3-alt"></i>
+            </div>
+            <div class="cube-face back">
+              <i class="fa-brands fa-css3-alt"></i>
+            </div>
+            <div class="cube-face right">
+              <i class="fa-brands fa-css3-alt"></i>
+            </div>
+            <div class="cube-face left">
+              <i class="fa-brands fa-css3-alt"></i>
+            </div>
+            <div class="cube-face top"></div>
+            <div class="cube-face bottom"></div>
+          </div>
+          <span class="cube-label">CSS3</span>
+        </div>
+
+        <div class="cube-wrapper" data-lang="js">
+          <div class="cube">
+            <div class="cube-face front"><i class="fa-brands fa-js"></i></div>
+            <div class="cube-face back"><i class="fa-brands fa-js"></i></div>
+            <div class="cube-face right"><i class="fa-brands fa-js"></i></div>
+            <div class="cube-face left"><i class="fa-brands fa-js"></i></div>
+            <div class="cube-face top"></div>
+            <div class="cube-face bottom"></div>
+          </div>
+          <span class="cube-label">JavaScript</span>
+        </div>
+
+        <div class="cube-wrapper" data-lang="react">
+          <div class="cube">
+            <div class="cube-face front">
+              <i class="fa-brands fa-react"></i>
+            </div>
+            <div class="cube-face back"><i class="fa-brands fa-react"></i></div>
+            <div class="cube-face right">
+              <i class="fa-brands fa-react"></i>
+            </div>
+            <div class="cube-face left"><i class="fa-brands fa-react"></i></div>
+            <div class="cube-face top"></div>
+            <div class="cube-face bottom"></div>
+          </div>
+          <span class="cube-label">React</span>
+        </div>
+
+        <div class="cube-wrapper" data-lang="node">
+          <div class="cube">
+            <div class="cube-face front">
+              <i class="fa-brands fa-node-js"></i>
+            </div>
+            <div class="cube-face back">
+              <i class="fa-brands fa-node-js"></i>
+            </div>
+            <div class="cube-face right">
+              <i class="fa-brands fa-node-js"></i>
+            </div>
+            <div class="cube-face left">
+              <i class="fa-brands fa-node-js"></i>
+            </div>
+            <div class="cube-face top"></div>
+            <div class="cube-face bottom"></div>
+          </div>
+          <span class="cube-label">Node.js</span>
+        </div>
+
+        <div class="cube-wrapper" data-lang="git">
+          <div class="cube">
+            <div class="cube-face front">
+              <i class="fa-brands fa-git-alt"></i>
+            </div>
+            <div class="cube-face back">
+              <i class="fa-brands fa-git-alt"></i>
+            </div>
+            <div class="cube-face right">
+              <i class="fa-brands fa-git-alt"></i>
+            </div>
+            <div class="cube-face left">
+              <i class="fa-brands fa-git-alt"></i>
+            </div>
+            <div class="cube-face top"></div>
+            <div class="cube-face bottom"></div>
+          </div>
+          <span class="cube-label">Git</span>
+        </div>
+
+        <div class="cube-wrapper" data-lang="cpp">
+          <div class="cube">
+            <div class="cube-face front">
+              <span class="cpp-logo">C<span>++</span></span>
+            </div>
+            <div class="cube-face back">
+              <span class="cpp-logo">C<span>++</span></span>
+            </div>
+            <div class="cube-face right">
+              <span class="cpp-logo">C<span>++</span></span>
+            </div>
+            <div class="cube-face left">
+              <span class="cpp-logo">C<span>++</span></span>
+            </div>
+            <div class="cube-face top"></div>
+            <div class="cube-face bottom"></div>
+          </div>
+          <span class="cube-label">C++</span>
+        </div>
+
+        <div class="cube-wrapper" data-lang="portugol">
+          <div class="cube">
+            <div class="cube-face front">
+              <i class="fa-regular fa-lightbulb"></i>
+            </div>
+            <div class="cube-face back">
+              <i class="fa-regular fa-lightbulb"></i>
+            </div>
+            <div class="cube-face right">
+              <i class="fa-regular fa-lightbulb"></i>
+            </div>
+            <div class="cube-face left">
+              <i class="fa-regular fa-lightbulb"></i>
+            </div>
+            <div class="cube-face top"></div>
+            <div class="cube-face bottom"></div>
+          </div>
+          <span class="cube-label">Portugol</span>
+        </div>
+
+        <div class="cube-wrapper" data-lang="construct">
+          <div class="cube">
+            <div class="cube-face front">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="cube-face back">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="cube-face right">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="cube-face left">
+              <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="cube-face top"></div>
+            <div class="cube-face bottom"></div>
+          </div>
+          <span class="cube-label">Construct 3</span>
+        </div>
       </div>
     </section>
 
