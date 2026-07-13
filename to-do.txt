@@ -18,3 +18,4 @@ outros
 - cursor personalizado?
 - cobrinha scan dessincronizando
 - melhorar fontes descrição h2 (tirar fonte terminal)
+- girar moeda depois da transição
