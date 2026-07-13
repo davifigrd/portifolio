@@ -17,5 +17,4 @@ FINAL
 outros
 - cursor personalizado?
 - cobrinha scan dessincronizando
-- h2 efeito sublinhado
 - melhorar fontes descrição h2 (tirar fonte terminal)
