@@ -322,9 +322,6 @@ header img {
   transform: translateY(0) !important;
 }
 
-/* ------------------------------------------
-   HERO H1: text-clip scan + synced glow pulse
-   ------------------------------------------ */
 #hero h1 {
   font-size: 3.6rem;
   font-weight: 900;
@@ -339,76 +336,29 @@ header img {
   margin: 0 auto 35px auto;
   padding-bottom: 12px;
 
-  background: linear-gradient(
-    to right,
-    #4b1093 0%,
-    #4b1093 40%,
-    #ba7eff 50%,
-    #4b1093 60%,
-    #4b1093 100%
-  );
-  background-size: 300% 100%;
-  background-position: 250% 0;
+  background: linear-gradient(100deg, #8b2fd9 42%, #d9a8ff 50%, #8b2fd9 58%);
+  background-size: 250% 100%;
+  background-position: 200% 0;
 
+  color: transparent;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  filter: drop-shadow(2px 2px 0px rgba(0, 0, 0, 0.4));
 
-  /* Single animation drives both the text scan AND the glow pulse below,
-     so it stays perfectly in sync with the underline scan (#hero h1::after) */
-  animation: cyberScanUnificado 4s linear infinite;
+  animation: scanShine 5s linear infinite;
+}
 
-  transition: color 0.4s ease;
+@keyframes scanShine {
+  to {
+    background-position: -50% 0;
+  }
 }
 
 #hero h1 span {
   color: inherit;
   -webkit-text-fill-color: transparent;
 }
-
-/* Underline "scan line" — uses the exact same animation/duration as the H1 above */
-#hero h1::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 4px;
-  width: 100%;
-
-  transition:
-    background-position 0.5s ease,
-    opacity 0.4s ease;
-
-  background: linear-gradient(
-    to right,
-    transparent 0%,
-    transparent 47%,
-    #7201f3 50%,
-    transparent 53%,
-    transparent 100%
-  );
-
-  background-size: 300% 100%;
-  background-position: 250% 0;
-
-  animation: cyberScanUnificado 4s linear infinite;
-}
-
-/* Text scan position + glow intensity peak at the same midpoint (50%) */
-@keyframes cyberScanUnificado {
-  0% {
-    background-position: 250% 0;
-    filter: drop-shadow(0 2px 5px rgba(186, 126, 255, 0.2));
-  }
-  50% {
-    filter: drop-shadow(0 4px 20px rgba(186, 126, 255, 0.85));
-  }
-  100% {
-    background-position: -50% 0;
-    filter: drop-shadow(0 2px 5px rgba(186, 126, 255, 0.2));
-  }
-}
-
 /* ------------------------------------------
    HERO PROFILE CARD (flip coin photo)
    ------------------------------------------ */
@@ -774,103 +724,166 @@ section.active-section {
 }
 
 /* ==========================================
-   PROJECTS SECTION
+   PROJECTS CAROUSEL (Corrigido)
    ========================================== */
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
+.projects-carousel {
+  width: 100%;
   max-width: 1100px;
-  margin-top: 50px;
+  overflow: hidden;
+  margin: 50px auto 0 auto; /* Centraliza o carrossel */
+  position: relative;
 }
 
-.project-card {
-  background-color: var(--color-card-bg);
-  border: 1px solid rgba(255, 255, 255, 0.03);
-  border-radius: 16px;
+.projects-track {
+  display: flex;
+  width: 100%;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================
+   PROJECTS CAROUSEL (Infinite Loop & Dark Design)
+   ========================================== */
+.projects-carousel {
+  width: 100%;
+  max-width: 1100px;
   overflow: hidden;
+  margin: 50px auto 0 auto;
+  position: relative;
+  /* Degradê sofisticado no fundo do container principal */
+  background: linear-gradient(180px, rgba(0, 0, 0, 0) 0%, rgba(13, 13, 13, 0.8) 100%);
+  border-radius: 24px;
+  padding: 20px 0;
+}
+
+.projects-track {
+  display: flex;
+  width: 100%;
+  /* 1.2s torna o deslize físico bem mais calmo e elegante */
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.projects-page {
+  flex: 0 0 100%;
+  min-width: 100%;
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+/* Card Estilo Dark Premium com Fundo de Vidro */
+.project-card {
+  width: 100%;
+  max-width: 680px; /* Aumentado um pouco o espaço de exibição */
+  background: rgba(15, 15, 15, 0.6); 
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   transition:
-    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.4s ease,
-    border-color 0.4s ease;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.5s ease,
+    border-color 0.5s ease;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
 }
 
 .project-card:hover {
   transform: translateY(-8px);
-  border-color: rgba(178, 74, 241, 0.4);
-  box-shadow: 0 12px 30px rgba(178, 74, 241, 0.1);
+  border-color: rgba(178, 74, 241, 0.5);
+  box-shadow: 0 20px 40px rgba(178, 74, 241, 0.15);
 }
 
-.project-img-placeholder {
+.project-media {
   width: 100%;
-  height: 180px;
-  background: linear-gradient(
-    135deg,
-    var(--color-purple-dark),
-    var(--color-bg)
-  );
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  color: #ffffff;
-  opacity: 0.9;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  /* Removemos o height fixo de 340px */
+  aspect-ratio: 16 / 9; /* Força o container a ter o formato perfeito de um vídeo de ecrã inteiro */
+  background-color: #050505;
+  overflow: hidden;
+}
+
+.project-video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Troca de 'cover' para 'contain' para GARANTIR que nada é cortado */
+  display: block;
+  opacity: 0.8;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+}
+
+.project-card:hover .project-video {
+  transform: scale(1.03);
+  opacity: 1;
 }
 
 .project-info {
-  padding: 25px;
+  padding: 30px;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
 .project-info h3 {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: var(--color-text);
   margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
 }
 
 .project-info p {
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    sans-serif;
-  font-size: 0.9rem;
-  line-height: 1.6;
-  color: #a1a1aa;
   margin: 0;
-  margin-bottom: 10px;
-  letter-spacing: 0.5px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .project-links a {
-  text-decoration: none;
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 20px;
-  background-color: rgba(178, 74, 241, 0.1);
-  color: var(--color-purple);
+  padding: 10px 24px;
+  background: rgba(178, 74, 241, 0.08);
+  border: 1px solid rgba(178, 74, 241, 0.25);
+  border-radius: 30px;
+  color: #e5b3ff;
+  text-decoration: none;
   font-weight: 600;
-  font-size: 0.9rem;
-  border-radius: 8px;
-  border: 1px solid rgba(178, 74, 241, 0.2);
+  font-size: 0.85rem;
   transition: all 0.3s ease;
-  width: fit-content;
 }
 
 .project-links a:hover {
-  background-color: var(--color-purple);
+  background: #b24af1;
   color: #ffffff;
-  border-color: var(--color-purple);
-  box-shadow: 0 4px 12px rgba(178, 74, 241, 0.3);
-  transform: translateY(-1px);
+  box-shadow: 0 0 15px rgba(178, 74, 241, 0.4);
+}
+
+/* Área das Bolinhas Corrigida (Evita o corte) */
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 30px;
+  padding: 10px 0; /* PADDING DE SEGURANÇA: Impede que o efeito 'scale' do hover corte as bolinhas */
+  height: 20px;   /* Força uma altura fixa para conter o efeito sem esmagar */
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.dot.active {
+  background-color: #b24af1;
+  transform: scale(1.3); /* Agora cresce livremente sem ser cortado */
 }
 
 /* ==========================================

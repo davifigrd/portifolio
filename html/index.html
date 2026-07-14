@@ -250,37 +250,99 @@
       </div>
     </section>
 
-    <section id="projects">
-      <h2 data-i18n="projects-title">Projects</h2>
-      <div class="projects-grid">
-        <div class="project-card">
-          <div class="project-img-placeholder">Code Studio</div>
-          <div class="project-info">
-            <h3 data-i18n="project-1-title">Premium Web Experience</h3>
-            <p data-i18n="project-1-desc">
-              A beautiful, minimalistic personal website built using modern CSS
-              layout techniques and interactive, lightweight JavaScript
-              features.
-            </p>
-            <div class="project-links">
-              <a href="https://github.com/davifigrd" target="_blank">GitHub</a>
-            </div>
+      <section id="projects">
+        <h2 data-i18n="projects-title">Projects</h2>
+
+        <div class="projects-carousel">
+          <div class="projects-track" id="projects-track">
+            <article class="project-card">
+              <div class="project-media">
+                <video
+                  class="project-video"
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                >
+                  <source src="../videos/terminal-zero.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <div class="project-info">
+                <h3>Terminal Zero</h3>
+                <p data-i18n="project-1-desc"></p>
+                <div class="project-links">
+                  <a
+                    href="https://github.com/davifigrd/terminal-zero"
+                    target="_blank"
+                    rel="noopener"
+                    data-i18n="view-project"
+                    >View Project</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article class="project-card">
+              <div class="project-media">
+                <video
+                  class="project-video"
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                >
+                  <source src="../videos/ia-consciente.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <div class="project-info">
+                <h3>IA Consciente</h3>
+                <p data-i18n="project-2-desc"></p>
+                <div class="project-links">
+                  <a
+                    href="https://davifigrd.github.io/IA-consciente"
+                    target="_blank"
+                    rel="noopener"
+                    data-i18n="view-project"
+                    >View Project</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article class="project-card">
+              <div class="project-media">
+                <video
+                  class="project-video"
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                >
+                  <source
+                    src="../videos/tristram-health-mind.mp4"
+                    type="video/mp4"
+                  />
+                </video>
+              </div>
+              <div class="project-info">
+                <h3>Tristram Health &amp; Mind</h3>
+                <p data-i18n="project-3-desc"></p>
+                <div class="project-links">
+                  <a
+                    href="https://davifigrd.github.io/tristram-health-mind"
+                    target="_blank"
+                    rel="noopener"
+                    data-i18n="view-project"
+                    >View Project</a
+                  >
+                </div>
+              </div>
+            </article>
           </div>
+
+          <div class="carousel-dots" id="carousel-dots"></div>
         </div>
-        <div class="project-card">
-          <div class="project-img-placeholder">Coming Soon</div>
-          <div class="project-info">
-            <h3 data-i18n="project-2-title">Next Big Project</h3>
-            <p data-i18n="project-2-desc">
-              Currently studying new architectures and software engineering
-              patterns to launch the next efficient fullstack application here.
-            </p>
-            <div class="project-links">
-              <a href="https://github.com/davifigrd" target="_blank">GitHub</a>
-            </div>
-          </div>
-        </div>
-      </div>
+      </section>
     </section>
 
     <section id="contact">

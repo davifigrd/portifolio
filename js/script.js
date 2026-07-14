@@ -29,12 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
       "about-text": "I am an Analysis and Systems Development student passionate about creating clean, efficient, and modern digital solutions. Focused on front-end development and constantly learning new technologies to build premium web experiences.",
       "skills-title": "Skills & Technologies",
       "projects-title": "Projects",
-      "project-1-title": "Premium Web Experience",
-      "project-1-desc": "A beautiful, minimalistic personal website built using modern CSS layout techniques and interactive, lightweight JavaScript features.",
-      "project-2-title": "Next Big Project",
-      "project-2-desc": "Currently studying new architectures and software engineering patterns to launch the next efficient fullstack application here.",
+      "project-1-desc": "A minimalist puzzle game engineered in Construct 3 to test core algorithmic logic. Features 10 progressive stages optimized for strategic analysis and quick visual troubleshooting.",
+      "project-2-desc": "A premium web platform built to evaluate AI models critically. Fosters media literacy by mapping patterns, vulnerabilities, and factual deviations in automated neural outputs.",
+      "project-3-desc": "A smart wellness client using real-time computer vision mechanics. Tracks physical posture during yoga routines using secure live video analysis for immediate biofeedback.",
+      "view-project": "View Project",
       "contact-title": "Contact Me",
-      "contact-desc": "Feel free to reach out for projects, collaborations or just a friendly chat!",
       "form-name": "Name",
       "form-email": "Email",
       "form-msg": "Message",
@@ -51,12 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
       "about-text": "Sou estudante de Análise e Desenvolvimento de Sistemas, apaixonado por criar soluções digitais limpas, eficientes e modernas. Focado no desenvolvimento front-end e constantemente aprendendo novas tecnologias para construir experiências web premium.",
       "skills-title": "Habilidades & Tecnologias",
       "projects-title": "Projetos",
-      "project-1-title": "Experiência Web Premium",
-      "project-1-desc": "Um site pessoal lindo e minimalista construído usando técnicas modernas de layout CSS e recursos interativos e leves de JavaScript.",
-      "project-2-title": "Próximo Grande Projeto",
-      "project-2-desc": "Atualmente estudando novas arquiteturas e padrões de engenharia de software para lançar a próxima aplicação fullstack eficiente aqui.",
-      "contact-title": "Contato",
-      "contact-desc": "Sinta-se à vontade para entrar em contato para projetos, colaborações ou apenas um bate-papo amigável!",
+      "project-1-desc": "Jogo de quebra-cabeça minimalista projetado no Construct 3 para exercitar lógica algorítmica. Possui 10 fases progressivas focadas em análise estratégica e depuração visual rápida.",
+      "project-2-desc": "Plataforma web premium voltada à auditoria crítica de modelos de IA. Combate a infodemia mapeando vieses, limitações e inconsistências factuais em saídas geradas por redes neurais.",
+      "project-3-desc": "Interface inteligente de bem-estar integrada a rotinas de computação visual. Monitora e corrige a postura biomecânica durante treinos em tempo real utilizando análise de vídeo local.", "view-project": "Ver Projeto",
       "form-name": "Nome",
       "form-email": "E-mail",
       "form-msg": "Mensagem",
@@ -125,21 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       profileCard.classList.add('active-360');
     }, 1450);
-  }
-
-  // =========================================
-  // HAMBURGER MENU (MOBILE)
-  // =========================================
-  if (menuToggle && navLinks) {
-    menuToggle.addEventListener('click', () => {
-      navLinks.classList.toggle('active');
-    });
-
-    menuItems.forEach(item => {
-      item.addEventListener('click', () => {
-        navLinks.classList.remove('active');
-      });
-    });
   }
 
   // =========================================
@@ -255,6 +236,340 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =========================================
+  // HEADER SHOW/HIDE ON SCROLL (up = show, down = hide)
+  // =========================================
+  const header = document.querySelector('header');
+  const heroSection = document.getElementById('hero');
+  const backToTopBtn = document.getElementById('back-to-top');
+
+  let lastScrollY = window.scrollY;
+  let borderTimeout = null;
+  let suppressHeaderOnTop = false; // True while the back-to-top scroll animation is running
+
+  // Clicking "back to top" scrolls upward, which would normally reveal the
+  // header (see scroll logic below). This suppresses that side-effect.
+  if (backToTopBtn && header) {
+    backToTopBtn.addEventListener('click', () => {
+      suppressHeaderOnTop = true;
+      header.classList.remove('visible');
+      header.classList.remove('scrolled');
+      clearTimeout(borderTimeout);
+    });
+  }
+
+  if (header && heroSection) {
+    window.addEventListener('scroll', () => {
+      const heroHeight = heroSection.offsetHeight;
+      const currentScrollY = window.scrollY;
+
+      // Releases the lock only once the page has actually reached the top,
+      // no matter how long the smooth-scroll animation takes.
+      if (suppressHeaderOnTop && currentScrollY <= 5) {
+        suppressHeaderOnTop = false;
+      }
+
+      const pastHero = currentScrollY > heroHeight * 0.8;
+      const scrollingUp = currentScrollY < lastScrollY;
+
+      if (!suppressHeaderOnTop && pastHero && (scrollingUp || currentScrollY <= 0)) {
+        if (!header.classList.contains('visible')) {
+          header.classList.add('visible');
+
+          clearTimeout(borderTimeout);
+          borderTimeout = setTimeout(() => {
+            header.classList.add('scrolled');
+          }, 500);
+        }
+      } else {
+        header.classList.remove('visible');
+        header.classList.remove('scrolled');
+        clearTimeout(borderTimeout);
+      }
+
+      lastScrollY = currentScrollY;
+    });
+  }
+
+  // =================================================================
+  // PAGE LOAD SEQUENCE (intro curtain, scroll hint, coin spin)
+  // =================================================================
+  window.addEventListener('load', () => {
+    const introScreen = document.getElementById('intro-screen');
+
+    // =========================================
+    // INTRO CURTAIN TIMELINE
+    // =========================================
+    if (introScreen) {
+      document.body.classList.add('loaded');
+
+      // Keeps the curtain fully closed for 6s while it pulses gently
+      setTimeout(() => {
+        introScreen.classList.add('fade-out');
+
+        // At ~85% open (700ms in), the Hero fades in behind the curtain
+        setTimeout(() => {
+          document.body.classList.add('start-animations');
+        }, 700);
+
+        // Curtain fully gone: enable real scrolling and arm the scroll hint
+        setTimeout(() => {
+          document.body.classList.add('scrollbar-visible');
+          introScreen.remove();
+          ativarAvisoScroll();
+        }, 1300);
+
+      }, 6000);
+    } else {
+      document.body.classList.add('loaded');
+      document.body.classList.add('start-animations');
+      document.body.classList.add('scrollbar-visible');
+      ativarAvisoScroll();
+    }
+
+    // =========================================
+    // IDLE SCROLL HINT
+    // Appears after 5s of inactivity, disappears for good on first scroll.
+    // =========================================
+    function ativarAvisoScroll() {
+      const obterTexto = () => {
+        const idiomaSalvo = localStorage.getItem('user-language') || 'pt';
+        return idiomaSalvo === 'en' ? 'Scroll' : 'Role para baixo';
+      };
+
+      const hint = document.createElement('div');
+      hint.className = 'scroll-hint';
+      hint.innerHTML = `
+      <span id="scroll-hint-text">${obterTexto()}</span>
+      <svg viewBox="0 0 24 24">
+        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+      </svg>
+    `;
+      document.body.appendChild(hint);
+
+      let timerHint = setTimeout(() => {
+        hint.classList.add('show');
+      }, 5000);
+
+      const removerAviso = () => {
+        clearTimeout(timerHint);
+        hint.classList.remove('show');
+
+        setTimeout(() => {
+          hint.remove();
+        }, 800);
+
+        window.removeEventListener('scroll', removerAviso);
+      };
+
+      window.addEventListener('scroll', removerAviso);
+    }
+
+    // =========================================
+    // PROFILE CARD SPIN-ON-CLICK (coin flip accumulator)
+    // Keeps spinning further with every click instead of resetting.
+    // =========================================
+    const profileCard = document.querySelector('.profile-card');
+    const cardInner = document.querySelector('.profile-card-inner');
+
+    if (profileCard && cardInner) {
+      let rotacaoAcumulada = 360; // Starts at 360 to match the entry-spin animation
+
+      const girarMoeda = () => {
+        rotacaoAcumulada += 180;
+        cardInner.style.transform = `rotateY(${rotacaoAcumulada}deg)`;
+      };
+
+      profileCard.addEventListener('click', girarMoeda);
+    }
+  });
+
+  // =================================================================
+  // 3D SKILL CUBES: click jump + continuous hover rotation
+  // =================================================================
+  const cubes = document.querySelectorAll('.cube');
+
+  // Click: brief "jump" pulse
+  cubes.forEach(cube => {
+    cube.addEventListener('click', () => {
+      if (cube.classList.contains('jump-active')) return;
+
+      cube.classList.add('jump-active');
+      setTimeout(() => {
+        cube.classList.remove('jump-active');
+      }, 600);
+    });
+  });
+
+  // Hover: constant-speed rotation that always eases back to the resting angle
+  cubes.forEach(cube => {
+    let animationFrameId = null;
+    let currentY = 25;       // Starting Y angle
+    const baseX = -20;       // Fixed X angle
+    const velocidade = 2.0;  // Constant rotation speed for every cube
+    let isHovered = false;
+
+    function updateRotation() {
+      currentY += velocidade;
+
+      if (isHovered) {
+        // Mouse over: spin indefinitely
+        cube.style.transform = `rotateX(${baseX}deg) rotateY(${currentY}deg)`;
+        animationFrameId = requestAnimationFrame(updateRotation);
+      } else {
+        // Mouse left: keep the same pace until it lands back on the resting angle
+        const anguloRelativo = (currentY - 25) % 360;
+
+        if (anguloRelativo >= 0 && anguloRelativo < velocidade) {
+          const voltas = Math.round((currentY - 25) / 360);
+          currentY = 25 + (voltas * 360); // Snaps precisely to the resting angle
+          cube.style.transform = `rotateX(${baseX}deg) rotateY(${currentY}deg)`;
+          animationFrameId = null; // Stops the loop gracefully
+        } else {
+          cube.style.transform = `rotateX(${baseX}deg) rotateY(${currentY}deg)`;
+          animationFrameId = requestAnimationFrame(updateRotation);
+        }
+      }
+    }
+
+    cube.addEventListener('mouseenter', () => {
+      isHovered = true;
+      if (!animationFrameId) {
+        updateRotation();
+      }
+    });
+
+    cube.addEventListener('mouseleave', () => {
+      isHovered = false;
+      // Loop keeps running until it naturally reaches the resting angle
+    });
+  });
+
+  // =========================================
+  // PROJECTS CAROUSEL (Infinite Loop & Tab Visibility Guard)
+  // =========================================
+  const projectsTrack = document.getElementById('projects-track');
+  const carouselDots = document.getElementById('carousel-dots');
+
+  if (projectsTrack && carouselDots) {
+    const allCards = Array.from(projectsTrack.children);
+    const cardsPerPage = 1;
+    const originalPagesData = [];
+
+    for (let i = 0; i < allCards.length; i += cardsPerPage) {
+      originalPagesData.push(allCards.slice(i, i + cardsPerPage));
+    }
+
+    projectsTrack.innerHTML = '';
+    carouselDots.innerHTML = '';
+
+    const pageElements = originalPagesData.map((pageCards) => {
+      const page = document.createElement('div');
+      page.classList.add('projects-page');
+      pageCards.forEach(card => page.appendChild(card));
+      return page;
+    });
+
+    const totalOriginalPages = pageElements.length;
+
+    const firstClone = pageElements[0].cloneNode(true);
+    const lastClone = pageElements[totalOriginalPages - 1].cloneNode(true);
+
+    projectsTrack.appendChild(lastClone);
+    pageElements.forEach(page => projectsTrack.appendChild(page));
+    projectsTrack.appendChild(firstClone);
+
+    for (let i = 0; i < totalOriginalPages; i++) {
+      const dot = document.createElement('button');
+      dot.classList.add('dot');
+      if (i === 0) dot.classList.add('active');
+      dot.addEventListener('click', () => goToPage(i + 1));
+      carouselDots.appendChild(dot);
+    }
+
+    let currentIndex = 1;
+    let autoplayInterval = null;
+    let isHoveringCard = false;
+
+    projectsTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+    function goToPage(targetIndex, animated = true) {
+      if (!animated) {
+        projectsTrack.style.transition = 'none';
+      } else {
+        projectsTrack.style.transition = 'transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)';
+      }
+
+      currentIndex = targetIndex;
+      projectsTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+      let activeDotIndex = currentIndex - 1;
+      if (currentIndex === 0) activeDotIndex = totalOriginalPages - 1;
+      if (currentIndex === totalOriginalPages + 1) activeDotIndex = 0;
+
+      const dots = document.querySelectorAll('#carousel-dots .dot');
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === activeDotIndex);
+      });
+    }
+
+    projectsTrack.addEventListener('transitionend', () => {
+      if (currentIndex === 0) goToPage(totalOriginalPages, false);
+      if (currentIndex === totalOriginalPages + 1) goToPage(1, false);
+    });
+
+    function startAutoplay() {
+      stopAutoplay(); // Evita duplicar intervalos ativos
+      if (totalOriginalPages <= 1) return;
+      autoplayInterval = setInterval(() => {
+        if (!isHoveringCard && document.visibilityState === 'visible') {
+          goToPage(currentIndex + 1);
+        }
+      }, 8000);
+    }
+
+    function stopAutoplay() {
+      if (autoplayInterval) {
+        clearInterval(autoplayInterval);
+        autoplayInterval = null;
+      }
+    }
+
+    // Monitora se o usuário saiu ou voltou para a página do portfólio
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        startAutoplay();
+      } else {
+        stopAutoplay();
+        // Força pausa em todos os vídeos ativos para economizar processamento
+        document.querySelectorAll('.project-video').forEach(video => video.pause());
+      }
+    });
+
+    function setupVideoListeners() {
+      document.querySelectorAll('.project-card').forEach(card => {
+        const video = card.querySelector('.project-video');
+        if (video) video.loop = true;
+
+        card.addEventListener('mouseenter', () => {
+          isHoveringCard = true;
+          if (video) {
+            video.currentTime = 0;
+            video.play().catch(() => { });
+          }
+        });
+
+        card.addEventListener('mouseleave', () => {
+          isHoveringCard = false;
+          if (video) video.pause();
+        });
+      });
+    }
+
+    setupVideoListeners();
+    startAutoplay();
+  }
+
+  // =========================================
   // BACK-TO-TOP BUTTON VISIBILITY
   // Shows the button once the Contact section enters the viewport.
   // =========================================
@@ -279,210 +594,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // =========================================
-// HEADER SHOW/HIDE ON SCROLL (up = show, down = hide)
+// HAMBURGER MENU (MOBILE)
 // =========================================
-const header = document.querySelector('header');
-const heroSection = document.getElementById('hero');
-const backToTopBtn = document.getElementById('back-to-top');
+if (menuToggle && navLinks) {
+  menuToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+  });
 
-let lastScrollY = window.scrollY;
-let borderTimeout = null;
-let suppressHeaderOnTop = false; // True while the back-to-top scroll animation is running
-
-// Clicking "back to top" scrolls upward, which would normally reveal the
-// header (see scroll logic below). This suppresses that side-effect.
-if (backToTopBtn && header) {
-  backToTopBtn.addEventListener('click', () => {
-    suppressHeaderOnTop = true;
-    header.classList.remove('visible');
-    header.classList.remove('scrolled');
-    clearTimeout(borderTimeout);
+  menuItems.forEach(item => {
+    item.addEventListener('click', () => {
+      navLinks.classList.remove('active');
+    });
   });
 }
-
-if (header && heroSection) {
-  window.addEventListener('scroll', () => {
-    const heroHeight = heroSection.offsetHeight;
-    const currentScrollY = window.scrollY;
-
-    // Releases the lock only once the page has actually reached the top,
-    // no matter how long the smooth-scroll animation takes.
-    if (suppressHeaderOnTop && currentScrollY <= 5) {
-      suppressHeaderOnTop = false;
-    }
-
-    const pastHero = currentScrollY > heroHeight * 0.8;
-    const scrollingUp = currentScrollY < lastScrollY;
-
-    if (!suppressHeaderOnTop && pastHero && (scrollingUp || currentScrollY <= 0)) {
-      if (!header.classList.contains('visible')) {
-        header.classList.add('visible');
-
-        clearTimeout(borderTimeout);
-        borderTimeout = setTimeout(() => {
-          header.classList.add('scrolled');
-        }, 500);
-      }
-    } else {
-      header.classList.remove('visible');
-      header.classList.remove('scrolled');
-      clearTimeout(borderTimeout);
-    }
-
-    lastScrollY = currentScrollY;
-  });
-}
-
-// =================================================================
-// PAGE LOAD SEQUENCE (intro curtain, scroll hint, coin spin)
-// =================================================================
-window.addEventListener('load', () => {
-  const introScreen = document.getElementById('intro-screen');
-
-  // =========================================
-  // INTRO CURTAIN TIMELINE
-  // =========================================
-  if (introScreen) {
-    document.body.classList.add('loaded');
-
-    // Keeps the curtain fully closed for 6s while it pulses gently
-    setTimeout(() => {
-      introScreen.classList.add('fade-out');
-
-      // At ~85% open (700ms in), the Hero fades in behind the curtain
-      setTimeout(() => {
-        document.body.classList.add('start-animations');
-      }, 700);
-
-      // Curtain fully gone: enable real scrolling and arm the scroll hint
-      setTimeout(() => {
-        document.body.classList.add('scrollbar-visible');
-        introScreen.remove();
-        ativarAvisoScroll();
-      }, 1300);
-
-    }, 6000);
-  } else {
-    document.body.classList.add('loaded');
-    document.body.classList.add('start-animations');
-    document.body.classList.add('scrollbar-visible');
-    ativarAvisoScroll();
-  }
-
-  // =========================================
-  // IDLE SCROLL HINT
-  // Appears after 5s of inactivity, disappears for good on first scroll.
-  // =========================================
-  function ativarAvisoScroll() {
-    const obterTexto = () => {
-      const idiomaSalvo = localStorage.getItem('user-language') || 'pt';
-      return idiomaSalvo === 'en' ? 'Scroll' : 'Role para baixo';
-    };
-
-    const hint = document.createElement('div');
-    hint.className = 'scroll-hint';
-    hint.innerHTML = `
-      <span id="scroll-hint-text">${obterTexto()}</span>
-      <svg viewBox="0 0 24 24">
-        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
-      </svg>
-    `;
-    document.body.appendChild(hint);
-
-    let timerHint = setTimeout(() => {
-      hint.classList.add('show');
-    }, 5000);
-
-    const removerAviso = () => {
-      clearTimeout(timerHint);
-      hint.classList.remove('show');
-
-      setTimeout(() => {
-        hint.remove();
-      }, 800);
-
-      window.removeEventListener('scroll', removerAviso);
-    };
-
-    window.addEventListener('scroll', removerAviso);
-  }
-
-  // =========================================
-  // PROFILE CARD SPIN-ON-CLICK (coin flip accumulator)
-  // Keeps spinning further with every click instead of resetting.
-  // =========================================
-  const profileCard = document.querySelector('.profile-card');
-  const cardInner = document.querySelector('.profile-card-inner');
-
-  if (profileCard && cardInner) {
-    let rotacaoAcumulada = 360; // Starts at 360 to match the entry-spin animation
-
-    const girarMoeda = () => {
-      rotacaoAcumulada += 180;
-      cardInner.style.transform = `rotateY(${rotacaoAcumulada}deg)`;
-    };
-
-    profileCard.addEventListener('click', girarMoeda);
-  }
-});
-
-// =================================================================
-// 3D SKILL CUBES: click jump + continuous hover rotation
-// =================================================================
-const cubes = document.querySelectorAll('.cube');
-
-// Click: brief "jump" pulse
-cubes.forEach(cube => {
-  cube.addEventListener('click', () => {
-    if (cube.classList.contains('jump-active')) return;
-
-    cube.classList.add('jump-active');
-    setTimeout(() => {
-      cube.classList.remove('jump-active');
-    }, 600);
-  });
-});
-
-// Hover: constant-speed rotation that always eases back to the resting angle
-cubes.forEach(cube => {
-  let animationFrameId = null;
-  let currentY = 25;       // Starting Y angle
-  const baseX = -20;       // Fixed X angle
-  const velocidade = 2.0;  // Constant rotation speed for every cube
-  let isHovered = false;
-
-  function updateRotation() {
-    currentY += velocidade;
-
-    if (isHovered) {
-      // Mouse over: spin indefinitely
-      cube.style.transform = `rotateX(${baseX}deg) rotateY(${currentY}deg)`;
-      animationFrameId = requestAnimationFrame(updateRotation);
-    } else {
-      // Mouse left: keep the same pace until it lands back on the resting angle
-      const anguloRelativo = (currentY - 25) % 360;
-
-      if (anguloRelativo >= 0 && anguloRelativo < velocidade) {
-        const voltas = Math.round((currentY - 25) / 360);
-        currentY = 25 + (voltas * 360); // Snaps precisely to the resting angle
-        cube.style.transform = `rotateX(${baseX}deg) rotateY(${currentY}deg)`;
-        animationFrameId = null; // Stops the loop gracefully
-      } else {
-        cube.style.transform = `rotateX(${baseX}deg) rotateY(${currentY}deg)`;
-        animationFrameId = requestAnimationFrame(updateRotation);
-      }
-    }
-  }
-
-  cube.addEventListener('mouseenter', () => {
-    isHovered = true;
-    if (!animationFrameId) {
-      updateRotation();
-    }
-  });
-
-  cube.addEventListener('mouseleave', () => {
-    isHovered = false;
-    // Loop keeps running until it naturally reaches the resting angle
-  });
-});

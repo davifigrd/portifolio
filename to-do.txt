@@ -3,19 +3,15 @@
 - Banco de dados funcional (futuro)
 
 <PROJECTS>
-- Melhorar botão de link
-- 4 x 4 + outros projetos...
-- card vai ter um video dando scroll/ mostrando o projeto
-- espaço entre h2 e cards
+- linguagens usadas em cada projeto
 
 FINAL
-- Comentar e organizar
 - Responsividade
-- Espanhol
 - Audio?
 
 outros
-- cursor personalizado?
 - cobrinha scan dessincronizando
 - melhorar fontes descrição h2 (tirar fonte terminal)
-- girar moeda depois da transição
+- girar moeda depois da transição/ de tempos em tempos
+- linha brilhando demais em h2
+- video terminal zero
