@@ -444,9 +444,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // =========================================
-  // PROJECTS CAROUSEL (Infinite Loop & Tab Visibility Guard)
-  // =========================================
+  // =================================================================
+  // PROJECTS CAROUSEL (Infinite Loop, Tab Visibility & Smooth Drag)
+  // =================================================================
   const projectsTrack = document.getElementById('projects-track');
   const carouselDots = document.getElementById('carousel-dots');
 
@@ -490,13 +490,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let autoplayInterval = null;
     let isHoveringCard = false;
 
+    // --- VARIÁVEIS DO DRAG SUAVE E SEGURO ---
+    let isDragging = false;
+    let startX = 0;
+    let diffX = 0;
+
     projectsTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
 
     function goToPage(targetIndex, animated = true) {
       if (!animated) {
         projectsTrack.style.transition = 'none';
       } else {
-        projectsTrack.style.transition = 'transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)';
+        // Transição ultra elegante para o encaixe final do card
+        projectsTrack.style.transition = 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
       }
 
       currentIndex = targetIndex;
@@ -518,10 +524,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function startAutoplay() {
-      stopAutoplay(); // Evita duplicar intervalos ativos
+      stopAutoplay();
       if (totalOriginalPages <= 1) return;
       autoplayInterval = setInterval(() => {
-        if (!isHoveringCard && document.visibilityState === 'visible') {
+        if (!isHoveringCard && !isDragging && document.visibilityState === 'visible') {
           goToPage(currentIndex + 1);
         }
       }, 8000);
@@ -534,33 +540,117 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Monitora se o usuário saiu ou voltou para a página do portfólio
+    // --- ENGENHARIA DO ARRASTO SEM CONFLITOS DE PX/% ---
+    function getPositionX(event) {
+      return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+    }
+
+    function dragStart(event) {
+      if (event.type === 'mousedown' && event.button !== 0) return;
+
+      isDragging = true;
+      startX = getPositionX(event);
+      diffX = 0;
+      stopAutoplay();
+
+      // Remove a transição imediatamente ao tocar para o dedo ter resposta instantânea
+      projectsTrack.style.transition = 'none';
+      projectsTrack.style.cursor = 'grabbing';
+    }
+
+    function dragMove(event) {
+      if (!isDragging) return;
+      const currentX = getPositionX(event);
+
+      // Diferença física do arrasto em pixels
+      const rawDiff = currentX - startX;
+      const trackWidth = projectsTrack.offsetWidth;
+
+      // Converte o arrasto de Pixels para Porcentagem (%) relativa ao container do carrossel
+      diffX = (rawDiff / trackWidth) * 100;
+
+      // =================================================================
+      // TRAVA DE SEGURANÇA CONTRA SUMIÇO:
+      // Impede arrastar além do primeiro card (esquerda) ou do último card (direita)
+      // =================================================================
+      if (currentIndex === 1 && diffX > 0) {
+        // Se estiver no primeiro slide e tentar puxar para trás (direita física), aplica uma resistência (efeito elástico)
+        diffX = diffX * 0.3;
+      } else if (currentIndex === totalOriginalPages && diffX < 0) {
+        // Se estiver no último slide e tentar empurrar para frente (esquerda física), aplica a mesma resistência
+        diffX = diffX * 0.3;
+      } else {
+        // Limite padrão suave para os slides do meio (no máximo 15% de deslocamento)
+        diffX = Math.max(-15, Math.min(15, diffX));
+      }
+
+      // Move dinamicamente o carrossel a partir da página atual usando apenas porcentagem
+      const currentPosPercent = -(currentIndex * 100) + diffX;
+      projectsTrack.style.transform = `translateX(${currentPosPercent}%)`;
+    }
+
+    function dragEnd() {
+      if (!isDragging) return;
+      isDragging = false;
+      projectsTrack.style.cursor = 'grab';
+
+      // Se arrastou mais do que 4% da tela para a esquerda, avança 1 card
+      if (diffX < -4) {
+        goToPage(currentIndex + 1);
+      }
+      // Se arrastou mais do que 4% da tela para a direita, recua 1 card
+      else if (diffX > 4) {
+        goToPage(currentIndex - 1);
+      }
+      // Se não arrastou o suficiente, centraliza e volta suavemente para o mesmo card
+      else {
+        goToPage(currentIndex);
+      }
+
+      startAutoplay();
+    }
+
+    // Eventos do Mouse
+    projectsTrack.style.cursor = 'grab';
+    projectsTrack.addEventListener('mousedown', dragStart);
+    projectsTrack.addEventListener('mousemove', dragMove);
+    window.addEventListener('mouseup', dragEnd);
+
+    // Eventos do Touch (Telemóvel)
+    projectsTrack.addEventListener('touchstart', dragStart, { passive: true });
+    projectsTrack.addEventListener('touchmove', dragMove, { passive: true });
+    projectsTrack.addEventListener('touchend', dragEnd);
+
+    // Evita arrastar links e imagens acidentalmente
+    projectsTrack.addEventListener('dragstart', (e) => e.preventDefault());
+
+    // Monitora visibilidade da página
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') {
         startAutoplay();
       } else {
         stopAutoplay();
-        // Força pausa em todos os vídeos ativos para economizar processamento
         document.querySelectorAll('.project-video').forEach(video => video.pause());
       }
     });
 
-    function setupVideoListeners() {
+function setupVideoListeners() {
       document.querySelectorAll('.project-card').forEach(card => {
         const video = card.querySelector('.project-video');
         if (video) video.loop = true;
 
         card.addEventListener('mouseenter', () => {
           isHoveringCard = true;
-          if (video) {
-            video.currentTime = 0;
+          if (video && !isDragging) {
             video.play().catch(() => { });
           }
         });
 
         card.addEventListener('mouseleave', () => {
           isHoveringCard = false;
-          if (video) video.pause();
+          if (video) {
+            video.pause();
+          }
         });
       });
     }
@@ -568,29 +658,29 @@ document.addEventListener('DOMContentLoaded', () => {
     setupVideoListeners();
     startAutoplay();
   }
+  
+// =========================================
+// BACK-TO-TOP BUTTON VISIBILITY
+// Shows the button once the Contact section enters the viewport.
+// =========================================
+const backToTopButton = document.getElementById('back-to-top');
+const contactSection = document.getElementById('contact');
 
-  // =========================================
-  // BACK-TO-TOP BUTTON VISIBILITY
-  // Shows the button once the Contact section enters the viewport.
-  // =========================================
-  const backToTopButton = document.getElementById('back-to-top');
-  const contactSection = document.getElementById('contact');
-
-  if (backToTopButton && contactSection) {
-    const contactObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          backToTopButton.classList.add('visible');
-        } else {
-          backToTopButton.classList.remove('visible');
-        }
-      });
-    }, {
-      threshold: 0.1
+if (backToTopButton && contactSection) {
+  const contactObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        backToTopButton.classList.add('visible');
+      } else {
+        backToTopButton.classList.remove('visible');
+      }
     });
+  }, {
+    threshold: 0.1
+  });
 
-    contactObserver.observe(contactSection);
-  }
+  contactObserver.observe(contactSection);
+}
 });
 
 // =========================================
