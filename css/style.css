@@ -852,10 +852,97 @@ section.active-section {
   transition: all 0.3s ease;
 }
 
+/* Container que engloba o botão (esquerda) e as tags (direita) */
+.project-links {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Empurra o botão pra esquerda e tags pra direita */
+  flex-wrap: wrap; /* Garante que se a tela for pequena, eles quebrem de linha suavemente */
+  gap: 15px;
+  margin-top: auto; /* Garante que essa barra fique sempre colada no rodapé do card */
+}
+
+/* Efeito Hover com as cores acendendo dinamicamente */
+.project-card:hover .tech-tag[data-tech="html"] {
+  border-color: rgba(227, 76, 38, 0.4);
+  color: #e34c26;
+  background: rgba(227, 76, 38, 0.05);
+}
+
+.project-card:hover .tech-tag[data-tech="css"] {
+  border-color: rgba(38, 77, 228, 0.4);
+  color: #264de4;
+  background: rgba(38, 77, 228, 0.05);
+}
+
+.project-card:hover .tech-tag[data-tech="js"] {
+  border-color: rgba(247, 223, 30, 0.4);
+  color: #f7df1e;
+  background: rgba(247, 223, 30, 0.05);
+}
+
+.project-card:hover .tech-tag[data-tech="construct"] {
+  border-color: rgba(0, 153, 130, 0.4);
+  color: #009982;
+  background: rgba(0, 153, 130, 0.05);
+}
+
 .project-links a:hover {
   background: #b24af1;
   color: #ffffff;
   box-shadow: 0 0 15px rgba(178, 74, 241, 0.4);
+}
+
+/* ==========================================
+   TAGS DE TECNOLOGIA DO PROJETO
+   ========================================== */
+/* Container das tags */
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Badges estilizados */
+.tech-tag {
+  font-family: system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: #a1a1aa;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+/* Cores de destaque nos ícones quando o card recebe hover */
+.project-card:hover .tech-tag[data-tech="html"] {
+  border-color: rgba(227, 76, 38, 0.4);
+  color: #e34c26;
+  background: rgba(227, 76, 38, 0.05);
+}
+
+.project-card:hover .tech-tag[data-tech="css"] {
+  border-color: rgba(38, 77, 228, 0.4);
+  color: #264de4;
+  background: rgba(38, 77, 228, 0.05);
+}
+
+.project-card:hover .tech-tag[data-tech="js"] {
+  border-color: rgba(247, 223, 30, 0.4);
+  color: #f7df1e;
+  background: rgba(247, 223, 30, 0.05);
+}
+
+.project-card:hover .tech-tag[data-tech="construct"] {
+  border-color: rgba(0, 153, 130, 0.4);
+  color: #009982;
+  background: rgba(0, 153, 130, 0.05);
 }
 
 /* Área das Bolinhas Corrigida (Evita o corte) */

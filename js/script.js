@@ -540,18 +540,24 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // --- ENGENHARIA DO ARRASTO SEM CONFLITOS DE PX/% ---
+    // --- ENGENHARIA DO ARRASTO POR POINTER EVENTS (SUPORTE ATÉ AS BORDAS DA TELA) ---
     function getPositionX(event) {
-      return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+      // Os Pointer Events unificam mouse e touch, fornecendo a coordenada pageX diretamente
+      return event.pageX;
     }
 
     function dragStart(event) {
-      if (event.type === 'mousedown' && event.button !== 0) return;
+      // Aceita apenas o clique principal (botão esquerdo do mouse) ou toque do dedo
+      if (event.button !== undefined && event.button !== 0) return;
 
       isDragging = true;
       startX = getPositionX(event);
       diffX = 0;
       stopAutoplay();
+
+      // CAPTURA DO PONTEIRO: Faz com que o carrossel continue recebendo o movimento
+      // do cursor mesmo se ele sair da aba, do navegador ou encostar no limite físico do monitor.
+      projectsTrack.setPointerCapture(event.pointerId);
 
       // Remove a transição imediatamente ao tocar para o dedo ter resposta instantânea
       projectsTrack.style.transition = 'none';
@@ -569,30 +575,32 @@ document.addEventListener('DOMContentLoaded', () => {
       // Converte o arrasto de Pixels para Porcentagem (%) relativa ao container do carrossel
       diffX = (rawDiff / trackWidth) * 100;
 
-      // =================================================================
-      // TRAVA DE SEGURANÇA CONTRA SUMIÇO:
-      // Impede arrastar além do primeiro card (esquerda) ou do último card (direita)
-      // =================================================================
+      // Efeito elástico suave para os limites inicial e final
       if (currentIndex === 1 && diffX > 0) {
-        // Se estiver no primeiro slide e tentar puxar para trás (direita física), aplica uma resistência (efeito elástico)
-        diffX = diffX * 0.3;
+        diffX = diffX * 0.4;
       } else if (currentIndex === totalOriginalPages && diffX < 0) {
-        // Se estiver no último slide e tentar empurrar para frente (esquerda física), aplica a mesma resistência
-        diffX = diffX * 0.3;
+        diffX = diffX * 0.4;
       } else {
-        // Limite padrão suave para os slides do meio (no máximo 15% de deslocamento)
-        diffX = Math.max(-15, Math.min(15, diffX));
+        // Limite ampliado para 100% para permitir que puxe o card totalmente para as laterais
+        diffX = Math.max(-100, Math.min(100, diffX));
       }
 
-      // Move dinamicamente o carrossel a partir da página atual usando apenas porcentagem
+      // Move dinamicamente o carrossel a partir da página atual
       const currentPosPercent = -(currentIndex * 100) + diffX;
       projectsTrack.style.transform = `translateX(${currentPosPercent}%)`;
     }
 
-    function dragEnd() {
+    function dragEnd(event) {
       if (!isDragging) return;
       isDragging = false;
       projectsTrack.style.cursor = 'grab';
+
+      // Libera a captura do ponteiro com segurança
+      if (event && event.pointerId !== undefined) {
+        try {
+          projectsTrack.releasePointerCapture(event.pointerId);
+        } catch (e) { }
+      }
 
       // Se arrastou mais do que 4% da tela para a esquerda, avança 1 card
       if (diffX < -4) {
@@ -610,20 +618,15 @@ document.addEventListener('DOMContentLoaded', () => {
       startAutoplay();
     }
 
-    // Eventos do Mouse
+    // Eventos unificados com Pointer Events (suporta Mouse e Touch simultaneamente)
     projectsTrack.style.cursor = 'grab';
-    projectsTrack.addEventListener('mousedown', dragStart);
-    projectsTrack.addEventListener('mousemove', dragMove);
-    window.addEventListener('mouseup', dragEnd);
+    projectsTrack.addEventListener('pointerdown', dragStart);
+    projectsTrack.addEventListener('pointermove', dragMove);
+    projectsTrack.addEventListener('pointerup', dragEnd);
+    projectsTrack.addEventListener('pointercancel', dragEnd);
 
-    // Eventos do Touch (Telemóvel)
-    projectsTrack.addEventListener('touchstart', dragStart, { passive: true });
-    projectsTrack.addEventListener('touchmove', dragMove, { passive: true });
-    projectsTrack.addEventListener('touchend', dragEnd);
-
-    // Evita arrastar links e imagens acidentalmente
+    // Evita arrastar links e imagens acidentalmente de forma nativa do navegador
     projectsTrack.addEventListener('dragstart', (e) => e.preventDefault());
-
     // Monitora visibilidade da página
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') {
@@ -634,7 +637,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-function setupVideoListeners() {
+    function setupVideoListeners() {
       document.querySelectorAll('.project-card').forEach(card => {
         const video = card.querySelector('.project-video');
         if (video) video.loop = true;
@@ -658,29 +661,29 @@ function setupVideoListeners() {
     setupVideoListeners();
     startAutoplay();
   }
-  
-// =========================================
-// BACK-TO-TOP BUTTON VISIBILITY
-// Shows the button once the Contact section enters the viewport.
-// =========================================
-const backToTopButton = document.getElementById('back-to-top');
-const contactSection = document.getElementById('contact');
 
-if (backToTopButton && contactSection) {
-  const contactObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        backToTopButton.classList.add('visible');
-      } else {
-        backToTopButton.classList.remove('visible');
-      }
+  // =========================================
+  // BACK-TO-TOP BUTTON VISIBILITY
+  // Shows the button once the Contact section enters the viewport.
+  // =========================================
+  const backToTopButton = document.getElementById('back-to-top');
+  const contactSection = document.getElementById('contact');
+
+  if (backToTopButton && contactSection) {
+    const contactObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          backToTopButton.classList.add('visible');
+        } else {
+          backToTopButton.classList.remove('visible');
+        }
+      });
+    }, {
+      threshold: 0.1
     });
-  }, {
-    threshold: 0.1
-  });
 
-  contactObserver.observe(contactSection);
-}
+    contactObserver.observe(contactSection);
+  }
 });
 
 // =========================================

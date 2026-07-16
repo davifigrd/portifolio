@@ -2,9 +2,6 @@
 - Mensagem em ingles no formulario = traduzir pra portugues mantendo a versão original
 - Banco de dados funcional (futuro)
 
-<PROJECTS>
-- linguagens usadas em cada projeto
-
 FINAL
 - Responsividade
 - Audio?
@@ -14,4 +11,3 @@ outros
 - melhorar fontes descrição h2 (tirar fonte terminal)
 - girar moeda depois da transição/ de tempos em tempos
 - linha brilhando demais em h2
-- video terminal zero
