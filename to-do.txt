@@ -2,12 +2,5 @@
 - Mensagem em ingles no formulario = traduzir pra portugues mantendo a versão original
 - Banco de dados funcional (futuro)
 
-FINAL
 - Responsividade
-- Audio?
-
-outros
-- cobrinha scan dessincronizando
-- melhorar fontes descrição h2 (tirar fonte terminal)
-- girar moeda depois da transição/ de tempos em tempos
-- linha brilhando demais em h2
+- revisar comentários

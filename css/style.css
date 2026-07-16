@@ -28,6 +28,8 @@ html {
   --transition: all 0.3s ease;
 }
 
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
+
 /* ==========================================
    BODY & PAGE-LOAD FADE-IN
    ========================================== */
@@ -78,76 +80,68 @@ section h2 {
   letter-spacing: -0.5px;
   margin-bottom: 30px;
   position: relative;
-  display: block;
-  width: max-content; /* Underline matches the exact width of the text */
-  color: #ffffff;
-  overflow: hidden;
-}
+  z-index: 0;
 
-section h2 {
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    sans-serif;
-  font-size: 2.8rem;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  margin-bottom: 30px;
-  position: relative;
-  z-index: 0; /* Creates a stacking context so the underline can sit behind the text */
+  /* Garante o alinhamento estrito à esquerda, ocupando apenas o tamanho do texto */
   display: block;
   width: max-content;
+  text-align: left;
+  margin-left: 0;
   color: #ffffff;
 }
 
 section h2::after {
   content: "";
   position: absolute;
-  bottom: 4px; /* Slightly raised so it visually crosses through descenders like j/g */
+  bottom: 4px; /* Levemente elevada para cortar sutilmente letras como g, j, p */
   left: 0;
   width: 100%;
   height: 3px;
   border-radius: 3px;
-  z-index: -1; /* Sits behind the h2 text */
+  z-index: -1;
+  background: var(--color-purple); /* Roxo base do seu site */
 
-  background: linear-gradient(
-    to right,
-    var(--color-purple) 0%,
-    #e2b6ff 50%,
-    var(--color-purple) 100%
-  );
-  background-size: 200% 100%;
-
+  /* Força o início absoluto na borda esquerda (0px) */
   transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: left center !important;
+  opacity: 0.7;
 }
 
+/* Ativação quando a seção entra na tela via Scroll */
 section.active-section h2::after {
-  transform: scaleX(1);
-  animation: underlineShine 2.2s linear infinite;
+  /* - "drawOnce 3s": Agora leva 3 segundos inteiros para se desenhar (bem lento e majestoso).
+     - "sutilPulse 5s ... 3s": O brilho pulsa lentamente e só começa após os 3 segundos da linha cheia.
+  */
+  animation:
+    drawOnce 3s cubic-bezier(0.25, 1, 0.5, 1) forwards,
+    sutilPulse 5s ease-in-out infinite 3s;
 }
 
-@keyframes underlineShine {
+/* 1. ANIMAÇÃO DE ENTRADA LENTA (Executa apenas uma vez do início ao fim) */
+@keyframes drawOnce {
   0% {
-    background-position: 200% 0;
-    box-shadow:
-      0 0 10px rgba(178, 74, 241, 0.6),
-      0 0 22px rgba(178, 74, 241, 0.4);
-  }
-  50% {
-    box-shadow:
-      0 0 22px rgba(178, 74, 241, 1),
-      0 0 45px rgba(178, 74, 241, 0.7);
+    transform: scaleX(0);
+    transform-origin: left center !important;
   }
   100% {
-    background-position: -200% 0;
+    transform: scaleX(1);
+    transform-origin: left center !important;
+    opacity: 0.8;
+  }
+}
+
+/* 2. ANIMAÇÃO DE BRILHO CONTÍNUO E SUAVE */
+@keyframes sutilPulse {
+  0%,
+  100% {
+    opacity: 0.7;
+    box-shadow: 0 0 6px rgba(178, 74, 241, 0.2);
+  }
+  50% {
+    opacity: 1;
     box-shadow:
-      0 0 10px rgba(178, 74, 241, 0.6),
-      0 0 22px rgba(178, 74, 241, 0.4);
+      0 0 10px rgba(178, 74, 241, 0.4),
+      0 0 18px rgba(178, 74, 241, 0.2);
   }
 }
 
@@ -323,35 +317,55 @@ header img {
 }
 
 #hero h1 {
-  font-size: 3.6rem;
-  font-weight: 900;
-  letter-spacing: -1.5px;
+  /* 1. FONTE PREMIUM E ULTRA-COMPACTA */
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-size: 4.2rem;
+  font-weight: 800;
+  letter-spacing: -2px;
   line-height: 1.1;
+
   position: relative;
   text-align: center;
   display: block;
   width: 100%;
   max-width: max-content;
+  margin: 0 auto 25px auto;
+  padding-bottom: 8px;
 
-  margin: 0 auto 35px auto;
-  padding-bottom: 12px;
+  /* 2. TRANSIÇÃO APENAS COM TONS DE ROXO (SEM BRANCO) */
+  background: linear-gradient(
+    to right,
+    var(--color-purple) 0%,
+    /* Roxo vibrante */ #d1a3ff 25%,
+    /* Lilás bem claro (para o ponto de luz) */ var(--color-purple) 50%,
+    /* Roxo vibrante */ var(--color-purple-dark) 75%,
+    /* Roxo escuro/profundo (para sombra) */ var(--color-purple) 100%
+      /* Fecha no roxo para dar emenda perfeita */
+  );
 
-  background: linear-gradient(100deg, #8b2fd9 42%, #d9a8ff 50%, #8b2fd9 58%);
-  background-size: 250% 100%;
-  background-position: 200% 0;
+  /* Duplicamos o tamanho horizontal para que a emenda infinita funcione */
+  background-size: 200% 100%;
 
+  /* 3. APLICAÇÃO DO TEXT-CLIP */
   color: transparent;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(2px 2px 0px rgba(0, 0, 0, 0.4));
 
-  animation: scanShine 5s linear infinite;
+  /* 4. SOMBRA SUTIL */
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+
+  /* 5. ANIMAÇÃO DE MOVIMENTO CONTÍNUO (Sem efeito vai-e-volta) */
+  animation: continuousPurpleWave 15s linear infinite;
 }
 
-@keyframes scanShine {
-  to {
-    background-position: -50% 0;
+/* Animação que desloca o degradê infinitamente para a esquerda */
+@keyframes continuousPurpleWave {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: -200% 0%; /* Move o gradiente de forma direta e contínua */
   }
 }
 
@@ -373,6 +387,8 @@ header img {
   flex-shrink: 0;
   user-select: none;
   -webkit-user-select: none;
+  will-change: transform;
+  transform: translateZ(0);
 
   transition:
     transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
@@ -384,7 +400,7 @@ header img {
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
-  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); /* <--- AQUI */
 }
 
 /* Entry spin, triggered once via JS shortly after the intro curtain opens */
@@ -393,7 +409,7 @@ header img {
 }
 
 body.loaded .profile-card.active-360 .profile-card-inner {
-  animation: quickSpin 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: quickSpin 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .profile-front,
@@ -436,6 +452,12 @@ body.loaded .profile-card.active-360 .profile-card-inner {
   height: 100%;
   object-fit: cover;
   display: block;
+
+  /* --- CORREÇÃO DE NITIDEZ --- */
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+  image-rendering: -webkit-optimize-contrast; /* Força nitidez no Chrome/Safari */
 }
 
 .profile-back {
@@ -750,7 +772,11 @@ section.active-section {
   margin: 50px auto 0 auto;
   position: relative;
   /* Degradê sofisticado no fundo do container principal */
-  background: linear-gradient(180px, rgba(0, 0, 0, 0) 0%, rgba(13, 13, 13, 0.8) 100%);
+  background: linear-gradient(
+    180px,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(13, 13, 13, 0.8) 100%
+  );
   border-radius: 24px;
   padding: 20px 0;
 }
@@ -775,7 +801,7 @@ section.active-section {
 .project-card {
   width: 100%;
   max-width: 680px; /* Aumentado um pouco o espaço de exibição */
-  background: rgba(15, 15, 15, 0.6); 
+  background: rgba(15, 15, 15, 0.6);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -810,7 +836,9 @@ section.active-section {
   object-fit: contain; /* Troca de 'cover' para 'contain' para GARANTIR que nada é cortado */
   display: block;
   opacity: 0.8;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+  transition:
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.6s ease;
 }
 
 .project-card:hover .project-video {
@@ -953,7 +981,7 @@ section.active-section {
   gap: 12px;
   margin-top: 30px;
   padding: 10px 0; /* PADDING DE SEGURANÇA: Impede que o efeito 'scale' do hover corte as bolinhas */
-  height: 20px;   /* Força uma altura fixa para conter o efeito sem esmagar */
+  height: 20px; /* Força uma altura fixa para conter o efeito sem esmagar */
 }
 
 .dot {
@@ -963,7 +991,9 @@ section.active-section {
   border: none;
   background-color: rgba(255, 255, 255, 0.2);
   cursor: pointer;
-  transition: transform 0.3s ease, background-color 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease;
   padding: 0;
   box-sizing: border-box;
 }

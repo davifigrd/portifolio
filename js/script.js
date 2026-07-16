@@ -29,9 +29,15 @@ document.addEventListener('DOMContentLoaded', () => {
       "about-text": "I am an Analysis and Systems Development student passionate about creating clean, efficient, and modern digital solutions. Focused on front-end development and constantly learning new technologies to build premium web experiences.",
       "skills-title": "Skills & Technologies",
       "projects-title": "Projects",
-      "project-1-desc": "A minimalist puzzle game engineered in Construct 3 to test core algorithmic logic. Features 10 progressive stages optimized for strategic analysis and quick visual troubleshooting.",
-      "project-2-desc": "A premium web platform built to evaluate AI models critically. Fosters media literacy by mapping patterns, vulnerabilities, and factual deviations in automated neural outputs.",
-      "project-3-desc": "A smart wellness client using real-time computer vision mechanics. Tracks physical posture during yoga routines using secure live video analysis for immediate biofeedback.",
+
+      // DESCRIÇÕES EM INGLÊS (RESUMIDAS)
+      // Terminal Zero
+      "project-1-desc": "Puzzle game developed as an academic project. It features 10 levels with challenges focused on logic, observation, and player interaction.",
+      // IA Consciente
+      "project-2-desc": "A web app created for an academic extension project that promotes ethical AI use by helping users spot limitations in generated content.",
+      // Tristram Health & Mind
+      "project-3-desc": "A wellness platform developed as an academic project that uses AI and your phone camera to correct your posture in real time.",
+
       "view-project": "View Project",
       "contact-title": "Contact Me",
       "form-name": "Name",
@@ -50,9 +56,17 @@ document.addEventListener('DOMContentLoaded', () => {
       "about-text": "Sou estudante de Análise e Desenvolvimento de Sistemas, apaixonado por criar soluções digitais limpas, eficientes e modernas. Focado no desenvolvimento front-end e constantemente aprendendo novas tecnologias para construir experiências web premium.",
       "skills-title": "Habilidades & Tecnologias",
       "projects-title": "Projetos",
-      "project-1-desc": "Jogo de quebra-cabeça minimalista projetado no Construct 3 para exercitar lógica algorítmica. Possui 10 fases progressivas focadas em análise estratégica e depuração visual rápida.",
-      "project-2-desc": "Plataforma web premium voltada à auditoria crítica de modelos de IA. Combate a infodemia mapeando vieses, limitações e inconsistências factuais em saídas geradas por redes neurais.",
-      "project-3-desc": "Interface inteligente de bem-estar integrada a rotinas de computação visual. Monitora e corrige a postura biomecânica durante treinos em tempo real utilizando análise de vídeo local.", "view-project": "Ver Projeto",
+
+      // DESCRIÇÕES EM PORTUGUÊS (RESUMIDAS)
+      // Terminal Zero
+      "project-1-desc": "Jogo do estilo puzzle desenvolvido como projeto acadêmico. Apresenta 10 fases com desafios focados em lógica, observação e interação.",
+      // IA Consciente
+      "project-2-desc": "Aplicação web para extensão acadêmica que promove o uso ético da IA, ensinando a identificar falhas em conteúdos gerados por algoritmos.",
+      // Tristram Health & Mind
+      "project-3-desc": "Plataforma de bem-estar criada como projeto acadêmico que utiliza IA e a câmera do celular para corrigir a postura em tempo real.",
+
+      "view-project": "Ver Projeto",
+      "contact-title": "Entre em Contato",
       "form-name": "Nome",
       "form-email": "E-mail",
       "form-msg": "Mensagem",
@@ -99,6 +113,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const textLength = subtitleEl.textContent.length;
     subtitleEl.style.setProperty('--text-length', textLength);
+  }
+
+  // =========================================
+  // ANIMAÇÃO INTELIGENTE DAS LINHAS DOS H2 (SCROLL)
+  // =========================================
+  const headings = document.querySelectorAll('h2');
+
+  if ('IntersectionObserver' in window) {
+    const headingObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        // Se o título ficou visível na tela
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          // Deixa de observar este h2 específico para que a animação não se repita ao subir a página
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      // Ativa quando 20% do elemento já estiver visível no ecrã
+      threshold: 0.2,
+      // Margem para iniciar a animação um pouco antes de aparecer totalmente
+      rootMargin: "0px 0px -50px 0px"
+    });
+
+    headings.forEach(heading => headingObserver.observe(heading));
+  } else {
+    // Fallback caso o navegador seja muito antigo e não suporte IntersectionObserver
+    headings.forEach(heading => heading.classList.add('active'));
   }
 
   // =========================================
@@ -363,25 +405,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
       window.addEventListener('scroll', removerAviso);
     }
+  });
 
-    // =========================================
-    // PROFILE CARD SPIN-ON-CLICK (coin flip accumulator)
-    // Keeps spinning further with every click instead of resetting.
-    // =========================================
-    const profileCard = document.querySelector('.profile-card');
+    // =================================================================
+    // PROFILE CARD SPIN (Click Accumulator + Inactivity Auto-Spin)
+    // =================================================================
     const cardInner = document.querySelector('.profile-card-inner');
 
     if (profileCard && cardInner) {
-      let rotacaoAcumulada = 360; // Starts at 360 to match the entry-spin animation
+      let rotacaoAcumulada = 360; // Começa em 360 para bater com a animação de entrada
+      let inactivityTimer;
+      const TEMPO_INATIVIDADE = 10000; // 10 segundos de inatividade (mude se quiser)
 
-      const girarMoeda = () => {
-        rotacaoAcumulada += 180;
+      // Função para dar o giro de 360 graus automático
+      const girarAutomatico = () => {
+        rotacaoAcumulada += 360; // Soma 360 graus no acumulador global
         cardInner.style.transform = `rotateY(${rotacaoAcumulada}deg)`;
+        
+        // Reinicia o timer para o próximo ciclo de inatividade
+        resetInactivityTimer();
+      };
+
+      // Inicia ou reinicia o temporizador de inatividade
+      const resetInactivityTimer = () => {
+        clearTimeout(inactivityTimer);
+        inactivityTimer = setTimeout(girarAutomatico, TEMPO_INATIVIDADE);
+      };
+
+      // Função ao clicar (Giro de 180 graus manual)
+      const girarMoeda = () => {
+        rotacaoAcumulada += 180; // Soma 180 graus normalmente
+        cardInner.style.transform = `rotateY(${rotacaoAcumulada}deg)`;
+        
+        // Se o usuário interagiu, reseta o tempo de inatividade
+        resetInactivityTimer();
       };
 
       profileCard.addEventListener('click', girarMoeda);
+
+      // Inicia o cronômetro assim que a página carregar por completo
+      window.addEventListener('load', () => {
+        resetInactivityTimer();
+      });
     }
-  });
 
   // =================================================================
   // 3D SKILL CUBES: click jump + continuous hover rotation
@@ -445,7 +511,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // =================================================================
-  // PROJECTS CAROUSEL (Infinite Loop, Tab Visibility & Smooth Drag)
+  // PROJECTS CAROUSEL (Infinite Loop & Tab Visibility - NO DRAG)
   // =================================================================
   const projectsTrack = document.getElementById('projects-track');
   const carouselDots = document.getElementById('carousel-dots');
@@ -490,18 +556,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let autoplayInterval = null;
     let isHoveringCard = false;
 
-    // --- VARIÁVEIS DO DRAG SUAVE E SEGURO ---
-    let isDragging = false;
-    let startX = 0;
-    let diffX = 0;
-
     projectsTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
 
     function goToPage(targetIndex, animated = true) {
       if (!animated) {
         projectsTrack.style.transition = 'none';
       } else {
-        // Transição ultra elegante para o encaixe final do card
         projectsTrack.style.transition = 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
       }
 
@@ -527,7 +587,7 @@ document.addEventListener('DOMContentLoaded', () => {
       stopAutoplay();
       if (totalOriginalPages <= 1) return;
       autoplayInterval = setInterval(() => {
-        if (!isHoveringCard && !isDragging && document.visibilityState === 'visible') {
+        if (!isHoveringCard && document.visibilityState === 'visible') {
           goToPage(currentIndex + 1);
         }
       }, 8000);
@@ -540,102 +600,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // --- ENGENHARIA DO ARRASTO POR POINTER EVENTS (SUPORTE ATÉ AS BORDAS DA TELA) ---
-    function getPositionX(event) {
-      // Os Pointer Events unificam mouse e touch, fornecendo a coordenada pageX diretamente
-      return event.pageX;
-    }
-
-    function dragStart(event) {
-      // Aceita apenas o clique principal (botão esquerdo do mouse) ou toque do dedo
-      if (event.button !== undefined && event.button !== 0) return;
-
-      isDragging = true;
-      startX = getPositionX(event);
-      diffX = 0;
-      stopAutoplay();
-
-      // CAPTURA DO PONTEIRO: Faz com que o carrossel continue recebendo o movimento
-      // do cursor mesmo se ele sair da aba, do navegador ou encostar no limite físico do monitor.
-      projectsTrack.setPointerCapture(event.pointerId);
-
-      // Remove a transição imediatamente ao tocar para o dedo ter resposta instantânea
-      projectsTrack.style.transition = 'none';
-      projectsTrack.style.cursor = 'grabbing';
-    }
-
-    function dragMove(event) {
-      if (!isDragging) return;
-      const currentX = getPositionX(event);
-
-      // Diferença física do arrasto em pixels
-      const rawDiff = currentX - startX;
-      const trackWidth = projectsTrack.offsetWidth;
-
-      // Converte o arrasto de Pixels para Porcentagem (%) relativa ao container do carrossel
-      diffX = (rawDiff / trackWidth) * 100;
-
-      // Efeito elástico suave para os limites inicial e final
-      if (currentIndex === 1 && diffX > 0) {
-        diffX = diffX * 0.4;
-      } else if (currentIndex === totalOriginalPages && diffX < 0) {
-        diffX = diffX * 0.4;
-      } else {
-        // Limite ampliado para 100% para permitir que puxe o card totalmente para as laterais
-        diffX = Math.max(-100, Math.min(100, diffX));
-      }
-
-      // Move dinamicamente o carrossel a partir da página atual
-      const currentPosPercent = -(currentIndex * 100) + diffX;
-      projectsTrack.style.transform = `translateX(${currentPosPercent}%)`;
-    }
-
-    function dragEnd(event) {
-      if (!isDragging) return;
-      isDragging = false;
-      projectsTrack.style.cursor = 'grab';
-
-      // Libera a captura do ponteiro com segurança
-      if (event && event.pointerId !== undefined) {
-        try {
-          projectsTrack.releasePointerCapture(event.pointerId);
-        } catch (e) { }
-      }
-
-      // Se arrastou mais do que 4% da tela para a esquerda, avança 1 card
-      if (diffX < -4) {
-        goToPage(currentIndex + 1);
-      }
-      // Se arrastou mais do que 4% da tela para a direita, recua 1 card
-      else if (diffX > 4) {
-        goToPage(currentIndex - 1);
-      }
-      // Se não arrastou o suficiente, centraliza e volta suavemente para o mesmo card
-      else {
-        goToPage(currentIndex);
-      }
-
-      startAutoplay();
-    }
-
-    // Eventos unificados com Pointer Events (suporta Mouse e Touch simultaneamente)
-    projectsTrack.style.cursor = 'grab';
-    projectsTrack.addEventListener('pointerdown', dragStart);
-    projectsTrack.addEventListener('pointermove', dragMove);
-    projectsTrack.addEventListener('pointerup', dragEnd);
-    projectsTrack.addEventListener('pointercancel', dragEnd);
-
-    // Evita arrastar links e imagens acidentalmente de forma nativa do navegador
-    projectsTrack.addEventListener('dragstart', (e) => e.preventDefault());
-    // Monitora visibilidade da página
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') {
-        startAutoplay();
-      } else {
-        stopAutoplay();
-        document.querySelectorAll('.project-video').forEach(video => video.pause());
-      }
-    });
+    // Remove qualquer cursor de "mãozinha de arrastar" para não confundir o usuário
+    projectsTrack.style.cursor = 'default';
 
     function setupVideoListeners() {
       document.querySelectorAll('.project-card').forEach(card => {
@@ -644,7 +610,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         card.addEventListener('mouseenter', () => {
           isHoveringCard = true;
-          if (video && !isDragging) {
+          if (video) {
             video.play().catch(() => { });
           }
         });
