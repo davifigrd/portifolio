@@ -1,6 +1,8 @@
-<FORM>
-- Mensagem em ingles no formulario = traduzir pra portugues mantendo a versão original
-- Banco de dados funcional (futuro)
+- comentários
 
-- Responsividade
-- revisar comentários
+
+RESPONSIVIDADE
+- video dentro do project card torto
+- h2 skills errado
+- subtitle hero errado
+- header só com o menu hamburguer, sem a logo

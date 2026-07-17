@@ -277,55 +277,46 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // =========================================
-  // HEADER SHOW/HIDE ON SCROLL (up = show, down = hide)
-  // =========================================
+  // =================================================================
+  // HEADER VISIBILITY ON MOBILE & DESKTOP (Item 1 - Travado no Mobile)
+  // =================================================================
   const header = document.querySelector('header');
   const heroSection = document.getElementById('hero');
-  const backToTopBtn = document.getElementById('back-to-top');
 
   let lastScrollY = window.scrollY;
   let borderTimeout = null;
-  let suppressHeaderOnTop = false; // True while the back-to-top scroll animation is running
-
-  // Clicking "back to top" scrolls upward, which would normally reveal the
-  // header (see scroll logic below). This suppresses that side-effect.
-  if (backToTopBtn && header) {
-    backToTopBtn.addEventListener('click', () => {
-      suppressHeaderOnTop = true;
-      header.classList.remove('visible');
-      header.classList.remove('scrolled');
-      clearTimeout(borderTimeout);
-    });
-  }
 
   if (header && heroSection) {
     window.addEventListener('scroll', () => {
       const heroHeight = heroSection.offsetHeight;
       const currentScrollY = window.scrollY;
-
-      // Releases the lock only once the page has actually reached the top,
-      // no matter how long the smooth-scroll animation takes.
-      if (suppressHeaderOnTop && currentScrollY <= 5) {
-        suppressHeaderOnTop = false;
-      }
-
       const pastHero = currentScrollY > heroHeight * 0.8;
-      const scrollingUp = currentScrollY < lastScrollY;
 
-      if (!suppressHeaderOnTop && pastHero && (scrollingUp || currentScrollY <= 0)) {
-        if (!header.classList.contains('visible')) {
-          header.classList.add('visible');
+      const isMobile = window.innerWidth <= 768;
 
-          clearTimeout(borderTimeout);
-          borderTimeout = setTimeout(() => {
-            header.classList.add('scrolled');
-          }, 500);
+      if (isMobile) {
+        // Comportamento Mobile: Passou do hero, fica FIXO e não some mais ao descer
+        if (pastHero) {
+          header.classList.add('visible', 'scrolled');
+        } else {
+          header.classList.remove('visible', 'scrolled');
         }
       } else {
-        header.classList.remove('visible');
-        header.classList.remove('scrolled');
-        clearTimeout(borderTimeout);
+        // Comportamento Desktop: Mantido original intacto
+        const scrollingUp = currentScrollY < lastScrollY;
+
+        if (pastHero && (scrollingUp || currentScrollY <= 0)) {
+          if (!header.classList.contains('visible')) {
+            header.classList.add('visible');
+            clearTimeout(borderTimeout);
+            borderTimeout = setTimeout(() => {
+              header.classList.add('scrolled');
+            }, 500);
+          }
+        } else {
+          header.classList.remove('visible', 'scrolled');
+          clearTimeout(borderTimeout);
+        }
       }
 
       lastScrollY = currentScrollY;
@@ -628,14 +619,13 @@ document.addEventListener('DOMContentLoaded', () => {
     startAutoplay();
   }
 
-  // =========================================
-  // BACK-TO-TOP BUTTON VISIBILITY
-  // Shows the button once the Contact section enters the viewport.
+// =========================================
+  // BACK-TO-TOP BUTTON VISIBILITY (Apenas Desktop)
   // =========================================
   const backToTopButton = document.getElementById('back-to-top');
   const contactSection = document.getElementById('contact');
 
-  if (backToTopButton && contactSection) {
+  if (backToTopButton && contactSection && window.innerWidth > 768) {
     const contactObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -644,9 +634,7 @@ document.addEventListener('DOMContentLoaded', () => {
           backToTopButton.classList.remove('visible');
         }
       });
-    }, {
-      threshold: 0.1
-    });
+    }, { threshold: 0.1 });
 
     contactObserver.observe(contactSection);
   }
