@@ -1,8 +1,27 @@
-// =================================================================
-// SCROLL-TO-TOP FIX ON REFRESH (F5)
-// Forces the page to stay at the top instead of restoring old scroll
-// position, so the intro curtain always plays from a clean state.
-// =================================================================
+/* ==========================================================================
+   JS INDEX
+   ==========================================================================
+   1.  SCROLL-TO-TOP BEHAVIOR ............................ Scroll Restoration
+   2.  I18N TRANSLATIONS DICTIONARY ....................... EN / PT Strings
+   3.  LANGUAGE DETECTION .................................. Locale Resolver
+   4.  APPLY TRANSLATIONS .................................. Text & Placeholders
+   5.  SUBTITLE TYPEWRITER SETUP ........................... Hero Subtitle FX
+   6.  HEADING SCROLL-REVEAL ANIMATION ..................... H2 Intersection
+   7.  GLOBAL DOM REFERENCES ............................... Shared Selectors
+   8.  PROFILE CARD ENTRY ANIMATION ........................ 360° Spin-In
+   9.  SECTION SCROLL-REVEAL ANIMATION ..................... General Sections
+   10. CONTACT FORM: VALIDATION + SIMULATED SUBMIT ......... Form & Button States
+   11. HEADER VISIBILITY ON SCROLL ......................... Topbar Behavior
+   12. PAGE LOAD SEQUENCE .................................. Intro Curtain & Scroll Hint
+   13. PROFILE CARD SPIN ................................... Click & Inactivity
+   14. 3D SKILL CUBES ...................................... Click Jump & Hover
+   15. PROJECTS CAROUSEL ................................... Infinite Loop
+   16. BACK-TO-TOP BUTTON VISIBILITY ....................... Fixed Scroll Button
+   ========================================================================== */
+
+/* ============================================================================
+ * 01. SCROLL-TO-TOP BEHAVIOR
+ * ========================================================================== */
 if (history.scrollRestoration) {
   history.scrollRestoration = 'manual';
 } else {
@@ -14,9 +33,9 @@ if (history.scrollRestoration) {
 document.addEventListener('DOMContentLoaded', () => {
   window.scrollTo(0, 0);
 
-  // =========================================
-  // TRANSLATIONS DICTIONARY (i18n)
-  // =========================================
+  /* ==========================================================================
+   * 02. I18N TRANSLATIONS DICTIONARY
+   * ======================================================================== */
   const translations = {
     en: {
       about: "About",
@@ -27,10 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
       subtitle: "ADS student & Developer",
       "about-title": "About Me",
       "about-text": "I am an Analysis and Systems Development student passionate about creating clean, efficient, and modern digital solutions. Focused on front-end development and constantly learning new technologies to build premium web experiences.",
-      "skills-title": "Skills & Technologies",
+      "skills-title": "Skills",
       "projects-title": "Projects",
 
-      // DESCRIÇÕES EM INGLÊS (RESUMIDAS)
       // Terminal Zero
       "project-1-desc": "Puzzle game developed as an academic project. It features 10 levels with challenges focused on logic, observation, and player interaction.",
       // IA Consciente
@@ -39,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
       "project-3-desc": "A wellness platform developed as an academic project that uses AI and your phone camera to correct your posture in real time.",
 
       "view-project": "View Project",
-      "contact-title": "Contact Me",
+      "contact-title": "Contact",
       "form-name": "Name",
       "form-email": "Email",
       "form-msg": "Message",
@@ -54,10 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
       subtitle: "Estudante de ADS & Desenvolvedor",
       "about-title": "Sobre Mim",
       "about-text": "Sou estudante de Análise e Desenvolvimento de Sistemas, apaixonado por criar soluções digitais limpas, eficientes e modernas. Focado no desenvolvimento front-end e constantemente aprendendo novas tecnologias para construir experiências web premium.",
-      "skills-title": "Habilidades & Tecnologias",
+      "skills-title": "Habilidades",
       "projects-title": "Projetos",
 
-      // DESCRIÇÕES EM PORTUGUÊS (RESUMIDAS)
       // Terminal Zero
       "project-1-desc": "Jogo do estilo puzzle desenvolvido como projeto acadêmico. Apresenta 10 fases com desafios focados em lógica, observação e interação.",
       // IA Consciente
@@ -66,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
       "project-3-desc": "Plataforma de bem-estar criada como projeto acadêmico que utiliza IA e a câmera do celular para corrigir a postura em tempo real.",
 
       "view-project": "Ver Projeto",
-      "contact-title": "Entre em Contato",
+      "contact-title": "Contato",
       "form-name": "Nome",
       "form-email": "E-mail",
       "form-msg": "Mensagem",
@@ -74,16 +91,18 @@ document.addEventListener('DOMContentLoaded', () => {
     },
   };
 
-  // Auto-detects language from a saved preference or the browser locale
+  /* ==========================================================================
+   * 03. LANGUAGE DETECTION
+   * ======================================================================== */
   let lang = localStorage.getItem('user-language');
   if (!lang) {
     const browserLang = navigator.language || navigator.userLanguage;
     lang = browserLang.startsWith('pt') ? 'pt' : 'en';
   }
 
-  // =========================================
-  // APPLY TRANSLATIONS TO THE PAGE
-  // =========================================
+  /* ==========================================================================
+   * 04. APPLY TRANSLATIONS
+   * ======================================================================== */
   const i18nTextElements = document.querySelectorAll("[data-i18n]");
   i18nTextElements.forEach((element) => {
     const key = element.dataset.i18n;
@@ -100,74 +119,63 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // =========================================
-  // SUBTITLE TYPEWRITER SETUP
-  // Restarts the CSS "typing" animation and recalculates the
-  // character count so it matches whichever language is active.
-  // =========================================
+  /* ==========================================================================
+   * 05. SUBTITLE TYPEWRITER SETUP
+   * ======================================================================== */
   const subtitleEl = document.querySelector('.subtitle');
   if (subtitleEl) {
     subtitleEl.style.animation = 'none';
-    void subtitleEl.offsetWidth; // Forces a reflow so the animation can restart
+    void subtitleEl.offsetWidth;
     subtitleEl.style.animation = '';
 
     const textLength = subtitleEl.textContent.length;
     subtitleEl.style.setProperty('--text-length', textLength);
   }
 
-  // =========================================
-  // ANIMAÇÃO INTELIGENTE DAS LINHAS DOS H2 (SCROLL)
-  // =========================================
+  /* ==========================================================================
+   * 06. HEADING SCROLL-REVEAL ANIMATION
+   * ======================================================================== */
   const headings = document.querySelectorAll('h2');
 
   if ('IntersectionObserver' in window) {
     const headingObserver = new IntersectionObserver((entries, observer) => {
       entries.forEach(entry => {
-        // Se o título ficou visível na tela
         if (entry.isIntersecting) {
           entry.target.classList.add('active');
-          // Deixa de observar este h2 específico para que a animação não se repita ao subir a página
           observer.unobserve(entry.target);
         }
       });
     }, {
-      // Ativa quando 20% do elemento já estiver visível no ecrã
       threshold: 0.2,
-      // Margem para iniciar a animação um pouco antes de aparecer totalmente
       rootMargin: "0px 0px -50px 0px"
     });
 
     headings.forEach(heading => headingObserver.observe(heading));
   } else {
-    // Fallback caso o navegador seja muito antigo e não suporte IntersectionObserver
     headings.forEach(heading => heading.classList.add('active'));
   }
 
-  // =========================================
-  // GLOBAL DOM REFERENCES
-  // =========================================
+  /* ==========================================================================
+   * 07. GLOBAL DOM REFERENCES
+   * ======================================================================== */
   const profileCard = document.querySelector('.profile-card');
-  const menuToggle = document.getElementById('menu-toggle');
-  const navLinks = document.querySelector('.nav-links');
-  const menuItems = document.querySelectorAll('.nav-links a');
 
-  // Reveals the page body shortly after DOM content is ready
   setTimeout(() => {
     document.body.classList.add('loaded');
   }, 500);
 
-  // =========================================
-  // PROFILE CARD ENTRY ANIMATION (360° spin-in)
-  // =========================================
+  /* ==========================================================================
+   * 08. PROFILE CARD ENTRY ANIMATION
+   * ======================================================================== */
   if (profileCard) {
     setTimeout(() => {
       profileCard.classList.add('active-360');
     }, 1450);
   }
 
-  // =========================================
-  // SECTION SCROLL-REVEAL ANIMATION
-  // =========================================
+  /* ==========================================================================
+   * 09. SECTION SCROLL-REVEAL ANIMATION
+   * ======================================================================== */
   const sections = document.querySelectorAll('section');
 
   function revealSections() {
@@ -183,9 +191,9 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', revealSections);
   setTimeout(revealSections, 600);
 
-  // =========================================
-  // CONTACT FORM: VALIDATION + SIMULATED SUBMIT
-  // =========================================
+  /* ==========================================================================
+   * 10. CONTACT FORM: VALIDATION + SIMULATED SUBMIT
+   * ======================================================================== */
   const contactForm = document.querySelector('.contact-form');
   const submitBtn = contactForm ? contactForm.querySelector('button') : null;
 
@@ -196,7 +204,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const isEn = (lang === 'en');
 
-      // Basic profanity / inappropriate-content filter
       const blackList = [
         "viado", "puta", "caralho", "porra", "merda", "chupa", "buceta", "pica", "caral", "fdp", "vtnm",
         "arrombado", "cu", "cuzao", "pnc", "cacete", "bosta", "vadia", "vagabundo", "bicha", "macaco",
@@ -205,7 +212,6 @@ document.addEventListener('DOMContentLoaded', () => {
         "slut", "whore", "cock", "prick", "wanker", "motherfucker", "sex", "porn", "naked"
       ];
 
-      // Button label text for each state, in both languages
       const text = {
         sending: isEn ? `<i class="fa-solid fa-circle-notch fa-spin"></i> Sending...` : `<i class="fa-solid fa-circle-notch fa-spin"></i> Enviando...`,
         success: isEn ? `<i class="fa-solid fa-circle-check"></i> Message Sent!` : `<i class="fa-solid fa-circle-check"></i> Mensagem Enviada!`,
@@ -231,7 +237,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return regex.test(email.toLowerCase().trim());
       };
 
-      // Validation pipeline: empty fields -> invalid email -> banned content
       if (!nameInput?.value.trim() || !emailInput?.value.trim() || !messageInput?.value.trim()) {
         mensagemErro = text.errEmpty;
       } else if (emailInput && !emailValido(emailInput.value)) {
@@ -277,9 +282,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // =================================================================
-  // HEADER VISIBILITY ON MOBILE & DESKTOP (Item 1 - Travado no Mobile)
-  // =================================================================
+  /* ==========================================================================
+   * 11. HEADER VISIBILITY ON SCROLL
+   * ======================================================================== */
   const header = document.querySelector('header');
   const heroSection = document.getElementById('hero');
 
@@ -295,14 +300,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const isMobile = window.innerWidth <= 768;
 
       if (isMobile) {
-        // Comportamento Mobile: Passou do hero, fica FIXO e não some mais ao descer
         if (pastHero) {
           header.classList.add('visible', 'scrolled');
         } else {
           header.classList.remove('visible', 'scrolled');
         }
       } else {
-        // Comportamento Desktop: Mantido original intacto
         const scrollingUp = currentScrollY < lastScrollY;
 
         if (pastHero && (scrollingUp || currentScrollY <= 0)) {
@@ -323,28 +326,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // =================================================================
-  // PAGE LOAD SEQUENCE (intro curtain, scroll hint, coin spin)
-  // =================================================================
+  /* ==========================================================================
+   * 12. PAGE LOAD SEQUENCE (INTRO CURTAIN + SCROLL HINT)
+   * ======================================================================== */
   window.addEventListener('load', () => {
     const introScreen = document.getElementById('intro-screen');
 
-    // =========================================
-    // INTRO CURTAIN TIMELINE
-    // =========================================
     if (introScreen) {
       document.body.classList.add('loaded');
 
-      // Keeps the curtain fully closed for 6s while it pulses gently
       setTimeout(() => {
         introScreen.classList.add('fade-out');
 
-        // At ~85% open (700ms in), the Hero fades in behind the curtain
         setTimeout(() => {
           document.body.classList.add('start-animations');
         }, 700);
 
-        // Curtain fully gone: enable real scrolling and arm the scroll hint
         setTimeout(() => {
           document.body.classList.add('scrollbar-visible');
           introScreen.remove();
@@ -359,10 +356,6 @@ document.addEventListener('DOMContentLoaded', () => {
       ativarAvisoScroll();
     }
 
-    // =========================================
-    // IDLE SCROLL HINT
-    // Appears after 5s of inactivity, disappears for good on first scroll.
-    // =========================================
     function ativarAvisoScroll() {
       const obterTexto = () => {
         const idiomaSalvo = localStorage.getItem('user-language') || 'pt';
@@ -398,54 +391,47 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-    // =================================================================
-    // PROFILE CARD SPIN (Click Accumulator + Inactivity Auto-Spin)
-    // =================================================================
-    const cardInner = document.querySelector('.profile-card-inner');
+  /* ========================================================================
+   * 13. PROFILE CARD SPIN (CLICK + INACTIVITY AUTO-SPIN)
+   * ====================================================================== */
+  const cardInner = document.querySelector('.profile-card-inner');
 
-    if (profileCard && cardInner) {
-      let rotacaoAcumulada = 360; // Começa em 360 para bater com a animação de entrada
-      let inactivityTimer;
-      const TEMPO_INATIVIDADE = 10000; // 10 segundos de inatividade (mude se quiser)
+  if (profileCard && cardInner) {
+    let rotacaoAcumulada = 360;
+    let inactivityTimer;
+    const TEMPO_INATIVIDADE = 10000;
 
-      // Função para dar o giro de 360 graus automático
-      const girarAutomatico = () => {
-        rotacaoAcumulada += 360; // Soma 360 graus no acumulador global
-        cardInner.style.transform = `rotateY(${rotacaoAcumulada}deg)`;
-        
-        // Reinicia o timer para o próximo ciclo de inatividade
-        resetInactivityTimer();
-      };
+    const girarAutomatico = () => {
+      rotacaoAcumulada += 360;
+      cardInner.style.transform = `rotateY(${rotacaoAcumulada}deg)`;
 
-      // Inicia ou reinicia o temporizador de inatividade
-      const resetInactivityTimer = () => {
-        clearTimeout(inactivityTimer);
-        inactivityTimer = setTimeout(girarAutomatico, TEMPO_INATIVIDADE);
-      };
+      resetInactivityTimer();
+    };
 
-      // Função ao clicar (Giro de 180 graus manual)
-      const girarMoeda = () => {
-        rotacaoAcumulada += 180; // Soma 180 graus normalmente
-        cardInner.style.transform = `rotateY(${rotacaoAcumulada}deg)`;
-        
-        // Se o usuário interagiu, reseta o tempo de inatividade
-        resetInactivityTimer();
-      };
+    const resetInactivityTimer = () => {
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(girarAutomatico, TEMPO_INATIVIDADE);
+    };
 
-      profileCard.addEventListener('click', girarMoeda);
+    const girarMoeda = () => {
+      rotacaoAcumulada += 180;
+      cardInner.style.transform = `rotateY(${rotacaoAcumulada}deg)`;
 
-      // Inicia o cronômetro assim que a página carregar por completo
-      window.addEventListener('load', () => {
-        resetInactivityTimer();
-      });
-    }
+      resetInactivityTimer();
+    };
 
-  // =================================================================
-  // 3D SKILL CUBES: click jump + continuous hover rotation
-  // =================================================================
+    profileCard.addEventListener('click', girarMoeda);
+
+    window.addEventListener('load', () => {
+      resetInactivityTimer();
+    });
+  }
+
+  /* ==========================================================================
+   * 14. 3D SKILL CUBES (CLICK JUMP + HOVER ROTATION)
+   * ======================================================================== */
   const cubes = document.querySelectorAll('.cube');
 
-  // Click: brief "jump" pulse
   cubes.forEach(cube => {
     cube.addEventListener('click', () => {
       if (cube.classList.contains('jump-active')) return;
@@ -457,30 +443,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Hover: constant-speed rotation that always eases back to the resting angle
   cubes.forEach(cube => {
     let animationFrameId = null;
-    let currentY = 25;       // Starting Y angle
-    const baseX = -20;       // Fixed X angle
-    const velocidade = 2.0;  // Constant rotation speed for every cube
+    let currentY = 25;
+    const baseX = -20;
+    const velocidade = 2.0;
     let isHovered = false;
 
     function updateRotation() {
       currentY += velocidade;
 
       if (isHovered) {
-        // Mouse over: spin indefinitely
         cube.style.transform = `rotateX(${baseX}deg) rotateY(${currentY}deg)`;
         animationFrameId = requestAnimationFrame(updateRotation);
       } else {
-        // Mouse left: keep the same pace until it lands back on the resting angle
         const anguloRelativo = (currentY - 25) % 360;
 
         if (anguloRelativo >= 0 && anguloRelativo < velocidade) {
           const voltas = Math.round((currentY - 25) / 360);
-          currentY = 25 + (voltas * 360); // Snaps precisely to the resting angle
+          currentY = 25 + (voltas * 360);
           cube.style.transform = `rotateX(${baseX}deg) rotateY(${currentY}deg)`;
-          animationFrameId = null; // Stops the loop gracefully
+          animationFrameId = null;
         } else {
           cube.style.transform = `rotateX(${baseX}deg) rotateY(${currentY}deg)`;
           animationFrameId = requestAnimationFrame(updateRotation);
@@ -497,13 +480,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cube.addEventListener('mouseleave', () => {
       isHovered = false;
-      // Loop keeps running until it naturally reaches the resting angle
     });
   });
 
-  // =================================================================
-  // PROJECTS CAROUSEL (Infinite Loop & Tab Visibility - NO DRAG)
-  // =================================================================
+  /* ==========================================================================
+   * 15. PROJECTS CAROUSEL (INFINITE LOOP)
+   * ======================================================================== */
   const projectsTrack = document.getElementById('projects-track');
   const carouselDots = document.getElementById('carousel-dots');
 
@@ -591,7 +573,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Remove qualquer cursor de "mãozinha de arrastar" para não confundir o usuário
     projectsTrack.style.cursor = 'default';
 
     function setupVideoListeners() {
@@ -619,9 +600,9 @@ document.addEventListener('DOMContentLoaded', () => {
     startAutoplay();
   }
 
-// =========================================
-  // BACK-TO-TOP BUTTON VISIBILITY (Apenas Desktop)
-  // =========================================
+  /* ==========================================================================
+   * 16. BACK-TO-TOP BUTTON VISIBILITY
+   * ======================================================================== */
   const backToTopButton = document.getElementById('back-to-top');
   const contactSection = document.getElementById('contact');
 
@@ -639,18 +620,3 @@ document.addEventListener('DOMContentLoaded', () => {
     contactObserver.observe(contactSection);
   }
 });
-
-// =========================================
-// HAMBURGER MENU (MOBILE)
-// =========================================
-if (menuToggle && navLinks) {
-  menuToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-  });
-
-  menuItems.forEach(item => {
-    item.addEventListener('click', () => {
-      navLinks.classList.remove('active');
-    });
-  });
-}

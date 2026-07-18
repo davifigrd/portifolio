@@ -1,6 +1,25 @@
+<!--
+==========================================================================
+   HTML INDEX
+   ==========================================================================
+   1.  HEAD ................................................ Meta & Stylesheets
+   2.  INTRO SCREEN ......................................... Preloader Screen
+   3.  HEADER & NAVIGATION .................................. Topbar & Menu
+   4.  HERO SECTION ......................................... Intro & Profile Photo
+   5.  ABOUT ME SECTION ..................................... About Me Narrative
+   6.  SKILLS SECTION - 3D CUBES ........................... Tech Cubes Layout
+   7.  PROJECTS SECTION - CAROUSEL .......................... Projects Carousel
+   8.  CONTACT SECTION ...................................... Form & Social Networks
+   9.  FOOTER ............................................... Page Footer
+   10. SCRIPTS & BACK-TO-TOP BUTTON ......................... JS Include & Fixed Button
+   ==========================================================================
+-->
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- ======================================================================
+         1. HEAD
+         ====================================================================== -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link rel="icon" type="image/png" href="../img/logo/shield-logo.png" />
@@ -15,6 +34,9 @@
     />
   </head>
   <body>
+    <!-- ========================================================================
+         2. INTRO SCREEN
+         ======================================================================== -->
     <div id="intro-screen">
       <div class="intro-panel panel-top">
         <div class="intro-content">
@@ -28,17 +50,13 @@
       <div class="intro-panel panel-bottom"></div>
     </div>
 
+    <!-- ========================================================================
+         3. HEADER & NAVIGATION
+         ======================================================================== -->
     <header>
       <a href="#hero" class="logo-link">
         <img src="../img/logo/logo-name-bg-removed.png" alt="Logo davifigrd" />
       </a>
-
-      <div class="header-right">
-        <button id="menu-toggle" aria-label="Open menu">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
 
         <nav class="nav-links">
           <ul>
@@ -51,6 +69,9 @@
       </div>
     </header>
 
+    <!-- ========================================================================
+         4. HERO SECTION
+         ======================================================================== -->
     <section id="hero" class="section">
       <h1 data-i18n="greeting">Hello, I'm Davi</h1>
 
@@ -71,6 +92,9 @@
       <p class="subtitle" data-i18n="subtitle">ADS Student & Developer</p>
     </section>
 
+    <!-- ========================================================================
+         5. ABOUT ME SECTION
+         ======================================================================== -->
     <section id="about">
       <h2 data-i18n="about-title">About Me</h2>
       <p data-i18n="about-text">
@@ -81,6 +105,9 @@
       </p>
     </section>
 
+    <!-- ========================================================================
+         6. SKILLS SECTION - 3D CUBES
+         ======================================================================== -->
     <section id="skills" class="skills-fullpage">
       <h2 data-i18n="skills-title">Skills & Technologies</h2>
       <div class="skills-3d-container">
@@ -250,6 +277,9 @@
       </div>
     </section>
 
+    <!-- ========================================================================
+         7. PROJECTS SECTION - CAROUSEL
+         ======================================================================== -->
     <section id="projects">
       <h2 data-i18n="projects-title">Projects</h2>
 
@@ -371,6 +401,9 @@
       </div>
     </section>
 
+    <!-- ========================================================================
+         8. CONTACT SECTION
+         ======================================================================== -->
     <section id="contact">
       <h2 data-i18n="contact-title">Contact Me</h2>
 
@@ -440,10 +473,16 @@
       </div>
     </section>
 
+    <!-- ========================================================================
+         9. FOOTER
+         ======================================================================== -->
     <footer>
       <p>&copy; 2026 Davi Figueiredo (davifigrd). All rights reserved.</p>
     </footer>
 
+    <!-- ========================================================================
+         10. SCRIPTS & BACK-TO-TOP BUTTON
+         ======================================================================== -->
     <script src="../js/script.js"></script>
 
     <a href="#hero" id="back-to-top" aria-label="Voltar ao topo">

@@ -1,8 +1,0 @@
-- comentários
-
-
-RESPONSIVIDADE
-- video dentro do project card torto
-- h2 skills errado
-- subtitle hero errado
-- header só com o menu hamburguer, sem a logo

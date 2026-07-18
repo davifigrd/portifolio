@@ -1,19 +1,42 @@
+/* ==========================================================================
+   CSS INDEX
+   ==========================================================================
+   1. FONTS & IMPORTS ................................... External Fonts
+   2. RESET & BASE CONFIG ............................... Resets & Variables
+   3. INTRO SCREEN ...................................... Preloader Screen
+   4. BODY, PAGE-LOAD & ANIMATION LOCKS ................. Page States & Locks
+   5. SECTION GLOBAL STYLES (SCROLL-REVEAL) ............. General Sections & H2s
+   6. HEADER & NAVIGATION ............................... Topbar & Menu
+   7. HERO SECTION & COMPONENTS ......................... Intro & Profile Photo
+   8. ABOUT ME SECTION .................................. About Me Narrative
+   9. SKILLS SECTION - 3D CUBES ......................... Tech Cubes Layout
+   10. PROJECTS CAROUSEL & CARDS ........................ Projects Carousel
+   11. CONTACT SECTION .................................. Form & Social Networks
+   12. FOOTER ........................................... Page Footer
+   13. UTILITIES & FLOATING ELEMENTS .................... Scroll Hint & Fixed Top
+   14. MOBILE ........................................... Media Queries
+   ========================================================================== */
+
 /* ==========================================
-   RESET & BASE CONFIG
+   1. FONTS & IMPORTS
+   ========================================== */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
+
+/* ==========================================
+   2. RESET & BASE CONFIG
    ========================================== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   user-select: none;
-  -webkit-user-select: none; /* Safari */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* IE10+ */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 html {
   scroll-behavior: smooth;
-  /* Custom scrollbar is fully hidden site-wide (see Scrollbar block below) */
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
 }
@@ -28,20 +51,133 @@ html {
   --transition: all 0.3s ease;
 }
 
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
+/* ==========================================
+   3. INTRO SCREEN
+   ========================================== */
+#intro-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999;
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+.intro-panel {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background-color: #020203;
+  transition:
+    transform 1s cubic-bezier(0.77, 0, 0.175, 1),
+    opacity 0.8s ease-in-out;
+}
+
+.panel-top {
+  top: 0;
+  background: linear-gradient(
+    to bottom,
+    #020203 70%,
+    rgba(178, 74, 241, 0.05) 100%
+  );
+}
+
+.panel-bottom {
+  bottom: 0;
+  background: linear-gradient(
+    to top,
+    #020203 70%,
+    rgba(178, 74, 241, 0.05) 100%
+  );
+}
+
+.panel-top::after,
+.panel-bottom::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-purple);
+  transform: scaleX(0);
+  transform-origin: center center;
+  animation: drawIntroLine 1.4s cubic-bezier(0.25, 1, 0.5, 1) forwards 0.2s;
+}
+
+.panel-top::after {
+  bottom: 0;
+  box-shadow: 0 4px 15px rgba(178, 74, 241, 0.6);
+}
+
+.panel-bottom::after {
+  top: 0;
+  box-shadow: 0 -4px 15px rgba(178, 74, 241, 0.6);
+}
+
+@keyframes drawIntroLine {
+  0% {
+    transform: scaleX(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+.intro-content {
+  position: absolute;
+  bottom: -60px;
+  left: 50%;
+  transform: translate(-50%, 0) scale(0.85);
+  z-index: 2;
+  text-align: center;
+  opacity: 0;
+  animation: fadeInLogoShield 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards 1.3s;
+}
+
+.intro-logo-img {
+  width: 120px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 0 25px rgba(178, 74, 241, 0.7));
+}
+
+@keyframes fadeInLogoShield {
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+#intro-screen.fade-out .panel-top {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+#intro-screen.fade-out .panel-bottom {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+#intro-screen.fade-out .intro-content {
+  opacity: 0;
+  filter: blur(4px);
+  transition: all 0.6s ease-in-out;
+}
 
 /* ==========================================
-   BODY & PAGE-LOAD FADE-IN
+   4. BODY, PAGE-LOAD & ANIMATION LOCKS
    ========================================== */
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: sans-serif;
-
-  /* Starts fully invisible with no scrollbar until JS marks the page as loaded */
   opacity: 0;
   overflow-y: hidden !important;
-
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
@@ -49,105 +185,30 @@ body {
 
 body.loaded {
   opacity: 1;
-  overflow-x: hidden; /* Prevents unwanted horizontal scroll */
+  overflow-x: hidden;
 }
 
 body.scrollbar-visible {
-  overflow-y: auto !important; /* Enables real scrolling once the intro is done */
+  overflow-y: auto !important;
 }
 
-/* ==========================================
-   SCROLLBAR (fully hidden, kept scrollable)
-   ========================================== */
-body::-webkit-scrollbar {
-  display: none !important;
-  width: 0 !important;
+/* Trava do Hero até a cortina abrir */
+body:not(.start-animations) #hero h1,
+body:not(.start-animations) .profile-card,
+body:not(.start-animations) .subtitle,
+body:not(.start-animations) section {
+  animation: none !important;
+  opacity: 0 !important;
+  transition: none !important;
 }
 
-/* ==========================================
-   SECTION TITLES (H2) WITH REVEAL UNDERLINE
-   ========================================== */
-section h2 {
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    sans-serif;
-  font-size: 2.8rem;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  margin-bottom: 30px;
-  position: relative;
-  z-index: 0;
-
-  /* Garante o alinhamento estrito à esquerda, ocupando apenas o tamanho do texto */
-  display: block;
-  width: max-content;
-  text-align: left;
-  margin-left: 0;
-  color: #ffffff;
+body.start-animations #hero h1,
+body.start-animations .profile-card {
+  opacity: 1;
+  transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-section h2::after {
-  content: "";
-  position: absolute;
-  bottom: 4px; /* Levemente elevada para cortar sutilmente letras como g, j, p */
-  left: 0;
-  width: 100%;
-  height: 3px;
-  border-radius: 3px;
-  z-index: -1;
-  background: var(--color-purple); /* Roxo base do seu site */
-
-  /* Força o início absoluto na borda esquerda (0px) */
-  transform: scaleX(0);
-  transform-origin: left center !important;
-  opacity: 0.7;
-}
-
-/* Ativação quando a seção entra na tela via Scroll */
-section.active-section h2::after {
-  /* - "drawOnce 3s": Agora leva 3 segundos inteiros para se desenhar (bem lento e majestoso).
-     - "sutilPulse 5s ... 3s": O brilho pulsa lentamente e só começa após os 3 segundos da linha cheia.
-  */
-  animation:
-    drawOnce 3s cubic-bezier(0.25, 1, 0.5, 1) forwards,
-    sutilPulse 5s ease-in-out infinite 3s;
-}
-
-/* 1. ANIMAÇÃO DE ENTRADA LENTA (Executa apenas uma vez do início ao fim) */
-@keyframes drawOnce {
-  0% {
-    transform: scaleX(0);
-    transform-origin: left center !important;
-  }
-  100% {
-    transform: scaleX(1);
-    transform-origin: left center !important;
-    opacity: 0.8;
-  }
-}
-
-/* 2. ANIMAÇÃO DE BRILHO CONTÍNUO E SUAVE */
-@keyframes sutilPulse {
-  0%,
-  100% {
-    opacity: 0.7;
-    box-shadow: 0 0 6px rgba(178, 74, 241, 0.2);
-  }
-  50% {
-    opacity: 1;
-    box-shadow:
-      0 0 10px rgba(178, 74, 241, 0.4),
-      0 0 18px rgba(178, 74, 241, 0.2);
-  }
-}
-
-/* ==========================================
-   BODY TEXT (About paragraph & Contact subtitle)
-   ========================================== */
+/* Typography Global */
 #about p,
 .contact-subtitle {
   font-family:
@@ -163,14 +224,102 @@ section.active-section h2::after {
   color: white;
 }
 
-.contact-subtitle {
-  color: #a1a1aa;
-  margin-bottom: 40px;
-  font-size: 0.95rem;
+/* ==========================================
+   5. SECTION GLOBAL STYLES (SCROLL-REVEAL)
+   ========================================== */
+section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 140px 20px !important;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 90%;
+  box-sizing: border-box;
+  opacity: 0;
+  transform: translateY(50px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+section.active-section {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+section h2 {
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 0;
+  display: block;
+  width: max-content;
+  text-align: left;
+  margin-left: 0;
+  color: #ffffff;
+}
+
+section h2::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  border-radius: 3px;
+  z-index: -1;
+  background: var(--color-purple);
+  transform: scaleX(0);
+  transform-origin: left center !important;
+  opacity: 0.7;
+}
+
+section.active-section h2::after {
+  animation:
+    drawOnce 3s cubic-bezier(0.25, 1, 0.5, 1) forwards,
+    sutilPulse 5s ease-in-out infinite 3s;
+}
+
+@keyframes drawOnce {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left center !important;
+  }
+  100% {
+    transform: scaleX(1);
+    transform-origin: left center !important;
+    opacity: 0.8;
+  }
+}
+
+@keyframes sutilPulse {
+  0%,
+  100% {
+    opacity: 0.7;
+    box-shadow: 0 0 6px rgba(178, 74, 241, 0.2);
+  }
+  50% {
+    opacity: 1;
+    box-shadow:
+      0 0 10px rgba(178, 74, 241, 0.4),
+      0 0 18px rgba(178, 74, 241, 0.2);
+  }
 }
 
 /* ==========================================
-   HEADER & NAVIGATION (floating pill, anti-flicker)
+   6. HEADER & NAVIGATION
    ========================================== */
 header {
   display: flex;
@@ -180,23 +329,17 @@ header {
   position: fixed;
   top: 20px;
   left: 50%;
-
-  /* Starts invisible and unclickable until JS reveals it past the Hero section */
   opacity: 0;
   pointer-events: none;
   transform: translateX(-50%) translateY(-150%);
-
   width: 90%;
   max-width: 1200px;
   border-radius: 50px;
-
   background-color: rgba(2, 2, 3, 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.05);
-
   z-index: 1000;
   transition:
     transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
@@ -205,7 +348,6 @@ header {
     box-shadow 0.3s ease;
 }
 
-/* Revealed via JS once the user scrolls back up past the Hero */
 body.loaded header.visible {
   opacity: 1;
   pointer-events: auto;
@@ -254,6 +396,12 @@ header img {
   position: relative;
 }
 
+/* Garanta que nenhum ícone quebrado apareça antes do texto */
+.nav-links a::before {
+  display: none !important;
+  content: none !important;
+}
+
 .nav-links a::after {
   content: "";
   position: absolute;
@@ -268,35 +416,12 @@ header img {
 .nav-links a:hover {
   color: var(--color-purple);
 }
-
 .nav-links a:hover::after {
   width: 100%;
 }
 
 /* ==========================================
-   MOBILE MENU TOGGLE (hamburger icon)
-   ========================================== */
-#menu-toggle {
-  display: none;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 24px;
-  height: 18px;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-#menu-toggle span {
-  width: 100%;
-  height: 2px;
-  background-color: var(--color-text);
-  border-radius: 2px;
-  transition: var(--transition);
-}
-
-/* ==========================================
-   HERO SECTION
+   7. HERO SECTION & COMPONENTS
    ========================================== */
 #hero {
   min-height: 100vh;
@@ -310,20 +435,17 @@ header img {
   box-sizing: border-box;
 }
 
-/* Disables the generic scroll-reveal animation so the Hero appears with the curtain instead */
 #hero.section {
   opacity: 1 !important;
   transform: translateY(0) !important;
 }
 
 #hero h1 {
-  /* 1. FONTE PREMIUM E ULTRA-COMPACTA */
   font-family: "Plus Jakarta Sans", system-ui, sans-serif;
-  font-size: 4.2rem;
+  font-size: 3.9rem;
   font-weight: 800;
   letter-spacing: -2px;
   line-height: 1.1;
-
   position: relative;
   text-align: center;
   display: block;
@@ -331,41 +453,29 @@ header img {
   max-width: max-content;
   margin: 0 auto 25px auto;
   padding-bottom: 8px;
-
-  /* 2. TRANSIÇÃO APENAS COM TONS DE ROXO (SEM BRANCO) */
   background: linear-gradient(
     to right,
     var(--color-purple) 0%,
-    /* Roxo vibrante */ #d1a3ff 25%,
-    /* Lilás bem claro (para o ponto de luz) */ var(--color-purple) 50%,
-    /* Roxo vibrante */ var(--color-purple-dark) 75%,
-    /* Roxo escuro/profundo (para sombra) */ var(--color-purple) 100%
-      /* Fecha no roxo para dar emenda perfeita */
+    #d1a3ff 25%,
+    var(--color-purple) 50%,
+    var(--color-purple-dark) 75%,
+    var(--color-purple) 100%
   );
-
-  /* Duplicamos o tamanho horizontal para que a emenda infinita funcione */
   background-size: 200% 100%;
-
-  /* 3. APLICAÇÃO DO TEXT-CLIP */
   color: transparent;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-
-  /* 4. SOMBRA SUTIL */
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
-
-  /* 5. ANIMAÇÃO DE MOVIMENTO CONTÍNUO (Sem efeito vai-e-volta) */
   animation: continuousPurpleWave 15s linear infinite;
 }
 
-/* Animação que desloca o degradê infinitamente para a esquerda */
 @keyframes continuousPurpleWave {
   0% {
     background-position: 0% 0%;
   }
   100% {
-    background-position: -200% 0%; /* Move o gradiente de forma direta e contínua */
+    background-position: -200% 0%;
   }
 }
 
@@ -373,11 +483,9 @@ header img {
   color: inherit;
   -webkit-text-fill-color: transparent;
 }
-/* ------------------------------------------
-   HERO PROFILE CARD (flip coin photo)
-   ------------------------------------------ */
+
+/* Profile Card */
 .profile-card {
-  background-color: transparent;
   width: 250px;
   height: 250px;
   perspective: 1000px;
@@ -385,11 +493,8 @@ header img {
   margin: 25px auto 0 auto;
   cursor: pointer;
   flex-shrink: 0;
-  user-select: none;
-  -webkit-user-select: none;
   will-change: transform;
   transform: translateZ(0);
-
   transition:
     transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
     box-shadow 0.4s cubic-bezier(0.25, 1, 0.5, 1);
@@ -400,10 +505,9 @@ header img {
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
-  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); /* <--- AQUI */
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Entry spin, triggered once via JS shortly after the intro curtain opens */
 .profile-card.active-360 .profile-card-inner {
   transform: rotateY(360deg);
 }
@@ -423,21 +527,17 @@ body.loaded .profile-card.active-360 .profile-card-inner {
   backface-visibility: hidden !important;
   border: 3px solid var(--color-purple);
   border-radius: 50%;
-
   box-shadow:
     0 0 10px rgba(178, 74, 241, 0.5),
     0 0 25px rgba(178, 74, 241, 0.3);
-
   overflow: hidden;
   box-sizing: border-box;
   transition: box-shadow 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* Hover: gentle zoom + expanding neon glow */
 .profile-card:hover {
   transform: scale(1.05);
 }
-
 .profile-card:hover .profile-front,
 .profile-card:hover .profile-back {
   box-shadow:
@@ -452,21 +552,17 @@ body.loaded .profile-card.active-360 .profile-card-inner {
   height: 100%;
   object-fit: cover;
   display: block;
-
-  /* --- CORREÇÃO DE NITIDEZ --- */
   backface-visibility: hidden;
   transform: translateZ(0);
   will-change: transform;
-  image-rendering: -webkit-optimize-contrast; /* Força nitidez no Chrome/Safari */
+  image-rendering: -webkit-optimize-contrast;
 }
 
 .profile-back {
   transform: rotateY(180deg);
 }
 
-/* ------------------------------------------
-   HERO SUBTITLE (terminal typewriter effect)
-   ------------------------------------------ */
+/* Hero Subtitle */
 .subtitle {
   font-family: monospace;
   font-size: 1.3rem;
@@ -475,15 +571,13 @@ body.loaded .profile-card.active-360 .profile-card-inner {
   white-space: nowrap;
   overflow: hidden;
   display: inline-block;
-
   margin: 45px auto 0 auto;
   width: 0;
   color: #a1a1aa;
   transition: color var(--transition);
-  --text-length: 25; /* Overwritten via JS with the actual character count */
+  --text-length: 25;
 }
 
-/* Animation only starts once the intro curtain has fully opened */
 body.start-animations .subtitle {
   animation:
     typing 2s steps(var(--text-length)) forwards,
@@ -495,7 +589,6 @@ body.start-animations .subtitle {
     width: 0;
   }
   to {
-    /* Width = character cells + 1 extra cell of breathing room + letter-spacing pixels */
     width: calc((var(--text-length) * 1ch) + 1ch + (var(--text-length) * 1px));
   }
 }
@@ -511,36 +604,7 @@ body.start-animations .subtitle {
 }
 
 /* ==========================================
-   SECTION SCROLL-REVEAL (fade + slide up)
-   ========================================== */
-section {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  padding: 140px 20px !important;
-  max-width: 1200px;
-  margin: 0 auto;
-  width: 90%;
-  box-sizing: border-box;
-
-  opacity: 0;
-  transform: translateY(50px);
-  transition:
-    opacity 0.8s ease,
-    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Toggled via JS scroll listener */
-section.active-section {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ==========================================
-   ABOUT ME SECTION
+   8. ABOUT ME SECTION
    ========================================== */
 #about {
   display: flex;
@@ -557,9 +621,9 @@ section.active-section {
   margin-top: 50px;
 }
 
-/* =================================================================
-   SKILLS SECTION — 3D CUBES
-   ================================================================= */
+/* ==========================================
+   9. SKILLS SECTION - 3D CUBES
+   ========================================== */
 .skills-fullpage {
   min-height: 100vh;
   display: flex;
@@ -594,10 +658,9 @@ section.active-section {
   height: 70px;
   position: relative;
   transform-style: preserve-3d;
-  transform: rotateX(-20deg) rotateY(25deg); /* Base resting angle */
+  transform: rotateX(-20deg) rotateY(25deg);
 }
 
-/* JS removes transitions during the continuous hover-driven rotation loop */
 .cube-wrapper:hover .cube {
   transition: none !important;
 }
@@ -615,7 +678,6 @@ section.active-section {
   transition: var(--transition);
 }
 
-/* Cube face geometry */
 .front {
   transform: rotateY(0deg) translateZ(35px);
 }
@@ -649,7 +711,6 @@ section.active-section {
   font-weight: 900;
 }
 
-/* Per-language accent colors */
 [data-lang="html"] .cube-face {
   border-color: #e34c26;
   color: #e34c26;
@@ -746,24 +807,7 @@ section.active-section {
 }
 
 /* ==========================================
-   PROJECTS CAROUSEL (Corrigido)
-   ========================================== */
-.projects-carousel {
-  width: 100%;
-  max-width: 1100px;
-  overflow: hidden;
-  margin: 50px auto 0 auto; /* Centraliza o carrossel */
-  position: relative;
-}
-
-.projects-track {
-  display: flex;
-  width: 100%;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* ==========================================
-   PROJECTS CAROUSEL (Infinite Loop & Dark Design)
+   10. PROJECTS CAROUSEL & CARDS
    ========================================== */
 .projects-carousel {
   width: 100%;
@@ -771,20 +815,13 @@ section.active-section {
   overflow: hidden;
   margin: 50px auto 0 auto;
   position: relative;
-  /* Degradê sofisticado no fundo do container principal */
-  background: linear-gradient(
-    180px,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(13, 13, 13, 0.8) 100%
-  );
-  border-radius: 24px;
+  background: transparent !important;
   padding: 20px 0;
 }
 
 .projects-track {
   display: flex;
   width: 100%;
-  /* 1.2s torna o deslize físico bem mais calmo e elegante */
   transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -797,191 +834,156 @@ section.active-section {
   padding: 20px;
 }
 
-/* Card Estilo Dark Premium com Fundo de Vidro */
 .project-card {
   width: 100%;
-  max-width: 680px; /* Aumentado um pouco o espaço de exibição */
-  background: rgba(15, 15, 15, 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
+  max-width: 680px;
+  background: var(--color-card-bg) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-radius: 20px !important;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   transition:
-    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.5s ease,
-    border-color 0.5s ease;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    transform 0.4s ease,
+    box-shadow 0.4s ease,
+    border-color 0.4s ease;
 }
 
 .project-card:hover {
   transform: translateY(-8px);
-  border-color: rgba(178, 74, 241, 0.5);
-  box-shadow: 0 20px 40px rgba(178, 74, 241, 0.15);
+  border-color: rgba(178, 74, 241, 0.5) !important;
+  box-shadow: 0 25px 50px rgba(178, 74, 241, 0.18);
 }
 
 .project-media {
-  width: 100%;
-  /* Removemos o height fixo de 340px */
-  aspect-ratio: 16 / 9; /* Força o container a ter o formato perfeito de um vídeo de ecrã inteiro */
-  background-color: #050505;
+  width: 100% !important;
+  aspect-ratio: 16 / 9 !important;
+  background-color: #000 !important;
   overflow: hidden;
+  position: relative;
 }
 
 .project-video {
-  width: 100%;
-  height: 100%;
-  object-fit: contain; /* Troca de 'cover' para 'contain' para GARANTIR que nada é cortado */
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
   display: block;
-  opacity: 0.8;
-  transition:
-    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 0.6s ease;
 }
 
 .project-card:hover .project-video {
-  transform: scale(1.03);
+  transform: scale(1.04);
   opacity: 1;
 }
 
 .project-info {
-  padding: 30px;
+  padding: 32px !important;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .project-info h3 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.6rem !important;
   font-weight: 700;
   color: #ffffff;
+  letter-spacing: -0.5px;
 }
 
 .project-info p {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 0.98rem !important;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(220, 222, 225, 0.75) !important;
 }
 
-.project-links a {
-  display: inline-flex;
-  padding: 10px 24px;
-  background: rgba(178, 74, 241, 0.08);
-  border: 1px solid rgba(178, 74, 241, 0.25);
-  border-radius: 30px;
-  color: #e5b3ff;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.85rem;
-  transition: all 0.3s ease;
-}
-
-/* Container que engloba o botão (esquerda) e as tags (direita) */
-.project-links {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* Empurra o botão pra esquerda e tags pra direita */
-  flex-wrap: wrap; /* Garante que se a tela for pequena, eles quebrem de linha suavemente */
-  gap: 15px;
-  margin-top: auto; /* Garante que essa barra fique sempre colada no rodapé do card */
-}
-
-/* Efeito Hover com as cores acendendo dinamicamente */
-.project-card:hover .tech-tag[data-tech="html"] {
-  border-color: rgba(227, 76, 38, 0.4);
-  color: #e34c26;
-  background: rgba(227, 76, 38, 0.05);
-}
-
-.project-card:hover .tech-tag[data-tech="css"] {
-  border-color: rgba(38, 77, 228, 0.4);
-  color: #264de4;
-  background: rgba(38, 77, 228, 0.05);
-}
-
-.project-card:hover .tech-tag[data-tech="js"] {
-  border-color: rgba(247, 223, 30, 0.4);
-  color: #f7df1e;
-  background: rgba(247, 223, 30, 0.05);
-}
-
-.project-card:hover .tech-tag[data-tech="construct"] {
-  border-color: rgba(0, 153, 130, 0.4);
-  color: #009982;
-  background: rgba(0, 153, 130, 0.05);
-}
-
-.project-links a:hover {
-  background: #b24af1;
-  color: #ffffff;
-  box-shadow: 0 0 15px rgba(178, 74, 241, 0.4);
-}
-
-/* ==========================================
-   TAGS DE TECNOLOGIA DO PROJETO
-   ========================================== */
-/* Container das tags */
+/* Tech Tags */
 .project-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-/* Badges estilizados */
 .tech-tag {
   font-family: system-ui, sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.78rem !important;
   font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  color: #a1a1aa;
+  padding: 6px 12px !important;
+  border-radius: 14px !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  color: #ababac !important;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   transition: all 0.3s ease;
   white-space: nowrap;
 }
 
-/* Cores de destaque nos ícones quando o card recebe hover */
 .project-card:hover .tech-tag[data-tech="html"] {
-  border-color: rgba(227, 76, 38, 0.4);
-  color: #e34c26;
-  background: rgba(227, 76, 38, 0.05);
+  border-color: rgba(227, 76, 38, 0.4) !important;
+  color: #e34c26 !important;
+  background: rgba(227, 76, 38, 0.05) !important;
 }
-
 .project-card:hover .tech-tag[data-tech="css"] {
-  border-color: rgba(38, 77, 228, 0.4);
-  color: #264de4;
-  background: rgba(38, 77, 228, 0.05);
+  border-color: rgba(38, 77, 228, 0.4) !important;
+  color: #264de4 !important;
+  background: rgba(38, 77, 228, 0.05) !important;
 }
-
 .project-card:hover .tech-tag[data-tech="js"] {
-  border-color: rgba(247, 223, 30, 0.4);
-  color: #f7df1e;
-  background: rgba(247, 223, 30, 0.05);
+  border-color: rgba(247, 223, 30, 0.4) !important;
+  color: #f7df1e !important;
+  background: rgba(247, 223, 30, 0.05) !important;
 }
-
 .project-card:hover .tech-tag[data-tech="construct"] {
-  border-color: rgba(0, 153, 130, 0.4);
-  color: #009982;
-  background: rgba(0, 153, 130, 0.05);
+  border-color: rgba(0, 153, 130, 0.4) !important;
+  color: #009982 !important;
+  background: rgba(0, 153, 130, 0.05) !important;
 }
 
-/* Área das Bolinhas Corrigida (Evita o corte) */
+/* Carousel Control Elements */
+.project-links {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 15px !important;
+}
+
+.project-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 28px !important;
+  background: rgba(178, 74, 241, 0.08) !important;
+  border: 1px solid rgba(178, 74, 241, 0.25) !important;
+  border-radius: 30px !important;
+  color: #e5b3ff !important;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.88rem !important;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.project-links a:hover {
+  background: #b24af1 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 20px rgba(178, 74, 241, 0.5);
+  transform: scale(1.02);
+}
+
 .carousel-dots {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 12px;
   margin-top: 30px;
-  padding: 10px 0; /* PADDING DE SEGURANÇA: Impede que o efeito 'scale' do hover corte as bolinhas */
-  height: 20px; /* Força uma altura fixa para conter o efeito sem esmagar */
+  padding: 10px 0;
+  height: 20px;
 }
 
 .dot {
@@ -1000,11 +1002,11 @@ section.active-section {
 
 .dot.active {
   background-color: #b24af1;
-  transform: scale(1.3); /* Agora cresce livremente sem ser cortado */
+  transform: scale(1.3);
 }
 
 /* ==========================================
-   CONTACT SECTION
+   11. CONTACT SECTION
    ========================================== */
 #contact h2 {
   text-align: center;
@@ -1019,6 +1021,12 @@ section.active-section {
   width: 100%;
   max-width: 850px;
   margin: 0 auto;
+}
+
+.contact-subtitle {
+  color: #a1a1aa;
+  margin-bottom: 40px;
+  font-size: 0.95rem;
 }
 
 .contact-form {
@@ -1050,8 +1058,7 @@ section.active-section {
   font-size: 1rem;
   outline: none;
   transition: var(--transition);
-
-  resize: none; /* Prevents manual resizing */
+  resize: none;
   min-height: 160px;
   font-family: inherit;
 }
@@ -1062,7 +1069,6 @@ section.active-section {
   box-shadow: 0 0 10px rgba(178, 74, 241, 0.1);
 }
 
-/* Submit button + its dynamic states (loading / success / error) */
 .contact-form button {
   background: linear-gradient(
     to right,
@@ -1096,7 +1102,6 @@ section.active-section {
   filter: brightness(0.8);
   opacity: 0.8;
 }
-
 .contact-form button.success {
   background: #00ff87 !important;
   color: #020203 !important;
@@ -1104,14 +1109,12 @@ section.active-section {
   transform: scale(0.98);
   box-shadow: 0 0 20px rgba(0, 255, 135, 0.4);
 }
-
 .contact-form button.error {
   background: #ff0055 !important;
   color: #ffffff !important;
   pointer-events: none;
   box-shadow: 0 0 20px rgba(255, 0, 85, 0.5);
 }
-
 .contact-form button.shake {
   animation: buttonShake 0.5s ease-in-out;
 }
@@ -1131,9 +1134,6 @@ section.active-section {
   }
 }
 
-/* ==========================================
-   SOCIAL ICONS
-   ========================================== */
 .social-links-minimal {
   display: flex;
   flex-wrap: wrap;
@@ -1165,7 +1165,7 @@ section.active-section {
 }
 
 /* ==========================================
-   FOOTER
+   12. FOOTER
    ========================================== */
 footer {
   padding: 20px 0;
@@ -1187,235 +1187,9 @@ footer p {
 }
 
 /* ==========================================
-   BACK-TO-TOP BUTTON (fixed, minimal)
+   13. UTILITIES & FLOATING ELEMENTS
    ========================================== */
-#back-to-top {
-  position: fixed !important;
-  bottom: 30px;
-  right: 30px;
-  width: 45px;
-  height: 45px;
-  background-color: rgba(2, 2, 3, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  color: var(--color-text);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  font-size: 0.9rem;
-  z-index: 9999;
-  cursor: pointer;
-
-  opacity: 0;
-  pointer-events: none;
-  transform: scale(0.8) translateY(10px);
-  transition:
-    opacity 0.4s ease,
-    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.4s ease,
-    box-shadow 0.4s ease;
-}
-
-#back-to-top i {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Small vertical tick that grows in on hover, joining the chevron */
-#back-to-top::after {
-  content: "";
-  position: absolute;
-  bottom: 15px;
-  width: 2px;
-  height: 0;
-  background-color: var(--color-purple);
-  border-radius: 1px;
-  opacity: 0;
-  transition:
-    height 0.3s ease,
-    opacity 0.2s ease;
-}
-
-/* Toggled via JS IntersectionObserver on the Contact section */
-#back-to-top.visible {
-  opacity: 1 !important;
-  pointer-events: auto !important;
-  transform: scale(1) translateY(0) !important;
-}
-
-#back-to-top:hover {
-  border-color: rgba(178, 74, 241, 0.3) !important;
-  box-shadow: 0 0 12px rgba(178, 74, 241, 0.2) !important;
-  transform: scale(1.05) translateY(-2px) !important;
-}
-
-#back-to-top:hover i {
-  color: var(--color-purple);
-  transform: translateY(-2px);
-}
-
-#back-to-top:hover::after {
-  height: 12px;
-  opacity: 1;
-}
-
-/* =================================================================
-   INTRO SCREEN (cinematic preloader)
-   ================================================================= */
-#intro-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 99999;
-  overflow: hidden;
-  pointer-events: auto;
-}
-
-/* Top/bottom curtain panels */
-.intro-panel {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 50%;
-  background-color: #020203;
-  transition:
-    transform 1s cubic-bezier(0.77, 0, 0.175, 1),
-    opacity 0.8s ease-in-out;
-}
-
-.panel-top {
-  top: 0;
-  background: linear-gradient(
-    to bottom,
-    #020203 70%,
-    rgba(178, 74, 241, 0.15) 100%
-  );
-  border-bottom: 2px solid var(--color-purple);
-  box-shadow: 0 5px 25px rgba(178, 74, 241, 0.2);
-}
-
-.panel-bottom {
-  bottom: 0;
-  background: linear-gradient(
-    to top,
-    #020203 70%,
-    rgba(178, 74, 241, 0.15) 100%
-  );
-  border-top: 2px solid var(--color-purple);
-  box-shadow: 0 -5px 25px rgba(178, 74, 241, 0.2);
-}
-
-/* Slow pulsing glow on the curtain seam while the intro is still closed */
-@keyframes pulseIntroLineTop {
-  0% {
-    box-shadow: 0 4px 12px rgba(178, 74, 241, 0.15);
-    border-bottom-color: var(--color-purple);
-  }
-  50% {
-    box-shadow: 0 8px 35px rgba(178, 74, 241, 0.8);
-    border-bottom-color: #e2b6ff;
-  }
-  100% {
-    box-shadow: 0 4px 12px rgba(178, 74, 241, 0.15);
-    border-bottom-color: var(--color-purple);
-  }
-}
-
-@keyframes pulseIntroLineBottom {
-  0% {
-    box-shadow: 0 -4px 12px rgba(178, 74, 241, 0.15);
-    border-top-color: var(--color-purple);
-  }
-  50% {
-    box-shadow: 0 -8px 35px rgba(178, 74, 241, 0.8);
-    border-top-color: #e2b6ff;
-  }
-  100% {
-    box-shadow: 0 -4px 12px rgba(178, 74, 241, 0.15);
-    border-top-color: var(--color-purple);
-  }
-}
-
-#intro-screen:not(.fade-out) .panel-top {
-  animation: pulseIntroLineTop 4s infinite ease-in-out !important;
-}
-
-#intro-screen:not(.fade-out) .panel-bottom {
-  animation: pulseIntroLineBottom 4s infinite ease-in-out !important;
-}
-
-/* Curtain opening, triggered via JS */
-#intro-screen.fade-out .panel-top {
-  transform: translateY(-100%);
-  opacity: 0;
-}
-
-#intro-screen.fade-out .panel-bottom {
-  transform: translateY(100%);
-  opacity: 0;
-}
-
-#intro-screen.fade-out .intro-content {
-  opacity: 0;
-  filter: blur(2px);
-  transition: all 0.7s ease-in-out;
-}
-
-/* Shield logo centered on the curtain seam */
-.intro-content {
-  position: absolute;
-  bottom: -60px;
-  left: 50%;
-  transform: translate(-50%, 0) scale(0.85);
-  z-index: 2;
-  text-align: center;
-  opacity: 0;
-  animation: fadeInLogoShield 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards 0.2s;
-}
-
-.intro-logo-img {
-  width: 120px;
-  height: auto;
-  display: block;
-  filter: drop-shadow(0 0 20px rgba(178, 74, 241, 0.6));
-}
-
-@keyframes fadeInLogoShield {
-  to {
-    opacity: 1;
-    transform: translate(-50%, 0) scale(1);
-  }
-}
-
-/* ==========================================
-   HERO LOCK UNTIL THE INTRO CURTAIN OPENS
-   ========================================== */
-body:not(.start-animations) #hero h1,
-body:not(.start-animations) .profile-card,
-body:not(.start-animations) .subtitle,
-body:not(.start-animations) section {
-  animation: none !important;
-  opacity: 0 !important;
-  transition: none !important;
-}
-
-body.start-animations #hero h1,
-body.start-animations .profile-card {
-  opacity: 1;
-  transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-/* ==========================================
-   IDLE SCROLL HINT
-   ========================================== */
+/* Scroll Hint */
 .scroll-hint {
   position: fixed;
   bottom: 30px;
@@ -1469,26 +1243,138 @@ body.start-animations .profile-card {
   }
 }
 
-/* ==========================================================================
-   BLOCO UNIFICADO DE RESPONSIVIDADE MOBILE COMPLETO E DEFINITIVO
-   ========================================================================== */
+/* Back To Top */
+#back-to-top {
+  position: fixed !important;
+  bottom: 30px;
+  right: 30px;
+  width: 45px;
+  height: 45px;
+  background-color: rgba(2, 2, 3, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--color-text);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 0.9rem;
+  z-index: 9999;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.8) translateY(10px);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+#back-to-top i {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#back-to-top::after {
+  content: "";
+  position: absolute;
+  bottom: 15px;
+  width: 2px;
+  height: 0;
+  background-color: var(--color-purple);
+  border-radius: 1px;
+  opacity: 0;
+  transition:
+    height 0.3s ease,
+    opacity 0.2s ease;
+}
+
+#back-to-top.visible {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: scale(1) translateY(0) !important;
+}
+
+#back-to-top:hover {
+  border-color: rgba(178, 74, 241, 0.3) !important;
+  box-shadow: 0 0 12px rgba(178, 74, 241, 0.2) !important;
+  transform: scale(1.05) translateY(-2px) !important;
+}
+
+#back-to-top:hover i {
+  color: var(--color-purple);
+  transform: translateY(-2px);
+}
+
+#back-to-top:hover::after {
+  height: 12px;
+  opacity: 1;
+}
+
+/* ==========================================
+   14. MOBILE / RESPONSIVIDADE
+   ========================================== */
 @media (max-width: 768px) {
-  
-  /* --- RESET DE FLUIDEZ MÁXIMA --- */
-  body, html, section {
+  body,
+  html {
     width: 100% !important;
     max-width: 100vw !important;
-    overflow-x: hidden !important; 
+    overflow-x: hidden !important;
     margin: 0 !important;
     padding: 0 !important;
     box-sizing: border-box !important;
   }
 
   section {
-    padding: 50px 15px !important;
+    padding: 60px 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 
-  /* --- CORREÇÃO DO HERO --- */
+  section h2,
+  .section-title,
+  #skills h2,
+  #projects h2 {
+    font-size: 2.6rem !important;
+    text-align: center !important;
+    display: inline-block !important;
+    width: auto !important;
+    max-width: 100% !important;
+    margin: 0 auto 35px auto !important;
+    position: relative !important;
+    white-space: nowrap !important;
+    z-index: 1 !important;
+    transform: none !important;
+    left: auto !important;
+    right: auto !important;
+    padding: 0 !important;
+  }
+
+  section h2::after,
+  #skills h2::after,
+  #projects h2::after {
+    content: "" !important;
+    position: absolute !important;
+    left: 0 !important;
+    bottom: 2px !important;
+    width: 100% !important;
+    height: 3px !important;
+    background-color: var(--color-purple) !important;
+    z-index: -1 !important;
+    transition: width 0.6s ease !important;
+  }
+
   #hero {
     display: flex !important;
     justify-content: center !important;
@@ -1535,31 +1421,31 @@ body.start-animations .profile-card {
   }
 
   .hero-subtitle-row {
-    display: block !important; 
+    display: block !important;
     text-align: center !important;
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 auto !important;
     padding: 0 10px !important;
     box-sizing: border-box !important;
-    position: static !important; 
+    position: static !important;
     transform: none !important;
   }
 
   .hero-subtitle-row span {
-    display: block !important; 
-    font-size: clamp(1rem, 5vw, 1.25rem) !important; 
+    display: block !important;
+    font-size: clamp(1rem, 5vw, 1.25rem) !important;
     line-height: 1.5 !important;
     text-align: center !important;
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 auto 10px auto !important;
-    white-space: normal !important; 
-    word-break: break-word !important; 
+    white-space: normal !important;
+    word-break: break-word !important;
     overflow-wrap: break-word !important;
   }
 
-  .hero-subtitle-row .languages-container, 
+  .hero-subtitle-row .languages-container,
   .hero-subtitle-row div {
     display: flex !important;
     justify-content: center !important;
@@ -1568,142 +1454,16 @@ body.start-animations .profile-card {
     width: 100% !important;
   }
 
-  /* --- CORREÇÃO CIRÚRGICA DO H2 DE SKILLS (E OUTROS TÍTULOS) --- */
-  .section-title, #skills .section-title, #skills h2 {
-    font-size: clamp(1.6rem, 6.5vw, 2.2rem) !important; /* Diminui o tamanho dinamicamente para caber em 414px */
-    text-align: center !important;
-    line-height: 1.3 !important;
-    display: block !important; /* Garante comportamento de bloco para quebrar linha se necessário */
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 auto 35px auto !important; /* Centraliza horizontalmente e dá espaço para os cubos */
-    padding: 0 15px !important; /* Margem interna de segurança para o texto não colar na borda do celular */
-    box-sizing: border-box !important;
-    /* Zera desvios absolutos ou relativos do desktop */
-    position: static !important;
-    transform: none !important;
-    left: auto !important;
-    right: auto !important;
-    white-space: normal !important; /* Permite que o texto quebre linhas se for muito grande */
-  }
-
-  /* --- ITEM 1: HEADER COM MENU HAMBÚRGUER ROXO NA ESQUERDA --- */
-  header {
-    position: fixed !important;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    padding: 0 15px;
-    display: flex;
-    flex-direction: row-reverse; 
-    justify-content: space-between;
-    align-items: center;
-    transform: translateY(-100%);
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease !important;
-    background-color: rgba(2, 2, 3, 0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(178, 74, 241, 0.1);
-    z-index: 1000;
-  }
-
-  header.visible {
-    transform: translateY(0) !important;
-  }
-
-  header .logo-link {
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-  }
-
-  header .logo-link img {
-    max-height: 22px;
-    width: auto;
-  }
-
-  header .header-right {
-    margin-right: auto;
-    margin-left: 0;
-    display: flex;
-    align-items: center;
-  }
-
-  #menu-toggle {
-    display: flex !important;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 22px;
-    height: 15px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-  }
-
-  #menu-toggle span {
-    background-color: #b24af1 !important;
-    height: 2px;
-    width: 100%;
-    border-radius: 2px;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
+  header,
+  #menu-toggle,
   .nav-links {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(2, 2, 3, 0.98);
-    display: flex !important;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 25px;
-    transform: translateX(-100%);
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 998;
+    display: none !important;
   }
 
-  .nav-links.active {
-    transform: translateX(0);
-  }
-
-  .nav-links::before {
-    content: "";
-    display: block;
-    width: 140px;
-    height: 45px;
-    margin-bottom: 20px;
-    background-image: url("../img/logo/logo-name-bg-removed.png"); 
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-
-  .nav-links a {
-    font-size: 1.3rem;
-    letter-spacing: 2px;
-    color: #ffffff;
-    transition: color 0.3s ease;
-  }
-
-  #menu-toggle.active span:nth-child(1) {
-    transform: translateY(6.5px) rotate(45deg);
-  }
-  #menu-toggle.active span:nth-child(2) {
-    opacity: 0;
-  }
-  #menu-toggle.active span:nth-child(3) {
-    transform: translateY(-6.5px) rotate(-45deg);
-  }
-
-  /* --- ITEM 2: REMOVER BOTÃO DE VOLTAR AO TOPO --- */
   #back-to-top {
     display: none !important;
   }
 
-  /* --- ITEM 4: CUBOS DE SKILLS DE 2 EM 2 --- */
   .skills-grid {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 12px !important;
@@ -1712,31 +1472,81 @@ body.start-animations .profile-card {
     margin: 0 auto !important;
   }
 
-  /* --- ITENS 5, 6 E 7: CARROSSEL DE PROJETOS SEGURO --- */
-  .carousel-container {
+  .carousel-container,
+  .projects-carousel {
     overflow: hidden !important;
+    width: 100% !important;
+    padding: 10px 0 !important;
+    background: transparent !important;
+  }
+
+  .carousel-track,
+  .projects-track {
+    display: flex !important;
     width: 100% !important;
   }
 
-  .carousel-track {
-    display: flex !important;
-    width: 100% !important;
+  .projects-page {
+    padding: 10px 5px !important;
   }
 
   .project-card {
-    padding: 0 10px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
     box-sizing: border-box !important;
+    border-radius: 16px !important;
+  }
+
+  .project-media {
+    width: 100% !important;
+    aspect-ratio: 16 / 9 !important;
+    margin: 0 !important;
+  }
+
+  .project-video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
   }
 
   .project-info {
+    padding: 20px !important;
     display: flex !important;
     flex-direction: column !important;
-    align-items: center !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+  }
+
+  .project-links {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
   }
 
   #carousel-dots .dot {
     width: 12px !important;
     height: 12px !important;
     margin: 0 5px !important;
+  }
+
+  .subtitle {
+    animation: none !important;
+    border-right: none;
+    width: auto;
+    max-width: 100%;
+    white-space: normal;
+    overflow: visible;
+    display: block;
+    text-align: center;
+    line-height: 1.4;
+    font-size: clamp(1rem, 4.6vw, 1.25rem);
+    letter-spacing: 0.5px;
+    margin: 45px auto 0;
+    padding: 0 20px;
+    --text-length: unset;
   }
 }
