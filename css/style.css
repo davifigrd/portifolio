@@ -192,7 +192,6 @@ body.scrollbar-visible {
   overflow-y: auto !important;
 }
 
-/* Trava do Hero até a cortina abrir */
 body:not(.start-animations) #hero h1,
 body:not(.start-animations) .profile-card,
 body:not(.start-animations) .subtitle,
@@ -208,7 +207,6 @@ body.start-animations .profile-card {
   transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* Typography Global */
 #about p,
 .contact-subtitle {
   font-family:
@@ -396,7 +394,6 @@ header img {
   position: relative;
 }
 
-/* Garanta que nenhum ícone quebrado apareça antes do texto */
 .nav-links a::before {
   display: none !important;
   content: none !important;
@@ -484,7 +481,6 @@ header img {
   -webkit-text-fill-color: transparent;
 }
 
-/* Profile Card */
 .profile-card {
   width: 250px;
   height: 250px;
@@ -562,7 +558,6 @@ body.loaded .profile-card.active-360 .profile-card-inner {
   transform: rotateY(180deg);
 }
 
-/* Hero Subtitle */
 .subtitle {
   font-family: monospace;
   font-size: 1.3rem;
@@ -612,7 +607,7 @@ body.start-animations .subtitle {
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-top: 100px;
+  margin-top: 750px;
 }
 
 #about p {
@@ -632,6 +627,7 @@ body.start-animations .subtitle {
   align-items: center;
   padding: 80px 10%;
   width: 100%;
+  margin-top: 800px;
 }
 
 .skills-3d-container {
@@ -809,6 +805,10 @@ body.start-animations .subtitle {
 /* ==========================================
    10. PROJECTS CAROUSEL & CARDS
    ========================================== */
+#projects {
+  margin-top: 450px;
+}
+
 .projects-carousel {
   width: 100%;
   max-width: 1100px;
@@ -831,7 +831,6 @@ body.start-animations .subtitle {
   display: flex;
   justify-content: center;
   box-sizing: border-box;
-  padding: 20px;
 }
 
 .project-card {
@@ -900,7 +899,6 @@ body.start-animations .subtitle {
   color: rgba(220, 222, 225, 0.75) !important;
 }
 
-/* Tech Tags */
 .project-tags {
   display: flex;
   flex-wrap: wrap;
@@ -944,7 +942,6 @@ body.start-animations .subtitle {
   background: rgba(0, 153, 130, 0.05) !important;
 }
 
-/* Carousel Control Elements */
 .project-links {
   display: flex;
   align-items: center;
@@ -1010,7 +1007,8 @@ body.start-animations .subtitle {
    ========================================== */
 #contact h2 {
   text-align: center;
-  margin-bottom: 70px;
+  margin-bottom: 80px;
+  margin-top: 850px;
 }
 
 .contact-container {
@@ -1189,7 +1187,6 @@ footer p {
 /* ==========================================
    13. UTILITIES & FLOATING ELEMENTS
    ========================================== */
-/* Scroll Hint */
 .scroll-hint {
   position: fixed;
   bottom: 30px;
@@ -1243,7 +1240,6 @@ footer p {
   }
 }
 
-/* Back To Top */
 #back-to-top {
   position: fixed !important;
   bottom: 30px;
@@ -1290,9 +1286,33 @@ footer p {
   background-color: var(--color-purple);
   border-radius: 1px;
   opacity: 0;
+  left: 50%;
+  transform: translateX(-50%);
   transition:
     height 0.3s ease,
     opacity 0.2s ease;
+}
+
+#back-to-top.visible {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: scale(1) translateY(0) !important;
+}
+
+#back-to-top:hover {
+  border-color: rgba(178, 74, 241, 0.3) !important;
+  box-shadow: 0 0 12px rgba(178, 74, 241, 0.2) !important;
+  transform: scale(1.05) translateY(-2px) !important;
+}
+
+#back-to-top:hover i {
+  color: var(--color-purple);
+  transform: translateY(-2px);
+}
+
+#back-to-top:hover::after {
+  height: 12px;
+  opacity: 1;
 }
 
 #back-to-top.visible {
